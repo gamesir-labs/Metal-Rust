@@ -5743,6 +5743,30 @@ pub(crate) mod metal {
                 .set_clear_depth(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Writes the inherited depth attachment texture.
+        pub fn set_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the inherited depth load action.
+        pub fn set_load_action(&self, value: crate::metal::LoadAction) -> Result<(), crate::Error> {
+            self.inner
+                .set_load_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the inherited depth store action.
+        pub fn set_store_action(
+            &self,
+            value: crate::metal::StoreAction,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `depth_resolve_filter` property with availability checks.
         pub fn depth_resolve_filter(
             &self,

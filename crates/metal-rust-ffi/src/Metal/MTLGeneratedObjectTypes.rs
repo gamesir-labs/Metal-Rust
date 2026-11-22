@@ -12754,6 +12754,67 @@ pub mod metal {
             }
             Ok(())
         }
+
+        /// Writes the inherited `texture` property after checking the selector.
+        pub fn set_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and `Texture` retains the MTLTexture identity.
+            unsafe {
+                let _: () =
+                    msg_send![&*self._inner, setTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+
+        /// Writes the inherited load action after validating the declared enum value.
+        pub fn set_load_action(
+            &self,
+            value: super::super::generated_value_types::LoadAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setLoadAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setLoadAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setLoadAction is unavailable",
+                ));
+            }
+            let raw = value.as_raw();
+            // SAFETY: The selector is present and the enum value was validated above.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLoadAction: raw];
+            }
+            Ok(())
+        }
+
+        /// Writes the inherited store action after validating the declared enum value.
+        pub fn set_store_action(
+            &self,
+            value: super::super::generated_value_types::StoreAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreAction is unavailable",
+                ));
+            }
+            let raw = value.as_raw();
+            // SAFETY: The selector is present and the enum value was validated above.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreAction: raw];
+            }
+            Ok(())
+        }
     }
     owned_object!(RenderPassDescriptor, "MTL::RenderPassDescriptor");
     impl RenderPassDescriptor {
@@ -23268,6 +23329,11 @@ pub mod metal4 {
     }
     owned_object!(LibraryFunctionDescriptor, "MTL4::LibraryFunctionDescriptor");
     impl LibraryFunctionDescriptor {
+        /// Returns a retained base descriptor view for pipeline descriptor properties.
+        pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+            FunctionDescriptor::from_inner(self._inner.clone())
+        }
+
         /// Creates a default `MTL4::LibraryFunctionDescriptor` when `MTL4LibraryFunctionDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4LibraryFunctionDescriptor").ok_or_else(|| {

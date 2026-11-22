@@ -1,6 +1,8 @@
 //! Safe Core Animation Metal layer and drawable wrappers.
 
 use crate::{Device, Error, PixelFormat, Texture};
+use std::ffi::c_void;
+use std::ptr::NonNull;
 
 /// An owned Core Graphics color space accepted by `CAMetalLayer`.
 pub struct ColorSpace {
@@ -34,6 +36,14 @@ impl Layer {
         metal_rust_ffi::Layer::with_device(&device.inner)
             .map(|inner| Self { inner })
             .map_err(Error::from_ffi)
+    }
+
+    /// Returns this layer's borrowed Objective-C object pointer.
+    ///
+    /// The pointer remains valid only while this layer is alive.
+    #[must_use]
+    pub fn as_ptr(&self) -> NonNull<c_void> {
+        self.inner.as_ptr()
     }
 
     /// Sets the layer's Metal device.

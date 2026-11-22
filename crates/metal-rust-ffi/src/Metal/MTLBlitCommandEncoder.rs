@@ -1189,22 +1189,6 @@ fn mip_extent(texture: &Texture, level: usize) -> Result<(usize, usize, usize), 
     Ok((width, height, depth))
 }
 
-fn audited_bytes_per_pixel(pixel_format: PixelFormat) -> Result<usize, Error> {
-    match pixel_format {
-        PixelFormat::RGBA8_UNORM
-        | PixelFormat::BGRA8_UNORM
-        | PixelFormat::RGBA8_UNORM_SRGB
-        | PixelFormat::BGRA8_UNORM_SRGB
-        | PixelFormat::RG16_FLOAT
-        | PixelFormat::DEPTH32_FLOAT => Ok(4),
-        PixelFormat::R16_FLOAT => Ok(2),
-        PixelFormat::RGBA16_FLOAT => Ok(8),
-        _ => Err(Error::unsupported(
-            "linear texture copy format has no audited byte layout",
-        )),
-    }
-}
-
 fn validate_linear_texture_layout(
     encoder: &ProtocolObject<dyn MTLBlitCommandEncoder>,
     buffer: &Buffer,
@@ -1214,7 +1198,7 @@ fn validate_linear_texture_layout(
     size: crate::metal::Size,
     pixel_format: PixelFormat,
 ) -> Result<(), Error> {
-    let bytes_per_pixel = audited_bytes_per_pixel(pixel_format)?;
+    let bytes_per_pixel = super::mtl_texture::audited_bytes_per_pixel(pixel_format)?;
     let active_row_bytes = size
         .width
         .checked_mul(bytes_per_pixel)

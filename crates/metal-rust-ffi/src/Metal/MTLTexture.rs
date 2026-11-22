@@ -694,7 +694,18 @@ impl Texture {
         bytes_per_row: usize,
     ) -> Result<(), Error> {
         self.validate_cpu_write(region, mipmap_level, 0)?;
-        let required = texture_source_span(region, bytes_per_row, 0)?;
+        let bytes_per_pixel = audited_bytes_per_pixel(self.pixel_format())?;
+        let active_row = region
+            .size
+            .width
+            .checked_mul(bytes_per_pixel)
+            .ok_or_else(|| Error::invalid_argument("texture row byte count overflow"))?;
+        if bytes_per_row < active_row {
+            return Err(Error::invalid_argument(
+                "texture row stride is smaller than the active row",
+            ));
+        }
+        let required = texture_source_span(region, bytes_per_row, 0, bytes_per_pixel)?;
         if bytes_per_row == 0 || bytes.len() < required || required == 0 {
             return Err(Error::invalid_argument(
                 "texture source does not cover every requested row",
@@ -726,7 +737,22 @@ impl Texture {
         bytes_per_image: usize,
     ) -> Result<(), Error> {
         self.validate_cpu_write(region, mipmap_level, slice)?;
-        let required = texture_source_span(region, bytes_per_row, bytes_per_image)?;
+        let bytes_per_pixel = audited_bytes_per_pixel(self.pixel_format())?;
+        let active_row = region
+            .size
+            .width
+            .checked_mul(bytes_per_pixel)
+            .ok_or_else(|| Error::invalid_argument("texture row byte count overflow"))?;
+        let minimum_image = bytes_per_row
+            .checked_mul(region.size.height)
+            .ok_or_else(|| Error::invalid_argument("texture image stride overflow"))?;
+        if bytes_per_row < active_row || bytes_per_image < minimum_image {
+            return Err(Error::invalid_argument(
+                "texture row or image stride is too small",
+            ));
+        }
+        let required =
+            texture_source_span(region, bytes_per_row, bytes_per_image, bytes_per_pixel)?;
         if bytes_per_row == 0 || bytes_per_image == 0 || bytes.len() < required || required == 0 {
             return Err(Error::invalid_argument(
                 "texture source does not cover every requested image",
@@ -852,19 +878,32 @@ fn swizzle_from_objc(value: MTLTextureSwizzleChannels) -> TextureSwizzleChannels
     }
 }
 
+pub(super) fn audited_bytes_per_pixel(pixel_format: PixelFormat) -> Result<usize, Error> {
+    match pixel_format {
+        PixelFormat::RGBA8_UNORM
+        | PixelFormat::BGRA8_UNORM
+        | PixelFormat::RGBA8_UNORM_SRGB
+        | PixelFormat::BGRA8_UNORM_SRGB
+        | PixelFormat::RG16_FLOAT
+        | PixelFormat::DEPTH32_FLOAT => Ok(4),
+        PixelFormat::R16_FLOAT => Ok(2),
+        PixelFormat::RGBA16_FLOAT => Ok(8),
+        _ => Err(Error::unsupported(
+            "CPU texture writes do not support this pixel format",
+        )),
+    }
+}
+
 fn texture_source_span(
     region: Region,
     bytes_per_row: usize,
     bytes_per_image: usize,
+    bytes_per_pixel: usize,
 ) -> Result<usize, Error> {
-    // Metal's largest uncompressed texel is currently 16 bytes. Using that
-    // upper bound keeps the borrowed byte slice valid even when an invalid
-    // row stride is rejected by Metal after it inspects the call.
-    const MAX_TEXEL_BYTES: usize = 16;
     let final_texel_row = region
         .size
         .width
-        .checked_mul(MAX_TEXEL_BYTES)
+        .checked_mul(bytes_per_pixel)
         .ok_or_else(|| Error::invalid_argument("texture row byte count overflow"))?;
     let preceding_rows = region
         .size
@@ -892,12 +931,12 @@ mod tests {
     #[test]
     fn source_span_covers_final_texel_row_and_image() {
         let region = Region::new(Origin::new(0, 0, 0), Size::new(4, 3, 2));
-        assert_eq!(texture_source_span(region, 64, 192).unwrap(), 384);
+        assert_eq!(texture_source_span(region, 16, 48, 4).unwrap(), 96);
     }
 
     #[test]
     fn source_span_rejects_overflow() {
         let region = Region::new(Origin::new(0, 0, 0), Size::new(usize::MAX, 1, 1));
-        assert!(texture_source_span(region, 1, 1).is_err());
+        assert!(texture_source_span(region, 1, 1, 4).is_err());
     }
 }

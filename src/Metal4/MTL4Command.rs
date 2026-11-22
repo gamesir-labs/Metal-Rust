@@ -1491,7 +1491,10 @@ impl CommandQueue {
     }
 
     /// Schedules drawable signaling after earlier queue work.
-    pub fn signal_drawable(&self, drawable: &crate::metal::Drawable) -> Result<(), crate::Error> {
+    pub fn signal_drawable(
+        &self,
+        drawable: &crate::quartz_core::Drawable,
+    ) -> Result<(), crate::Error> {
         self.inner
             .signal_drawable(&drawable.inner)
             .map_err(crate::Error::from_ffi)
@@ -1509,7 +1512,10 @@ impl CommandQueue {
     }
 
     /// Schedules a wait for drawable availability before later queue work.
-    pub fn wait_for_drawable(&self, drawable: &crate::metal::Drawable) -> Result<(), crate::Error> {
+    pub fn wait_for_drawable(
+        &self,
+        drawable: &crate::quartz_core::Drawable,
+    ) -> Result<(), crate::Error> {
         self.inner
             .wait_for_drawable(&drawable.inner)
             .map_err(crate::Error::from_ffi)

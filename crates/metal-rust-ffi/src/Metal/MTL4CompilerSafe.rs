@@ -2,13 +2,16 @@
 
 use crate::foundation::{Error, metal_error};
 use crate::metal::generated_object_types::{metal, metal4};
-use crate::metal::{ComputePipelineState, Library, RenderPipelineState};
+use crate::metal::{ClearColor, ComputePipelineState, Library, RenderPipelineState, Texture};
 use block2::RcBlock;
 use objc2::rc::Retained;
 use objc2::runtime::{AnyClass, AnyObject, ProtocolObject};
 use objc2::{msg_send, sel};
 use objc2_foundation::{NSData, NSError, NSString, NSURL};
-use objc2_metal::{MTL4PipelineDataSetSerializer, MTLSamplePosition, MTLSize};
+use objc2_metal::{
+    MTL4PipelineDataSetSerializer, MTLClearColor, MTLLoadAction, MTLSamplePosition, MTLSize,
+    MTLStoreAction,
+};
 use std::collections::HashMap;
 use std::ffi::c_void;
 use std::panic::{AssertUnwindSafe, catch_unwind};
@@ -1200,6 +1203,56 @@ impl metal4::StitchedFunctionDescriptor {
 }
 
 impl metal4::RenderPassDescriptor {
+    /// Sets a checked color attachment using a clear load and store action.
+    pub fn set_color_attachment(
+        &self,
+        index: usize,
+        texture: &Texture,
+        clear_color: ClearColor,
+    ) -> Result<(), Error> {
+        validate_mtl4_color_attachment(index, clear_color)?;
+        let descriptor = self.as_inner();
+        if !descriptor.responds_to(sel!(colorAttachments)) {
+            return Err(Error::unsupported(
+                "MTL4RenderPassDescriptor color attachments are unavailable",
+            ));
+        }
+        // SAFETY: the selector is checked and the property is an attachment array.
+        let attachments: Retained<AnyObject> = unsafe { msg_send![descriptor, colorAttachments] };
+        if !attachments.responds_to(sel!(objectAtIndexedSubscript:)) {
+            return Err(Error::unsupported(
+                "MTL4RenderPassDescriptor color attachment indexing is unavailable",
+            ));
+        }
+        // SAFETY: Metal defines eight color attachment slots and the index was checked.
+        let attachment: Retained<AnyObject> =
+            unsafe { msg_send![&*attachments, objectAtIndexedSubscript: index] };
+        for (selector, operation) in [
+            (sel!(setTexture:), "MTL4 color attachment texture"),
+            (sel!(setLoadAction:), "MTL4 color attachment load action"),
+            (sel!(setStoreAction:), "MTL4 color attachment store action"),
+            (sel!(setClearColor:), "MTL4 color attachment clear color"),
+        ] {
+            if !attachment.responds_to(selector) {
+                return Err(Error::unsupported(format!("{operation} is unavailable")));
+            }
+        }
+        // SAFETY: all setters are checked; texture is a live typed Metal texture,
+        // and the load/store enums and clear-color struct match their ObjC ABI.
+        unsafe {
+            let _: () = msg_send![&*attachment, setTexture: texture.as_any_object()];
+            let _: () = msg_send![&*attachment, setLoadAction: MTLLoadAction::Clear];
+            let _: () = msg_send![&*attachment, setStoreAction: MTLStoreAction::Store];
+            let _: () = msg_send![&*attachment, setClearColor: MTLClearColor {
+                red: clear_color.red,
+                green: clear_color.green,
+                blue: clear_color.blue,
+                alpha: clear_color.alpha,
+            }];
+        }
+        Ok(())
+    }
+
     /// Returns up to `count` programmable sample positions as owned values.
     pub fn sample_positions_vec(
         &self,
@@ -1270,6 +1323,45 @@ impl metal4::RenderPassDescriptor {
             let _: () = msg_send![self.as_inner(), setSamplePositions: positions.as_ptr(), count: positions.len()];
         }
         Ok(())
+    }
+}
+
+const MAX_MTL4_COLOR_ATTACHMENTS: usize = 8;
+
+fn validate_mtl4_color_attachment(index: usize, clear_color: ClearColor) -> Result<(), Error> {
+    if index >= MAX_MTL4_COLOR_ATTACHMENTS {
+        return Err(Error::invalid_argument(format!(
+            "color attachment index {index} exceeds Metal's limit of {MAX_MTL4_COLOR_ATTACHMENTS}"
+        )));
+    }
+    if [
+        clear_color.red,
+        clear_color.green,
+        clear_color.blue,
+        clear_color.alpha,
+    ]
+    .iter()
+    .any(|component| !component.is_finite())
+    {
+        return Err(Error::invalid_argument(
+            "clear-color components must be finite",
+        ));
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod mtl4_color_attachment_tests {
+    use super::*;
+
+    #[test]
+    fn validates_attachment_index_and_clear_color() {
+        let color = ClearColor::new(0.0, 0.0, 0.0, 1.0);
+        assert!(validate_mtl4_color_attachment(7, color).is_ok());
+        assert!(validate_mtl4_color_attachment(8, color).is_err());
+        assert!(
+            validate_mtl4_color_attachment(0, ClearColor::new(f64::NAN, 0.0, 0.0, 1.0)).is_err()
+        );
     }
 }
 

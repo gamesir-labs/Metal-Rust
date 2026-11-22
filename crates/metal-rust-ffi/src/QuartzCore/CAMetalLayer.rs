@@ -10,6 +10,8 @@ use objc2_core_foundation::CGSize;
 use objc2_core_graphics::CGColorSpace;
 use objc2_foundation::{NSObjectProtocol, NSThread};
 use objc2_quartz_core::{CAMetalDrawable, CAMetalLayer};
+use std::ffi::c_void;
+use std::ptr::NonNull;
 
 /// An owned `CAMetalLayer`.
 pub struct Layer {
@@ -54,6 +56,14 @@ impl Layer {
         let layer = Self::new()?;
         layer.inner.setDevice(Some(&device.inner));
         Ok(layer)
+    }
+
+    /// Returns this layer's borrowed Objective-C object pointer.
+    ///
+    /// The pointer remains valid only while this layer is alive.
+    #[must_use]
+    pub fn as_ptr(&self) -> NonNull<c_void> {
+        NonNull::from(&*self.inner).cast()
     }
 
     /// Sets the Metal device used for drawable allocation.

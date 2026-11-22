@@ -5,16 +5,17 @@
 //! crossing the Objective-C boundary.
 
 use crate::foundation::{Error, metal_error};
+use crate::quartz_core::Drawable as LayerDrawable;
 use block2::RcBlock;
 use objc2::rc::Retained;
-use objc2::runtime::{AnyObject, Sel};
+use objc2::runtime::{AnyObject, ProtocolObject, Sel};
 use objc2::{msg_send, sel};
 use objc2_foundation::{NSRange, NSString};
 use objc2_metal::{
     MTL4BufferRange, MTL4CopySparseBufferMappingOperation, MTL4CopySparseTextureMappingOperation,
     MTL4UpdateSparseBufferMappingOperation, MTL4UpdateSparseTextureMappingOperation, MTLBlitOption,
-    MTLBuffer, MTLDevice, MTLIndexType, MTLScissorRect, MTLSize, MTLSparseTextureMappingMode,
-    MTLVertexAmplificationViewMapping, MTLViewport,
+    MTLBuffer, MTLDevice, MTLDrawable, MTLIndexType, MTLScissorRect, MTLSize,
+    MTLSparseTextureMappingMode, MTLVertexAmplificationViewMapping, MTLViewport,
 };
 
 use super::generated_object_types::{metal, metal4, metal4_fx};
@@ -2704,7 +2705,7 @@ impl Metal4CommandQueue {
     }
 
     /// Schedules drawable signaling after earlier queue work.
-    pub fn signal_drawable(&self, drawable: &metal::Drawable) -> Result<(), Error> {
+    pub fn signal_drawable(&self, drawable: &LayerDrawable) -> Result<(), Error> {
         self.inner.signal_drawable(drawable)
     }
 
@@ -2714,7 +2715,7 @@ impl Metal4CommandQueue {
     }
 
     /// Schedules a wait for drawable availability before later queue work.
-    pub fn wait_for_drawable(&self, drawable: &metal::Drawable) -> Result<(), Error> {
+    pub fn wait_for_drawable(&self, drawable: &LayerDrawable) -> Result<(), Error> {
         self.inner.wait_for_drawable(drawable)
     }
 
@@ -3127,16 +3128,17 @@ impl metal4::CommandQueue {
     }
 
     /// Schedules drawable signaling after earlier queue work.
-    pub fn signal_drawable(&self, drawable: &metal::Drawable) -> Result<(), Error> {
+    pub fn signal_drawable(&self, drawable: &LayerDrawable) -> Result<(), Error> {
         let object = self.as_inner();
         require_selector(
             object,
             sel!(signalDrawable:),
             "MTL4::CommandQueue::signalDrawable",
         )?;
-        // SAFETY: Selector availability is checked and the generated wrapper
-        // retains an object with MTLDrawable identity.
-        unsafe { msg_send![object, signalDrawable: drawable.as_inner()] }
+        let drawable = ProtocolObject::<dyn MTLDrawable>::from_ref(&*drawable.inner);
+        // SAFETY: Selector availability is checked and the layer drawable is
+        // retained for the duration of this synchronous MTLDrawable message.
+        unsafe { msg_send![object, signalDrawable: drawable] }
         Ok(())
     }
 
@@ -3155,16 +3157,17 @@ impl metal4::CommandQueue {
     }
 
     /// Schedules a wait for drawable availability before later queue work.
-    pub fn wait_for_drawable(&self, drawable: &metal::Drawable) -> Result<(), Error> {
+    pub fn wait_for_drawable(&self, drawable: &LayerDrawable) -> Result<(), Error> {
         let object = self.as_inner();
         require_selector(
             object,
             sel!(waitForDrawable:),
             "MTL4::CommandQueue::wait(drawable)",
         )?;
-        // SAFETY: Selector availability is checked and the generated wrapper
-        // retains an object with MTLDrawable identity.
-        unsafe { msg_send![object, waitForDrawable: drawable.as_inner()] }
+        let drawable = ProtocolObject::<dyn MTLDrawable>::from_ref(&*drawable.inner);
+        // SAFETY: Selector availability is checked and the layer drawable is
+        // retained for the duration of this synchronous MTLDrawable message.
+        unsafe { msg_send![object, waitForDrawable: drawable] }
         Ok(())
     }
 }
@@ -3214,14 +3217,14 @@ impl metal4::RenderCommandEncoder {
         let object = self.as_inner();
         require_selector(
             object,
-            sel!(setArgumentTable:stages:),
+            sel!(setArgumentTable:atStages:),
             "MTL4::RenderCommandEncoder::setArgumentTable",
         )?;
         // SAFETY: Selector availability, argument-table identity, and stage bits are checked.
         unsafe {
             msg_send![object,
                 setArgumentTable: table.map(metal4::ArgumentTable::as_inner),
-                stages: stages.as_raw()
+                atStages: stages.as_raw()
             ]
         }
         Ok(())

@@ -321,6 +321,115 @@ fn metal4_counter_heap_is_safe_when_available() {
 }
 
 #[test]
+fn metal4_texture_readback_round_trip_when_available() {
+    let Some(device) = Device::system_default() else {
+        return;
+    };
+    let queue = match device.new_mtl4_command_queue() {
+        Ok(queue) => queue,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected Metal 4 queue error: {error}"),
+    };
+    let texture_descriptor = TextureDescriptor::new_2d(
+        PixelFormat::RGBA8_UNORM,
+        2,
+        2,
+        ResourceOptions::SHARED,
+        TextureUsage::SHADER_READ,
+    )
+    .expect("readable texture descriptor is valid");
+    let texture = match device.new_texture(&texture_descriptor) {
+        Ok(texture) => texture,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected readback texture error: {error}"),
+    };
+    let source = [1_u8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    let mut upload = [0_u8; 40];
+    upload[..source.len()].copy_from_slice(&source);
+    texture
+        .replace_region_2d(Region::new_2d(0, 0, 2, 2), 0, &upload, 8)
+        .expect("shared texture can be initialized");
+    let buffer = match device.new_buffer(source.len(), ResourceOptions::SHARED) {
+        Ok(buffer) => buffer,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected readback buffer error: {error}"),
+    };
+    let residency_descriptor = metal_rust::metal::ResidencySetDescriptor::new()
+        .expect("residency-set descriptor is available");
+    residency_descriptor
+        .set_initial_capacity(2)
+        .expect("residency capacity is valid");
+    let residency = match device.new_residency_set(&residency_descriptor) {
+        Ok(residency) => residency,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected residency-set error: {error}"),
+    };
+    residency
+        .add_allocations(&[
+            metal_rust::metal::ResidencyAllocation::Texture(&texture),
+            metal_rust::metal::ResidencyAllocation::Buffer(&buffer),
+        ])
+        .expect("readback resources can be made resident");
+    residency
+        .commit()
+        .expect("residency changes can be committed");
+    queue
+        .add_residency_set(&residency)
+        .expect("residency set can be attached to queue");
+
+    let allocator = match device.new_mtl4_command_allocator() {
+        Ok(allocator) => allocator,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected Metal 4 allocator error: {error}"),
+    };
+    let mut command_buffer = match device
+        .new_mtl4_command_buffer()
+        .and_then(|buffer| buffer.begin(&allocator, None))
+    {
+        Ok(command_buffer) => command_buffer,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected Metal 4 command-buffer error: {error}"),
+    };
+    {
+        let encoder = command_buffer
+            .compute_encoder()
+            .expect("Metal 4 compute encoder is available");
+        encoder
+            .copy_texture_to_buffer(
+                &texture,
+                metal_rust::metal4::TextureRegionSelection {
+                    slice: 0,
+                    level: 0,
+                    region: Region::new_2d(0, 0, 2, 2),
+                },
+                &buffer,
+                metal_rust::metal4::BufferImageLayout {
+                    offset: 0,
+                    bytes_per_row: 8,
+                    bytes_per_image: source.len(),
+                },
+                None,
+            )
+            .expect("texture copy can be encoded");
+        encoder.end().expect("compute encoder can end");
+    }
+    queue
+        .submit(
+            vec![command_buffer.end().expect("command buffer can end")],
+            None,
+        )
+        .expect("Metal 4 submission succeeds")
+        .wait()
+        .expect("Metal 4 submission completes");
+    assert_eq!(
+        buffer
+            .read(0, source.len())
+            .expect("readback buffer is readable"),
+        source
+    );
+}
+
+#[test]
 fn core_submission_smoke_when_available() {
     let Some(device) = Device::system_default() else {
         return;
@@ -342,11 +451,20 @@ fn core_submission_smoke_when_available() {
     buffer
         .write(4, &[1, 2, 3, 4])
         .expect("shared buffer is writable");
+    assert_eq!(
+        buffer.read(4, 4).expect("shared buffer is readable"),
+        [1, 2, 3, 4]
+    );
     let range_error = match buffer.write(63, &[1, 2]) {
         Ok(()) => panic!("buffer range must be checked"),
         Err(error) => error,
     };
     assert_eq!(range_error.kind(), ErrorKind::InvalidArgument);
+    let read_range_error = match buffer.read(63, 2) {
+        Ok(_) => panic!("buffer read range must be checked"),
+        Err(error) => error,
+    };
+    assert_eq!(read_range_error.kind(), ErrorKind::InvalidArgument);
 
     let destination = match device.new_buffer(64, ResourceOptions::SHARED) {
         Ok(buffer) => buffer,
