@@ -273,6 +273,67 @@ fn metalfx_scaler_creation_is_runtime_gated() {
 }
 
 #[test]
+fn mtl4fx_temporal_scaler_is_runtime_gated() {
+    let Some(device) = Device::system_default() else {
+        return;
+    };
+    if !device
+        .supports_family(metal_rust::metal::GPUFamily::GPUFamilyMetal4)
+        .unwrap_or(false)
+    {
+        return;
+    }
+    let descriptor = match TemporalScalerDescriptor::new() {
+        Ok(value) => value,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected temporal descriptor error: {error}"),
+    };
+    if !descriptor.supports_metal4_fx(&device) {
+        return;
+    }
+    descriptor
+        .configure(
+            PixelFormat::RGBA16_FLOAT,
+            PixelFormat::DEPTH32_FLOAT,
+            PixelFormat::RG16_FLOAT,
+            PixelFormat::RGBA16_FLOAT,
+            960,
+            540,
+            1920,
+            1080,
+        )
+        .expect("valid temporal configuration");
+    let compiler = device
+        .new_mtl4_compiler(&metal_rust::metal4::CompilerDescriptor::new().unwrap())
+        .expect("Metal 4 compiler");
+    let scaler = match descriptor.new_mtl4_scaler(&device, &compiler) {
+        Ok(value) => value,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected MTL4FX temporal scaler error: {error}"),
+    };
+    scaler
+        .set_input_content_width(960)
+        .expect("valid input content width");
+    scaler
+        .set_input_content_height(540)
+        .expect("valid input content height");
+    scaler
+        .set_jitter_offset_x(0.25)
+        .expect("valid jitter offset");
+    scaler
+        .set_motion_vector_scale_x(480.0)
+        .expect("valid motion vector scale");
+    assert_eq!(
+        scaler.set_jitter_offset_x(f32::NAN).unwrap_err().kind(),
+        ErrorKind::InvalidArgument
+    );
+    assert_eq!(
+        scaler.set_input_content_width(0).unwrap_err().kind(),
+        ErrorKind::InvalidArgument
+    );
+}
+
+#[test]
 fn metal_layer_is_owned_and_configurable_without_a_device() {
     let layer = match Layer::new() {
         Ok(layer) => layer,
