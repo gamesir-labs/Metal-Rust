@@ -11729,6 +11729,132 @@ pub(crate) mod metal4_fx {
         ) -> Self {
             Self { inner }
         }
+        /// Writes the display aspect ratio.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_aspect_ratio(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the real-frame delta time.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_delta_time(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the far clipping-plane distance.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_far_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the camera field of view.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_field_of_view(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the near clipping-plane distance.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_near_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the horizontal subpixel jitter offset.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the vertical subpixel jitter offset.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the horizontal motion-vector scale.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the vertical motion-vector scale.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the current color texture.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the previous color texture.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_prev_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the depth texture.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the motion-vector texture.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the interpolated output texture.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Assigns the optional composited UI texture.
+        pub fn set_ui_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_ui_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Selects reversed-depth convention.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_reversed(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Enables or disables compositor-provided UI texture handling.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_is_ui_texture_composited(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Requests history reset before the next encoded frame.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_should_reset_history(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Encodes work into an active Metal 4 recording scope.
         pub fn encode_to_command_buffer(
             &self,

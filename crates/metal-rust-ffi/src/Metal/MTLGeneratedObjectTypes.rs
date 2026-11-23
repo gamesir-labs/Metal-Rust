@@ -27143,6 +27143,268 @@ pub mod metal4_fx {
 
     owned_object!(FrameInterpolator, "MTL4FX::FrameInterpolator");
     impl FrameInterpolator {
+        fn set_f32_property(
+            &self,
+            selector: objc2::runtime::Sel,
+            name: &'static str,
+            value: f32,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX Frame Interpolator properties require finite values",
+                ));
+            }
+            if !self.responds_to(selector) {
+                return Err(FrameworkError::unsupported(name));
+            }
+            unsafe {
+                let _: () = match selector {
+                    _ if selector == sel!(setAspectRatio:) => {
+                        msg_send![&*self._inner, setAspectRatio: value]
+                    }
+                    _ if selector == sel!(setDeltaTime:) => {
+                        msg_send![&*self._inner, setDeltaTime: value]
+                    }
+                    _ if selector == sel!(setFarPlane:) => {
+                        msg_send![&*self._inner, setFarPlane: value]
+                    }
+                    _ if selector == sel!(setFieldOfView:) => {
+                        msg_send![&*self._inner, setFieldOfView: value]
+                    }
+                    _ if selector == sel!(setJitterOffsetX:) => {
+                        msg_send![&*self._inner, setJitterOffsetX: value]
+                    }
+                    _ if selector == sel!(setJitterOffsetY:) => {
+                        msg_send![&*self._inner, setJitterOffsetY: value]
+                    }
+                    _ if selector == sel!(setMotionVectorScaleX:) => {
+                        msg_send![&*self._inner, setMotionVectorScaleX: value]
+                    }
+                    _ if selector == sel!(setMotionVectorScaleY:) => {
+                        msg_send![&*self._inner, setMotionVectorScaleY: value]
+                    }
+                    _ => msg_send![&*self._inner, setNearPlane: value],
+                };
+            }
+            Ok(())
+        }
+
+        fn set_boolean_property(
+            &self,
+            selector: objc2::runtime::Sel,
+            name: &'static str,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(selector) {
+                return Err(FrameworkError::unsupported(name));
+            }
+            unsafe {
+                let _: () = match selector {
+                    _ if selector == sel!(setDepthReversed:) => {
+                        msg_send![&*self._inner, setDepthReversed: value]
+                    }
+                    _ if selector == sel!(setIsUITextureComposited:) => {
+                        msg_send![&*self._inner, setIsUITextureComposited: value]
+                    }
+                    _ => msg_send![&*self._inner, setShouldResetHistory: value],
+                };
+            }
+            Ok(())
+        }
+
+        fn set_texture_property(
+            &self,
+            selector: objc2::runtime::Sel,
+            name: &'static str,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(selector) {
+                return Err(FrameworkError::unsupported(name));
+            }
+            unsafe {
+                let _: () = match selector {
+                    _ if selector == sel!(setColorTexture:) => {
+                        msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)]
+                    }
+                    _ if selector == sel!(setPrevColorTexture:) => {
+                        msg_send![&*self._inner, setPrevColorTexture: value.map(crate::Texture::as_any_object)]
+                    }
+                    _ if selector == sel!(setDepthTexture:) => {
+                        msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)]
+                    }
+                    _ if selector == sel!(setMotionTexture:) => {
+                        msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)]
+                    }
+                    _ if selector == sel!(setOutputTexture:) => {
+                        msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)]
+                    }
+                    _ => {
+                        msg_send![&*self._inner, setUITexture: value.map(crate::Texture::as_any_object)]
+                    }
+                };
+            }
+            Ok(())
+        }
+
+        /// Writes the display aspect ratio.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setAspectRatio:),
+                "MTL4FX::FrameInterpolator::setAspectRatio",
+                value,
+            )
+        }
+        /// Writes the real-frame delta time.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setDeltaTime:),
+                "MTL4FX::FrameInterpolator::setDeltaTime",
+                value,
+            )
+        }
+        /// Writes the far clipping-plane distance.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setFarPlane:),
+                "MTL4FX::FrameInterpolator::setFarPlane",
+                value,
+            )
+        }
+        /// Writes the camera field of view in degrees.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setFieldOfView:),
+                "MTL4FX::FrameInterpolator::setFieldOfView",
+                value,
+            )
+        }
+        /// Writes the near clipping-plane distance.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setNearPlane:),
+                "MTL4FX::FrameInterpolator::setNearPlane",
+                value,
+            )
+        }
+        /// Writes the horizontal subpixel jitter offset.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setJitterOffsetX:),
+                "MTL4FX::FrameInterpolator::setJitterOffsetX",
+                value,
+            )
+        }
+        /// Writes the vertical subpixel jitter offset.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setJitterOffsetY:),
+                "MTL4FX::FrameInterpolator::setJitterOffsetY",
+                value,
+            )
+        }
+        /// Writes the horizontal motion-vector scale.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setMotionVectorScaleX:),
+                "MTL4FX::FrameInterpolator::setMotionVectorScaleX",
+                value,
+            )
+        }
+        /// Writes the vertical motion-vector scale.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            self.set_f32_property(
+                sel!(setMotionVectorScaleY:),
+                "MTL4FX::FrameInterpolator::setMotionVectorScaleY",
+                value,
+            )
+        }
+        /// Selects reversed-depth convention.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            self.set_boolean_property(
+                sel!(setDepthReversed:),
+                "MTL4FX::FrameInterpolator::setDepthReversed",
+                value,
+            )
+        }
+        /// Enables or disables compositor-provided UI texture handling.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), FrameworkError> {
+            self.set_boolean_property(
+                sel!(setIsUITextureComposited:),
+                "MTL4FX::FrameInterpolator::setIsUITextureComposited",
+                value,
+            )
+        }
+        /// Requests history reset before the next encoded frame.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), FrameworkError> {
+            self.set_boolean_property(
+                sel!(setShouldResetHistory:),
+                "MTL4FX::FrameInterpolator::setShouldResetHistory",
+                value,
+            )
+        }
+        /// Assigns the current color texture.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setColorTexture:),
+                "MTL4FX::FrameInterpolator::setColorTexture",
+                value,
+            )
+        }
+        /// Assigns the previous color texture.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setPrevColorTexture:),
+                "MTL4FX::FrameInterpolator::setPrevColorTexture",
+                value,
+            )
+        }
+        /// Assigns the depth texture.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setDepthTexture:),
+                "MTL4FX::FrameInterpolator::setDepthTexture",
+                value,
+            )
+        }
+        /// Assigns the motion-vector texture.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setMotionTexture:),
+                "MTL4FX::FrameInterpolator::setMotionTexture",
+                value,
+            )
+        }
+        /// Assigns the interpolated output texture.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setOutputTexture:),
+                "MTL4FX::FrameInterpolator::setOutputTexture",
+                value,
+            )
+        }
+        /// Assigns the optional composited UI texture.
+        pub fn set_ui_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            self.set_texture_property(
+                sel!(setUITexture:),
+                "MTL4FX::FrameInterpolator::setUITexture",
+                value,
+            )
+        }
         /// Mechanically encodes work into an active Metal 4 recording scope.
         pub(crate) fn encode_to_metal4_command_buffer(
             &self,
