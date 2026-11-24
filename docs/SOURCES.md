@@ -2,13 +2,15 @@
 
 ## Apple metal-cpp
 
-The migration reference is the local Apple metal-cpp distribution in
-`../D3D_Documentation/metal-cpp`. Its README identifies the current headers as
-the macOS 27/iOS 27 release family. The checkout is a source snapshot rather
-than a Git checkout, so `api/metal-cpp-inventory.json` records a SHA-256 digest
-of every included header path and file content instead of inventing a Git
-commit. The snapshot contains 136 headers across Foundation, Metal, MetalFX,
-and QuartzCore.
+The migration reference is the official Apple metal-cpp distribution pinned at
+`third_party/metal-cpp`. The gitlink is locked to
+`27c4382b7151d55a51692cdcb27aaa98752240de`, the
+`release/metal-cpp_macOS27_iOS27` revision. It contains 136 headers across
+Foundation, Metal, MetalFX, and QuartzCore.
+
+`api/metal-cpp-inventory.json` records both that Git revision and a SHA-256
+digest of every included header path and file content. The digest remains the
+content-level guard even when a submodule is moved or repackaged.
 
 The reference is Apache License 2.0, Copyright Apple Inc. 2024, as stated in
 `metal-cpp/LICENSE.txt`. Metal-Rust follows Apache-2.0 and does not link to or
@@ -35,7 +37,8 @@ After changing the reference snapshot, regenerate the inventory and review the
 digest and every new/removed declaration:
 
 ```sh
-python3 scripts/generate_api_inventory.py --reference ../D3D_Documentation/metal-cpp
+git submodule update --init --checkout
+python3 scripts/generate_api_inventory.py
 git diff -- api/metal-cpp-inventory.json
 python3 scripts/check-api-coverage.py
 ```

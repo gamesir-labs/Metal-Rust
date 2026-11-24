@@ -3795,7 +3795,7 @@ def render_markdown(inventory: dict[str, Any], mappings: dict[str, dict[str, str
         "The machine-readable ledger is checked with:",
         "",
         "```sh",
-        "python3 scripts/generate_api_inventory.py --reference ../D3D_Documentation/metal-cpp --check",
+        "python3 scripts/generate_api_inventory.py --check",
         "python3 scripts/check-api-coverage.py",
         "```",
         "",
