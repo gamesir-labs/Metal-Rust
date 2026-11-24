@@ -283,6 +283,7 @@ fn mtl4fx_temporal_scaler_is_runtime_gated() {
     {
         return;
     }
+
     let descriptor = match TemporalScalerDescriptor::new() {
         Ok(value) => value,
         Err(error) if error.kind() == ErrorKind::Unsupported => return,
@@ -329,6 +330,70 @@ fn mtl4fx_temporal_scaler_is_runtime_gated() {
     );
     assert_eq!(
         scaler.set_input_content_width(0).unwrap_err().kind(),
+        ErrorKind::InvalidArgument
+    );
+}
+
+#[test]
+fn mtl4fx_frame_interpolator_inherited_properties_are_runtime_gated() {
+    let Some(device) = Device::system_default() else {
+        return;
+    };
+    if !device
+        .supports_family(metal_rust::metal::GPUFamily::GPUFamilyMetal4)
+        .unwrap_or(false)
+    {
+        return;
+    }
+    let descriptor = match metal_rust::metal_fx::FrameInterpolatorDescriptor::new() {
+        Ok(value) => value,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected frame interpolator descriptor error: {error}"),
+    };
+    if !metal_rust::metal_fx::FrameInterpolatorDescriptor::supports_metal4_fx(&device)
+        .unwrap_or(false)
+    {
+        return;
+    }
+    descriptor.set_input_width(960).expect("valid input width");
+    descriptor.set_input_height(540).expect("valid input height");
+    descriptor
+        .set_output_width(1920)
+        .expect("valid output width");
+    descriptor
+        .set_output_height(1080)
+        .expect("valid output height");
+    descriptor
+        .set_color_texture_format(PixelFormat::RGBA16_FLOAT)
+        .expect("valid color format");
+    descriptor
+        .set_depth_texture_format(PixelFormat::DEPTH32_FLOAT)
+        .expect("valid depth format");
+    descriptor
+        .set_motion_texture_format(PixelFormat::RG16_FLOAT)
+        .expect("valid motion format");
+    descriptor
+        .set_output_texture_format(PixelFormat::RGBA16_FLOAT)
+        .expect("valid output format");
+    let compiler = device
+        .new_mtl4_compiler(&metal_rust::metal4::CompilerDescriptor::new().unwrap())
+        .expect("Metal 4 compiler");
+    let interpolator = match descriptor.new_frame_interpolator(&device, &compiler) {
+        Ok(value) => value,
+        Err(error) if error.kind() == ErrorKind::Unsupported => return,
+        Err(error) => panic!("unexpected MTL4FX frame interpolator error: {error}"),
+    };
+    interpolator
+        .set_delta_time(1.0 / 60.0)
+        .expect("valid real-frame delta");
+    interpolator
+        .set_motion_vector_scale_x(480.0)
+        .expect("valid motion-vector scale");
+    interpolator
+        .set_depth_reversed(true)
+        .expect("valid depth convention");
+    assert_eq!(
+        interpolator.set_delta_time(f32::NAN).unwrap_err().kind(),
         ErrorKind::InvalidArgument
     );
 }

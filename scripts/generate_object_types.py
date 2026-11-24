@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from collections import defaultdict
@@ -60,6 +61,18 @@ CUSTOM_PROPERTY_SETTERS = {
     ("MTLFX::FrameInterpolatorBase", "uiTexture"): "setUITexture",
 }
 
+CUSTOM_PROPERTY_NAMES = {
+    "uiTexture": "setUITexture",
+    "uiTextureFormat": "setUITextureFormat",
+}
+
+# These concrete generated owners have stronger handwritten setters in the
+# corresponding MetalFX module. The handwritten implementations validate
+# dimensions/finiteness more strictly than a generic inherited-property shim.
+INHERITED_PROPERTY_EXCLUSIONS = {
+    "MTL4FX::TemporalScaler",
+}
+
 CUSTOM_STATIC_DEVICE_SELECTORS = {
     ("MTLFX::TemporalDenoisedScalerDescriptor", "supportedInputContentMinScale"): "supportedInputContentMinScaleForDevice",
     ("MTLFX::TemporalDenoisedScalerDescriptor", "supportedInputContentMaxScale"): "supportedInputContentMaxScaleForDevice",
@@ -75,8 +88,54 @@ MATRIX_PROPERTIES = {
 
 def property_setter(parent: str, name: str) -> str:
     return CUSTOM_PROPERTY_SETTERS.get(
-        (parent, name), f"set{name[0].upper()}{name[1:]}"
+        (parent, name),
+        CUSTOM_PROPERTY_NAMES.get(name, f"set{name[0].upper()}{name[1:]}"),
     )
+
+
+def base_class(
+    declaration: dict[str, Any],
+) -> str | None:
+    signature = declaration.get("signature", "")
+    match = re.search(
+        r"public NS::(?:Copying|Referencing)<[^,]+,\s*([^>]+)>",
+        signature,
+    )
+    if match is None:
+        return None
+    base = match.group(1).strip()
+    return base if "::" in base else f"{declaration['qualified_name'].split('::', 1)[0]}::{base}"
+
+
+def inherited_properties(
+    declarations: list[dict[str, Any]],
+    own: dict[str, list[Any]],
+) -> dict[str, list[Any]]:
+    bases = {
+        declaration["qualified_name"]: base_class(declaration)
+        for declaration in declarations
+        if declaration["kind"] == "class"
+    }
+    result = {name: list(values) for name, values in own.items()}
+
+    def collect(name: str, seen: set[str] | None = None) -> list[Any]:
+        seen = set() if seen is None else seen
+        if name in seen:
+            return []
+        seen.add(name)
+        values = list(result.get(name, []))
+        base = bases.get(name)
+        if base:
+            values.extend(collect(base, seen))
+        return values
+
+    for name in bases:
+        if name in INHERITED_PROPERTY_EXCLUSIONS:
+            continue
+        combined = list(dict.fromkeys(collect(name)))
+        if combined:
+            result[name] = combined
+    return result
 
 
 def snake_case(name: str) -> str:
@@ -126,7 +185,7 @@ def generated_property_methods(
             continue
         rust_type, rust_name = parts
         result[declaration["parent"]].append((name, rust_name, rust_type, writable))
-    return result
+    return inherited_properties(declarations, result)
 
 
 def enum_return_parts(
@@ -175,7 +234,7 @@ def generated_enum_properties(
         result[declaration["parent"]].append(
             (name, snake_case(name), type_name, raw_type, writable)
         )
-    return result
+    return inherited_properties(declarations, result)
 
 
 def generated_object_properties(
@@ -208,7 +267,7 @@ def generated_object_properties(
         result[declaration["parent"]].append(
             (name, snake_case(name), qualified_type, writable)
         )
-    return result
+    return inherited_properties(declarations, result)
 
 
 def generated_bool_setters(
@@ -233,7 +292,7 @@ def generated_bool_setters(
         ):
             continue
         result[declaration["parent"]].append((name, snake_case(name)))
-    return result
+    return inherited_properties(declarations, result)
 
 
 def generated_command_buffer_encoders(declarations: list[dict[str, Any]]) -> set[str]:
@@ -431,6 +490,11 @@ def render(declarations: list[dict[str, Any]]) -> str:
     static_device_queries = generated_static_device_queries(declarations)
     metalfx_compiler_factories = generated_metalfx_compiler_factories(declarations)
     constructors = default_constructible_classes(declarations)
+    object_bases = {
+        declaration["qualified_name"]: base_class(declaration)
+        for declaration in declarations
+        if declaration["kind"] == "class"
+    }
     lines = [
         "//! Generated opaque owned wrappers for framework object classes.",
         "//!",
@@ -488,8 +552,24 @@ def render(declarations: list[dict[str, Any]]) -> str:
             device_queries = sorted(set(static_device_queries.get(qualified_name, [])))
             compiler_factories = sorted(set(metalfx_compiler_factories.get(qualified_name, [])))
             matrix_properties = MATRIX_PROPERTIES.get(qualified_name, [])
-            if methods or enum_methods or object_methods or setters or constructible or encodes_command_buffer or encodes_metal4_command_buffer or device_queries or compiler_factories or matrix_properties:
+            base = object_bases.get(qualified_name)
+            base_known = base in object_bases
+            if methods or enum_methods or object_methods or setters or constructible or encodes_command_buffer or encodes_metal4_command_buffer or device_queries or compiler_factories or matrix_properties or base_known:
                 lines += [f"    impl {name} {{"]
+                if base_known:
+                    base_namespace, base_name = base.split("::", 1)
+                    base_path = (
+                        base_name
+                        if base_namespace == reverse[module]
+                        else f"super::{NAMESPACES[base_namespace]}::{base_name}"
+                    )
+                    base_method = snake_case(base_name).removeprefix("r#")
+                    lines += [
+                        f"        /// Returns the inherited `{base}` view with retained ownership.",
+                        f"        pub fn as_{base_method}(&self) -> {base_path} {{",
+                        f"            {base_path}::from_inner(self._inner.clone())",
+                        "        }",
+                    ]
                 if constructible:
                     runtime_name = runtime_class_name(qualified_name)
                     lines += [

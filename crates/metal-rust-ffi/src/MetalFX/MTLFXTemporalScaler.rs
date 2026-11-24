@@ -557,6 +557,7 @@ impl crate::metal::generated_object_types::metal4_fx::TemporalScaler {
         value: Option<&Texture>,
     ) -> Result<(), Error> {
         let object = self.as_inner();
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
         let available: bool = unsafe { msg_send![object, respondsToSelector: selector] };
         if !available {
             return Err(Error::unsupported(
@@ -606,6 +607,7 @@ impl crate::metal::generated_object_types::metal4_fx::TemporalScaler {
             ));
         }
         let object = self.as_inner();
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
         let available: bool = unsafe { msg_send![object, respondsToSelector: selector] };
         if !available {
             return Err(Error::unsupported(
@@ -649,12 +651,14 @@ impl crate::metal::generated_object_types::metal4_fx::TemporalScaler {
             ));
         }
         let object = self.as_inner();
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
         let available: bool = unsafe { msg_send![object, respondsToSelector: selector] };
         if !available {
             return Err(Error::unsupported(
                 "MTL4FX Temporal Scaler input-content property is unavailable",
             ));
         }
+        // SAFETY: Selector availability is checked and usize matches NSUInteger.
         unsafe {
             if selector == sel!(setInputContentWidth:) {
                 let _: () = msg_send![object, setInputContentWidth: value];
@@ -681,12 +685,14 @@ impl crate::metal::generated_object_types::metal4_fx::TemporalScaler {
         value: bool,
     ) -> Result<(), Error> {
         let object = self.as_inner();
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
         let available: bool = unsafe { msg_send![object, respondsToSelector: selector] };
         if !available {
             return Err(Error::unsupported(
                 "MTL4FX Temporal Scaler boolean property is unavailable",
             ));
         }
+        // SAFETY: Selector availability is checked and bool matches the declared ABI.
         unsafe {
             if selector == sel!(setDepthReversed:) {
                 let _: () = msg_send![object, setDepthReversed: value];
