@@ -3,8 +3,9 @@
   "generator": "scripts/generate_api_inventory.py",
   "reference": {
     "name": "Apple metal-cpp",
-    "relative_root": "../D3D_Documentation/metal-cpp",
+    "relative_root": "third_party/metal-cpp",
     "license": "Apache-2.0",
+    "git_revision": "27c4382b7151d55a51692cdcb27aaa98752240de",
     "header_count": 136,
     "content_sha256": "925aa6c677b28fb9fe1a54a217bea1efd3f145c57e0e49e5b82d9d47810ff43d"
   },

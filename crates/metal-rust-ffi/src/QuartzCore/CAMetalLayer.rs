@@ -10,6 +10,7 @@ use objc2_core_foundation::CGSize;
 use objc2_core_graphics::CGColorSpace;
 use objc2_foundation::{NSObjectProtocol, NSThread};
 use objc2_quartz_core::{CAMetalDrawable, CAMetalLayer};
+use raw_window_handle::{AppKitWindowHandle, RawWindowHandle};
 
 /// An owned `CAMetalLayer`.
 pub struct Layer {
@@ -54,6 +55,37 @@ impl Layer {
         let layer = Self::new()?;
         layer.inner.setDevice(Some(&device.inner));
         Ok(layer)
+    }
+
+    /// Installs this layer as an AppKit view's backing layer.
+    pub fn attach_to_window(&self, handle: RawWindowHandle) -> Result<(), Error> {
+        let RawWindowHandle::AppKit(AppKitWindowHandle { ns_view, .. }) = handle else {
+            return Err(Error::unsupported(
+                "CAMetalLayer attachment requires an AppKit window handle",
+            ));
+        };
+        // SAFETY: A non-null AppKit view pointer is supplied by
+        // `raw-window-handle`; the synchronous call ends before the borrow can
+        // expire.
+        let view = unsafe { ns_view.cast::<AnyObject>().as_ref() };
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
+        let supports_layer_backing: bool =
+            unsafe { msg_send![view, respondsToSelector: sel!(setWantsLayer:)] };
+        // SAFETY: Every Objective-C object implements respondsToSelector:.
+        let supports_layer_assignment: bool =
+            unsafe { msg_send![view, respondsToSelector: sel!(setLayer:)] };
+        if !supports_layer_backing || !supports_layer_assignment {
+            return Err(Error::unsupported(
+                "the AppKit NSView cannot host a CAMetalLayer",
+            ));
+        }
+        // SAFETY: The view and layer are live for this synchronous retained
+        // assignment, and selector availability was checked above.
+        unsafe {
+            let _: () = msg_send![view, setWantsLayer: true];
+            let _: () = msg_send![view, setLayer: &*self.inner];
+        }
+        Ok(())
     }
 
     /// Sets the Metal device used for drawable allocation.

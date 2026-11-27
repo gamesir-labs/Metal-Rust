@@ -444,6 +444,32 @@ pub mod metal {
 
     owned_object!(AccelerationStructure, "MTL::AccelerationStructure");
     impl AccelerationStructure {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::AccelerationStructure::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
+        /// Reads `MTL::AccelerationStructure::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
         /// Reads `MTL::AccelerationStructure::size` when the runtime selector is available.
         pub fn size(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(size)) {
@@ -455,12 +481,128 @@ pub mod metal {
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, size] })
         }
+        /// Reads `MTL::AccelerationStructure::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::AccelerationStructure::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::AccelerationStructure::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
+        }
+        /// Reads `MTL::AccelerationStructure::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::storageMode returned an unknown value",
+                )
+            })
+        }
+        /// Reads `MTL::AccelerationStructure::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::AccelerationStructure::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::AccelerationStructure::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructure::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructure::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureBoundingBoxGeometryDescriptor,
         "MTL::AccelerationStructureBoundingBoxGeometryDescriptor"
     );
     impl AccelerationStructureBoundingBoxGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureBoundingBoxGeometryDescriptor` when `MTLAccelerationStructureBoundingBoxGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureBoundingBoxGeometryDescriptor").ok_or_else(||
@@ -470,6 +612,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::boundingBoxBufferOffset` when the runtime selector is available.
         pub fn bounding_box_buffer_offset(&self) -> Result<usize, FrameworkError> {
@@ -549,6 +704,124 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::boundingBoxBuffer` as an owned object.
         pub fn bounding_box_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
             if !self.responds_to(sel!(boundingBoxBuffer)) {
@@ -580,16 +853,154 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureBoundingBoxGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureCommandEncoder,
         "MTL::AccelerationStructureCommandEncoder"
     );
+    impl AccelerationStructureCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::AccelerationStructureCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::AccelerationStructureCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(
         AccelerationStructureCurveGeometryDescriptor,
         "MTL::AccelerationStructureCurveGeometryDescriptor"
     );
     impl AccelerationStructureCurveGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureCurveGeometryDescriptor` when `MTLAccelerationStructureCurveGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureCurveGeometryDescriptor").ok_or_else(||
@@ -599,6 +1010,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::controlPointBufferOffset` when the runtime selector is available.
         pub fn control_point_buffer_offset(&self) -> Result<usize, FrameworkError> {
@@ -701,6 +1125,124 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setIndexBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -1098,6 +1640,63 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureCurveGeometryDescriptor::radiusBuffer` as an owned object.
         pub fn radius_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
             if !self.responds_to(sel!(radiusBuffer)) {
@@ -1126,6 +1725,37 @@ pub mod metal {
             // Objective-C class identity declared for this property.
             unsafe {
                 let _: () = msg_send![&*self._inner, setRadiusBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureCurveGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureCurveGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
             }
             Ok(())
         }
@@ -1434,6 +2064,12 @@ pub mod metal {
         "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor"
     );
     impl AccelerationStructureMotionBoundingBoxGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor` when `MTLAccelerationStructureMotionBoundingBoxGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureMotionBoundingBoxGeometryDescriptor").ok_or_else(||
@@ -1443,6 +2079,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::boundingBoxCount` when the runtime selector is available.
         pub fn bounding_box_count(&self) -> Result<usize, FrameworkError> {
@@ -1496,6 +2145,124 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::boundingBoxBuffers` as an owned object.
         pub fn bounding_box_buffers(
             &self,
@@ -1530,12 +2297,106 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureMotionCurveGeometryDescriptor,
         "MTL::AccelerationStructureMotionCurveGeometryDescriptor"
     );
     impl AccelerationStructureMotionCurveGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureMotionCurveGeometryDescriptor` when `MTLAccelerationStructureMotionCurveGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureMotionCurveGeometryDescriptor").ok_or_else(||
@@ -1545,6 +2406,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::controlPointCount` when the runtime selector is available.
         pub fn control_point_count(&self) -> Result<usize, FrameworkError> {
@@ -1621,6 +2495,124 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setIndexBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -1995,6 +2987,63 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureMotionCurveGeometryDescriptor::radiusBuffers` as an owned object.
         pub fn radius_buffers(
             &self,
@@ -2029,12 +3078,49 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureMotionCurveGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionCurveGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureMotionTriangleGeometryDescriptor,
         "MTL::AccelerationStructureMotionTriangleGeometryDescriptor"
     );
     impl AccelerationStructureMotionTriangleGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureMotionTriangleGeometryDescriptor` when `MTLAccelerationStructureMotionTriangleGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureMotionTriangleGeometryDescriptor").ok_or_else(||
@@ -2044,6 +3130,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::indexBufferOffset` when the runtime selector is available.
         pub fn index_buffer_offset(&self) -> Result<usize, FrameworkError> {
@@ -2068,6 +3167,124 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setIndexBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -2297,6 +3514,63 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::transformationMatrixBuffer` as an owned object.
         pub fn transformation_matrix_buffer(
             &self,
@@ -2361,6 +3635,37 @@ pub mod metal {
             // Objective-C class identity declared for this property.
             unsafe {
                 let _: () = msg_send![&*self._inner, setVertexBuffers: value.map(super::super::generated_object_types::foundation::Array::as_inner)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureMotionTriangleGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
             }
             Ok(())
         }
@@ -2526,6 +3831,12 @@ pub mod metal {
         "MTL::AccelerationStructureTriangleGeometryDescriptor"
     );
     impl AccelerationStructureTriangleGeometryDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::AccelerationStructureTriangleGeometryDescriptor` when `MTLAccelerationStructureTriangleGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLAccelerationStructureTriangleGeometryDescriptor").ok_or_else(||
@@ -2535,6 +3846,19 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::indexBufferOffset` when the runtime selector is available.
         pub fn index_buffer_offset(&self) -> Result<usize, FrameworkError> {
@@ -2559,6 +3883,124 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setIndexBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataBufferOffset` when the runtime selector is available.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBufferOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataBufferOffset] })
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataBufferOffset` after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBufferOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataBufferOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBufferOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -2814,6 +4256,63 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataBuffer` as an owned object.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::primitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, primitiveDataBuffer] };
+            value.map(crate::Buffer::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataBuffer` from a type-checked wrapper.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::Buffer>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataBuffer:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
         /// Reads `MTL::AccelerationStructureTriangleGeometryDescriptor::transformationMatrixBuffer` as an owned object.
         pub fn transformation_matrix_buffer(
             &self,
@@ -2875,6 +4374,37 @@ pub mod metal {
             // Objective-C class identity declared for this property.
             unsafe {
                 let _: () = msg_send![&*self._inner, setVertexBuffer: value.map(crate::Buffer::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL::AccelerationStructureTriangleGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::AccelerationStructureTriangleGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
             }
             Ok(())
         }
@@ -3400,6 +4930,10 @@ pub mod metal {
     }
     owned_object!(ArrayType, "MTL::ArrayType");
     impl ArrayType {
+        /// Returns the inherited `MTL::Type` view with retained ownership.
+        pub fn as_type(&self) -> Type {
+            Type::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::ArrayType` when `MTLArrayType` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLArrayType").ok_or_else(|| {
@@ -3442,6 +4976,20 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, stride] })
+        }
+        /// Reads `MTL::ArrayType::dataType` when the runtime selector is available.
+        pub fn data_type(
+            &self,
+        ) -> Result<super::super::generated_value_types::DataType, FrameworkError> {
+            if !self.responds_to(sel!(dataType)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ArrayType::dataType is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, dataType] };
+            Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
         }
         /// Reads `MTL::ArrayType::elementType` when the runtime selector is available.
         pub fn element_type(
@@ -3823,6 +5371,50 @@ pub mod metal {
         }
     }
     owned_object!(BlitCommandEncoder, "MTL::BlitCommandEncoder");
+    impl BlitCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::BlitCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BlitCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::BlitCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BlitCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::BlitCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BlitCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(BlitPassDescriptor, "MTL::BlitPassDescriptor");
     impl BlitPassDescriptor {
         /// Creates a default `MTL::BlitPassDescriptor` when `MTLBlitPassDescriptor` is available.
@@ -3978,6 +5570,32 @@ pub mod metal {
     }
     owned_object!(Buffer, "MTL::Buffer");
     impl Buffer {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::Buffer::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
+        /// Reads `MTL::Buffer::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
         /// Reads `MTL::Buffer::length` when the runtime selector is available.
         pub fn length(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(length)) {
@@ -3988,6 +5606,47 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, length] })
+        }
+        /// Reads `MTL::Buffer::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::Buffer::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::Buffer::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
         }
         /// Reads `MTL::Buffer::sparseBufferTier` when the runtime selector is available.
         pub fn sparse_buffer_tier(
@@ -4002,6 +5661,73 @@ pub mod metal {
             // property getter with the `isize` enum representation.
             let raw: isize = unsafe { msg_send![&*self._inner, sparseBufferTier] };
             Ok(super::super::generated_value_types::BufferSparseTier::from_system_raw(raw))
+        }
+        /// Reads `MTL::Buffer::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported("MTL::Buffer::storageMode returned an unknown value")
+            })
+        }
+        /// Reads `MTL::Buffer::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::Buffer::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::Buffer::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::Buffer::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Buffer::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
         /// Reads `MTL::Buffer::remoteStorageBuffer` as an owned object.
         pub fn remote_storage_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
@@ -4019,6 +5745,10 @@ pub mod metal {
     }
     owned_object!(BufferBinding, "MTL::BufferBinding");
     impl BufferBinding {
+        /// Returns the inherited `MTL::Binding` view with retained ownership.
+        pub fn as_binding(&self) -> Binding {
+            Binding::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::BufferBinding::bufferAlignment` when the runtime selector is available.
         pub fn buffer_alignment(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(bufferAlignment)) {
@@ -4041,6 +5771,53 @@ pub mod metal {
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, bufferDataSize] })
         }
+        /// Reads `MTL::BufferBinding::index` when the runtime selector is available.
+        pub fn index(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(index)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::index is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, index] })
+        }
+        /// Reads `MTL::BufferBinding::isArgument` when the runtime selector is available.
+        pub fn is_argument(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isArgument)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::isArgument is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isArgument] })
+        }
+        /// Reads `MTL::BufferBinding::isUsed` when the runtime selector is available.
+        pub fn is_used(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUsed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::isUsed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUsed] })
+        }
+        /// Reads `MTL::BufferBinding::access` when the runtime selector is available.
+        pub fn access(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingAccess, FrameworkError> {
+            if !self.responds_to(sel!(access)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::access is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, access] };
+            Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
         /// Reads `MTL::BufferBinding::bufferDataType` when the runtime selector is available.
         pub fn buffer_data_type(
             &self,
@@ -4054,6 +5831,20 @@ pub mod metal {
             // property getter with the `usize` enum representation.
             let raw: usize = unsafe { msg_send![&*self._inner, bufferDataType] };
             Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
+        }
+        /// Reads `MTL::BufferBinding::type` when the runtime selector is available.
+        pub fn r#type(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingType, FrameworkError> {
+            if !self.responds_to(sel!(type)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::type is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `isize` enum representation.
+            let raw: isize = unsafe { msg_send![&*self._inner, type] };
+            Ok(super::super::generated_value_types::BindingType::from_system_raw(raw))
         }
         /// Reads `MTL::BufferBinding::bufferPointerType` as an owned object.
         pub fn buffer_pointer_type(
@@ -4086,6 +5877,17 @@ pub mod metal {
             let value: Option<Retained<AnyObject>> =
                 unsafe { msg_send![&*self._inner, bufferStructType] };
             Ok(value.map(super::super::generated_object_types::metal::StructType::from_inner))
+        }
+        /// Reads `MTL::BufferBinding::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::BufferBinding::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
         }
     }
     owned_object!(BufferLayoutDescriptor, "MTL::BufferLayoutDescriptor");
@@ -5421,6 +7223,10 @@ pub mod metal {
     }
     owned_object!(ComputeCommandEncoder, "MTL::ComputeCommandEncoder");
     impl ComputeCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::ComputeCommandEncoder::dispatchType` when the runtime selector is available.
         pub fn dispatch_type(
             &self,
@@ -5434,6 +7240,44 @@ pub mod metal {
             // property getter with the `usize` enum representation.
             let raw: usize = unsafe { msg_send![&*self._inner, dispatchType] };
             Ok(super::super::generated_value_types::DispatchType::from_system_raw(raw))
+        }
+        /// Reads `MTL::ComputeCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ComputeCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::ComputeCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ComputeCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::ComputeCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ComputeCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
     }
     owned_object!(ComputePassDescriptor, "MTL::ComputePassDescriptor");
@@ -6122,6 +7966,21 @@ pub mod metal {
     }
     owned_object!(ComputePipelineState, "MTL::ComputePipelineState");
     impl ComputePipelineState {
+        /// Returns the inherited `MTL::Allocation` view with retained ownership.
+        pub fn as_allocation(&self) -> Allocation {
+            Allocation::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::ComputePipelineState::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ComputePipelineState::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL::ComputePipelineState::maxTotalThreadsPerThreadgroup` when the runtime selector is available.
         pub fn max_total_threads_per_threadgroup(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(maxTotalThreadsPerThreadgroup)) {
@@ -7905,6 +9764,10 @@ pub mod metal {
         "MTL::FunctionStitchingAttributeAlwaysInline"
     );
     impl FunctionStitchingAttributeAlwaysInline {
+        /// Returns the inherited `MTL::FunctionStitchingAttribute` view with retained ownership.
+        pub fn as_function_stitching_attribute(&self) -> FunctionStitchingAttribute {
+            FunctionStitchingAttribute::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::FunctionStitchingAttributeAlwaysInline` when `MTLFunctionStitchingAttributeAlwaysInline` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -7924,6 +9787,10 @@ pub mod metal {
         "MTL::FunctionStitchingFunctionNode"
     );
     impl FunctionStitchingFunctionNode {
+        /// Returns the inherited `MTL::FunctionStitchingNode` view with retained ownership.
+        pub fn as_function_stitching_node(&self) -> FunctionStitchingNode {
+            FunctionStitchingNode::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::FunctionStitchingFunctionNode` when `MTLFunctionStitchingFunctionNode` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLFunctionStitchingFunctionNode").ok_or_else(|| {
@@ -8182,6 +10049,10 @@ pub mod metal {
         "MTL::FunctionStitchingInputNode"
     );
     impl FunctionStitchingInputNode {
+        /// Returns the inherited `MTL::FunctionStitchingNode` view with retained ownership.
+        pub fn as_function_stitching_node(&self) -> FunctionStitchingNode {
+            FunctionStitchingNode::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::FunctionStitchingInputNode` when `MTLFunctionStitchingInputNode` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLFunctionStitchingInputNode").ok_or_else(|| {
@@ -8224,6 +10095,21 @@ pub mod metal {
     owned_object!(FunctionStitchingNode, "MTL::FunctionStitchingNode");
     owned_object!(Heap, "MTL::Heap");
     impl Heap {
+        /// Returns the inherited `MTL::Allocation` view with retained ownership.
+        pub fn as_allocation(&self) -> Allocation {
+            Allocation::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::Heap::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Heap::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL::Heap::currentAllocatedSize` when the runtime selector is available.
         pub fn current_allocated_size(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(currentAllocatedSize)) {
@@ -8985,6 +10871,32 @@ pub mod metal {
     owned_object!(IOScratchBufferAllocator, "MTL::IOScratchBufferAllocator");
     owned_object!(IndirectCommandBuffer, "MTL::IndirectCommandBuffer");
     impl IndirectCommandBuffer {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::IndirectCommandBuffer::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
+        /// Reads `MTL::IndirectCommandBuffer::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
         /// Reads `MTL::IndirectCommandBuffer::size` when the runtime selector is available.
         pub fn size(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(size)) {
@@ -8995,6 +10907,116 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, size] })
+        }
+        /// Reads `MTL::IndirectCommandBuffer::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::IndirectCommandBuffer::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::IndirectCommandBuffer::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
+        }
+        /// Reads `MTL::IndirectCommandBuffer::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::storageMode returned an unknown value",
+                )
+            })
+        }
+        /// Reads `MTL::IndirectCommandBuffer::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::IndirectCommandBuffer::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::IndirectCommandBuffer::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::IndirectCommandBuffer::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectCommandBuffer::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
     }
     owned_object!(
@@ -9532,6 +11554,10 @@ pub mod metal {
         "MTL::IndirectInstanceAccelerationStructureDescriptor"
     );
     impl IndirectInstanceAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::IndirectInstanceAccelerationStructureDescriptor` when `MTLIndirectInstanceAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLIndirectInstanceAccelerationStructureDescriptor").ok_or_else(||
@@ -9877,6 +11903,49 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::IndirectInstanceAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectInstanceAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL::IndirectInstanceAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::IndirectInstanceAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IndirectInstanceAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
+        }
         /// Reads `MTL::IndirectInstanceAccelerationStructureDescriptor::instanceCountBuffer` as an owned object.
         pub fn instance_count_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
             if !self.responds_to(sel!(instanceCountBuffer)) {
@@ -10010,6 +12079,10 @@ pub mod metal {
         "MTL::InstanceAccelerationStructureDescriptor"
     );
     impl InstanceAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::InstanceAccelerationStructureDescriptor` when `MTLInstanceAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -10303,6 +12376,49 @@ pub mod metal {
             }
             Ok(())
         }
+        /// Reads `MTL::InstanceAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::InstanceAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL::InstanceAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::InstanceAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::InstanceAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
+        }
         /// Reads `MTL::InstanceAccelerationStructureDescriptor::instanceDescriptorBuffer` as an owned object.
         pub fn instance_descriptor_buffer(&self) -> Result<Option<crate::Buffer>, FrameworkError> {
             if !self.responds_to(sel!(instanceDescriptorBuffer)) {
@@ -10405,6 +12521,10 @@ pub mod metal {
         "MTL::IntersectionFunctionDescriptor"
     );
     impl IntersectionFunctionDescriptor {
+        /// Returns the inherited `MTL::FunctionDescriptor` view with retained ownership.
+        pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+            FunctionDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::IntersectionFunctionDescriptor` when `MTLIntersectionFunctionDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLIntersectionFunctionDescriptor").ok_or_else(|| {
@@ -10417,8 +12537,309 @@ pub mod metal {
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
         }
+        /// Reads `MTL::IntersectionFunctionDescriptor::options` when the runtime selector is available.
+        pub fn options(
+            &self,
+        ) -> Result<super::super::generated_value_types::FunctionOptions, FrameworkError> {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, options] };
+            Ok(super::super::generated_value_types::FunctionOptions::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::IntersectionFunctionDescriptor::setOptions` after value and selector checks.
+        pub fn set_options(
+            &self,
+            value: super::super::generated_value_types::FunctionOptions,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::IntersectionFunctionDescriptor::setOptions received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::setOptions is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::IntersectionFunctionDescriptor::binaryArchives` as an owned object.
+        pub fn binary_archives(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::foundation::Array>, FrameworkError>
+        {
+            if !self.responds_to(sel!(binaryArchives)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::binaryArchives is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, binaryArchives] };
+            Ok(value.map(super::super::generated_object_types::foundation::Array::from_inner))
+        }
+
+        /// Writes `MTL::IntersectionFunctionDescriptor::setBinaryArchives` from a type-checked wrapper.
+        pub fn set_binary_archives(
+            &self,
+            value: Option<&super::super::generated_object_types::foundation::Array>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setBinaryArchives:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::setBinaryArchives is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setBinaryArchives: value.map(super::super::generated_object_types::foundation::Array::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::IntersectionFunctionDescriptor::constantValues` as an owned object.
+        pub fn constant_values(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal::FunctionConstantValues>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(constantValues)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::constantValues is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, constantValues] };
+            Ok(value.map(
+                super::super::generated_object_types::metal::FunctionConstantValues::from_inner,
+            ))
+        }
+
+        /// Writes `MTL::IntersectionFunctionDescriptor::setConstantValues` from a type-checked wrapper.
+        pub fn set_constant_values(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::FunctionConstantValues>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setConstantValues:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::setConstantValues is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setConstantValues: value.map(super::super::generated_object_types::metal::FunctionConstantValues::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::IntersectionFunctionDescriptor::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::IntersectionFunctionDescriptor::setName` from a borrowed Rust string.
+        pub fn set_name(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setName:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::setName is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setName: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::IntersectionFunctionDescriptor::specializedName` as an owned string.
+        pub fn specialized_name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(specializedName)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::specializedName is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> =
+                unsafe { msg_send![&*self._inner, specializedName] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::IntersectionFunctionDescriptor::setSpecializedName` from a borrowed Rust string.
+        pub fn set_specialized_name(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSpecializedName:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionDescriptor::setSpecializedName is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSpecializedName: &*value];
+            }
+            Ok(())
+        }
     }
     owned_object!(IntersectionFunctionTable, "MTL::IntersectionFunctionTable");
+    impl IntersectionFunctionTable {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::IntersectionFunctionTable::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
+        /// Reads `MTL::IntersectionFunctionTable::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
+        /// Reads `MTL::IntersectionFunctionTable::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::IntersectionFunctionTable::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::IntersectionFunctionTable::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
+        }
+        /// Reads `MTL::IntersectionFunctionTable::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::storageMode returned an unknown value",
+                )
+            })
+        }
+        /// Reads `MTL::IntersectionFunctionTable::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::IntersectionFunctionTable::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::IntersectionFunctionTable::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::IntersectionFunctionTable::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::IntersectionFunctionTable::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(
         IntersectionFunctionTableDescriptor,
         "MTL::IntersectionFunctionTableDescriptor"
@@ -10697,6 +13118,12 @@ pub mod metal {
         }
     }
     owned_object!(LogContainer, "MTL::LogContainer");
+    impl LogContainer {
+        /// Returns the inherited `NS::FastEnumeration` view with retained ownership.
+        pub fn as_fast_enumeration(&self) -> super::foundation::FastEnumeration {
+            super::foundation::FastEnumeration::from_inner(self._inner.clone())
+        }
+    }
     owned_object!(LogState, "MTL::LogState");
     owned_object!(LogStateDescriptor, "MTL::LogStateDescriptor");
     impl LogStateDescriptor {
@@ -11662,6 +14089,43 @@ pub mod metal {
     }
     owned_object!(ObjectPayloadBinding, "MTL::ObjectPayloadBinding");
     impl ObjectPayloadBinding {
+        /// Returns the inherited `MTL::Binding` view with retained ownership.
+        pub fn as_binding(&self) -> Binding {
+            Binding::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::ObjectPayloadBinding::index` when the runtime selector is available.
+        pub fn index(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(index)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::index is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, index] })
+        }
+        /// Reads `MTL::ObjectPayloadBinding::isArgument` when the runtime selector is available.
+        pub fn is_argument(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isArgument)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::isArgument is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isArgument] })
+        }
+        /// Reads `MTL::ObjectPayloadBinding::isUsed` when the runtime selector is available.
+        pub fn is_used(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUsed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::isUsed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUsed] })
+        }
         /// Reads `MTL::ObjectPayloadBinding::objectPayloadAlignment` when the runtime selector is available.
         pub fn object_payload_alignment(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(objectPayloadAlignment)) {
@@ -11684,11 +14148,94 @@ pub mod metal {
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, objectPayloadDataSize] })
         }
+        /// Reads `MTL::ObjectPayloadBinding::access` when the runtime selector is available.
+        pub fn access(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingAccess, FrameworkError> {
+            if !self.responds_to(sel!(access)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::access is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, access] };
+            Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
+        /// Reads `MTL::ObjectPayloadBinding::type` when the runtime selector is available.
+        pub fn r#type(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingType, FrameworkError> {
+            if !self.responds_to(sel!(type)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::type is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `isize` enum representation.
+            let raw: isize = unsafe { msg_send![&*self._inner, type] };
+            Ok(super::super::generated_value_types::BindingType::from_system_raw(raw))
+        }
+        /// Reads `MTL::ObjectPayloadBinding::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ObjectPayloadBinding::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
+        }
     }
     owned_object!(
         ParallelRenderCommandEncoder,
         "MTL::ParallelRenderCommandEncoder"
     );
+    impl ParallelRenderCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::ParallelRenderCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ParallelRenderCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::ParallelRenderCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ParallelRenderCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::ParallelRenderCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ParallelRenderCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(PipelineBufferDescriptor, "MTL::PipelineBufferDescriptor");
     impl PipelineBufferDescriptor {
         /// Creates a default `MTL::PipelineBufferDescriptor` when `MTLPipelineBufferDescriptor` is available.
@@ -11762,6 +14309,10 @@ pub mod metal {
     }
     owned_object!(PointerType, "MTL::PointerType");
     impl PointerType {
+        /// Returns the inherited `MTL::Type` view with retained ownership.
+        pub fn as_type(&self) -> Type {
+            Type::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::PointerType` when `MTLPointerType` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLPointerType").ok_or_else(|| {
@@ -11819,6 +14370,20 @@ pub mod metal {
             let raw: usize = unsafe { msg_send![&*self._inner, access] };
             Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
         }
+        /// Reads `MTL::PointerType::dataType` when the runtime selector is available.
+        pub fn data_type(
+            &self,
+        ) -> Result<super::super::generated_value_types::DataType, FrameworkError> {
+            if !self.responds_to(sel!(dataType)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::PointerType::dataType is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, dataType] };
+            Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
+        }
         /// Reads `MTL::PointerType::elementType` when the runtime selector is available.
         pub fn element_type(
             &self,
@@ -11839,6 +14404,10 @@ pub mod metal {
         "MTL::PrimitiveAccelerationStructureDescriptor"
     );
     impl PrimitiveAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::PrimitiveAccelerationStructureDescriptor` when `MTLPrimitiveAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -12013,6 +14582,49 @@ pub mod metal {
             // been checked against its declared values or option bits.
             unsafe {
                 let _: () = msg_send![&*self._inner, setMotionStartBorderMode: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::PrimitiveAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::PrimitiveAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL::PrimitiveAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::PrimitiveAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::PrimitiveAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
             }
             Ok(())
         }
@@ -12251,6 +14863,10 @@ pub mod metal {
     }
     owned_object!(RenderCommandEncoder, "MTL::RenderCommandEncoder");
     impl RenderCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::RenderCommandEncoder::tileHeight` when the runtime selector is available.
         pub fn tile_height(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(tileHeight)) {
@@ -12272,6 +14888,44 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, tileWidth] })
+        }
+        /// Reads `MTL::RenderCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::RenderCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::RenderCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
     }
     owned_object!(
@@ -12627,6 +15281,10 @@ pub mod metal {
         "MTL::RenderPassColorAttachmentDescriptor"
     );
     impl RenderPassColorAttachmentDescriptor {
+        /// Returns the inherited `MTL::RenderPassAttachmentDescriptor` view with retained ownership.
+        pub fn as_render_pass_attachment_descriptor(&self) -> RenderPassAttachmentDescriptor {
+            RenderPassAttachmentDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::RenderPassColorAttachmentDescriptor` when `MTLRenderPassColorAttachmentDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -12639,6 +15297,336 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::depthPlane` when the runtime selector is available.
+        pub fn depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::depthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setDepthPlane` after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::level` when the runtime selector is available.
+        pub fn level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(level)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::level is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, level] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setLevel` after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::resolveDepthPlane` when the runtime selector is available.
+        pub fn resolve_depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveDepthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::resolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveDepthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setResolveDepthPlane` after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setResolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::resolveLevel` when the runtime selector is available.
+        pub fn resolve_level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveLevel)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::resolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveLevel] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setResolveLevel` after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setResolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::resolveSlice` when the runtime selector is available.
+        pub fn resolve_slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveSlice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::resolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveSlice] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setResolveSlice` after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setResolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveSlice: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::slice` when the runtime selector is available.
+        pub fn slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(slice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::slice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, slice] })
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setSlice` after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSlice: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::loadAction` when the runtime selector is available.
+        pub fn load_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::LoadAction, FrameworkError> {
+            if !self.responds_to(sel!(loadAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::loadAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, loadAction] };
+            Ok(super::super::generated_value_types::LoadAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setLoadAction` after value and selector checks.
+        pub fn set_load_action(
+            &self,
+            value: super::super::generated_value_types::LoadAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassColorAttachmentDescriptor::setLoadAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setLoadAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setLoadAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLoadAction: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::storeAction` when the runtime selector is available.
+        pub fn store_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreAction, FrameworkError> {
+            if !self.responds_to(sel!(storeAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::storeAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeAction] };
+            Ok(super::super::generated_value_types::StoreAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setStoreAction` after value and selector checks.
+        pub fn set_store_action(
+            &self,
+            value: super::super::generated_value_types::StoreAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassColorAttachmentDescriptor::setStoreAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setStoreAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreAction: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::storeActionOptions` when the runtime selector is available.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreActionOptions, FrameworkError>
+        {
+            if !self.responds_to(sel!(storeActionOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::storeActionOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeActionOptions] };
+            Ok(super::super::generated_value_types::StoreActionOptions::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setStoreActionOptions` after value and selector checks.
+        pub fn set_store_action_options(
+            &self,
+            value: super::super::generated_value_types::StoreActionOptions,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassColorAttachmentDescriptor::setStoreActionOptions received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreActionOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setStoreActionOptions is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreActionOptions: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::resolveTexture` as an owned object.
+        pub fn resolve_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(resolveTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::resolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, resolveTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setResolveTexture` from a type-checked wrapper.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setResolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassColorAttachmentDescriptor::texture` as an owned object.
+        pub fn texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(texture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::texture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, texture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassColorAttachmentDescriptor::setTexture` from a type-checked wrapper.
+        pub fn set_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassColorAttachmentDescriptor::setTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () =
+                    msg_send![&*self._inner, setTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
         }
     }
     owned_object!(
@@ -12665,6 +15653,10 @@ pub mod metal {
         "MTL::RenderPassDepthAttachmentDescriptor"
     );
     impl RenderPassDepthAttachmentDescriptor {
+        /// Returns the inherited `MTL::RenderPassAttachmentDescriptor` view with retained ownership.
+        pub fn as_render_pass_attachment_descriptor(&self) -> RenderPassAttachmentDescriptor {
+            RenderPassAttachmentDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::RenderPassDepthAttachmentDescriptor` when `MTLRenderPassDepthAttachmentDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -12706,6 +15698,162 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setClearDepth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::depthPlane` when the runtime selector is available.
+        pub fn depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::depthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setDepthPlane` after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::level` when the runtime selector is available.
+        pub fn level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(level)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::level is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, level] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setLevel` after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::resolveDepthPlane` when the runtime selector is available.
+        pub fn resolve_depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveDepthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::resolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveDepthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setResolveDepthPlane` after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setResolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::resolveLevel` when the runtime selector is available.
+        pub fn resolve_level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveLevel)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::resolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveLevel] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setResolveLevel` after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setResolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::resolveSlice` when the runtime selector is available.
+        pub fn resolve_slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveSlice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::resolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveSlice] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setResolveSlice` after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setResolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveSlice: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::slice` when the runtime selector is available.
+        pub fn slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(slice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::slice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, slice] })
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setSlice` after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSlice: value];
             }
             Ok(())
         }
@@ -12751,6 +15899,180 @@ pub mod metal {
             // been checked against its declared values or option bits.
             unsafe {
                 let _: () = msg_send![&*self._inner, setDepthResolveFilter: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::loadAction` when the runtime selector is available.
+        pub fn load_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::LoadAction, FrameworkError> {
+            if !self.responds_to(sel!(loadAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::loadAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, loadAction] };
+            Ok(super::super::generated_value_types::LoadAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setLoadAction` after value and selector checks.
+        pub fn set_load_action(
+            &self,
+            value: super::super::generated_value_types::LoadAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setLoadAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setLoadAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setLoadAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLoadAction: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::storeAction` when the runtime selector is available.
+        pub fn store_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreAction, FrameworkError> {
+            if !self.responds_to(sel!(storeAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::storeAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeAction] };
+            Ok(super::super::generated_value_types::StoreAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setStoreAction` after value and selector checks.
+        pub fn set_store_action(
+            &self,
+            value: super::super::generated_value_types::StoreAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreAction: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::storeActionOptions` when the runtime selector is available.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreActionOptions, FrameworkError>
+        {
+            if !self.responds_to(sel!(storeActionOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::storeActionOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeActionOptions] };
+            Ok(super::super::generated_value_types::StoreActionOptions::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setStoreActionOptions` after value and selector checks.
+        pub fn set_store_action_options(
+            &self,
+            value: super::super::generated_value_types::StoreActionOptions,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreActionOptions received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreActionOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setStoreActionOptions is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreActionOptions: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::resolveTexture` as an owned object.
+        pub fn resolve_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(resolveTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::resolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, resolveTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setResolveTexture` from a type-checked wrapper.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setResolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassDepthAttachmentDescriptor::texture` as an owned object.
+        pub fn texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(texture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::texture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, texture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassDepthAttachmentDescriptor::setTexture` from a type-checked wrapper.
+        pub fn set_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassDepthAttachmentDescriptor::setTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () =
+                    msg_send![&*self._inner, setTexture: value.map(crate::Texture::as_any_object)];
             }
             Ok(())
         }
@@ -13398,6 +16720,10 @@ pub mod metal {
         "MTL::RenderPassStencilAttachmentDescriptor"
     );
     impl RenderPassStencilAttachmentDescriptor {
+        /// Returns the inherited `MTL::RenderPassAttachmentDescriptor` view with retained ownership.
+        pub fn as_render_pass_attachment_descriptor(&self) -> RenderPassAttachmentDescriptor {
+            RenderPassAttachmentDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::RenderPassStencilAttachmentDescriptor` when `MTLRenderPassStencilAttachmentDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -13434,6 +16760,200 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setClearStencil: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::depthPlane` when the runtime selector is available.
+        pub fn depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::depthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setDepthPlane` after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::level` when the runtime selector is available.
+        pub fn level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(level)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::level is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, level] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setLevel` after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::resolveDepthPlane` when the runtime selector is available.
+        pub fn resolve_depth_plane(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveDepthPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::resolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveDepthPlane] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setResolveDepthPlane` after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveDepthPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setResolveDepthPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveDepthPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::resolveLevel` when the runtime selector is available.
+        pub fn resolve_level(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveLevel)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::resolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveLevel] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setResolveLevel` after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveLevel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setResolveLevel is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveLevel: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::resolveSlice` when the runtime selector is available.
+        pub fn resolve_slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resolveSlice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::resolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resolveSlice] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setResolveSlice` after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setResolveSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveSlice: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::slice` when the runtime selector is available.
+        pub fn slice(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(slice)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::slice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, slice] })
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setSlice` after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSlice:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setSlice is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSlice: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::loadAction` when the runtime selector is available.
+        pub fn load_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::LoadAction, FrameworkError> {
+            if !self.responds_to(sel!(loadAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::loadAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, loadAction] };
+            Ok(super::super::generated_value_types::LoadAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setLoadAction` after value and selector checks.
+        pub fn set_load_action(
+            &self,
+            value: super::super::generated_value_types::LoadAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setLoadAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setLoadAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setLoadAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLoadAction: raw];
             }
             Ok(())
         }
@@ -13475,6 +16995,142 @@ pub mod metal {
             // been checked against its declared values or option bits.
             unsafe {
                 let _: () = msg_send![&*self._inner, setStencilResolveFilter: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::storeAction` when the runtime selector is available.
+        pub fn store_action(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreAction, FrameworkError> {
+            if !self.responds_to(sel!(storeAction)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::storeAction is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeAction] };
+            Ok(super::super::generated_value_types::StoreAction::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setStoreAction` after value and selector checks.
+        pub fn set_store_action(
+            &self,
+            value: super::super::generated_value_types::StoreAction,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setStoreAction received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreAction:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setStoreAction is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreAction: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::storeActionOptions` when the runtime selector is available.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<super::super::generated_value_types::StoreActionOptions, FrameworkError>
+        {
+            if !self.responds_to(sel!(storeActionOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::storeActionOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storeActionOptions] };
+            Ok(super::super::generated_value_types::StoreActionOptions::from_system_raw(raw))
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setStoreActionOptions` after value and selector checks.
+        pub fn set_store_action_options(
+            &self,
+            value: super::super::generated_value_types::StoreActionOptions,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setStoreActionOptions received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setStoreActionOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setStoreActionOptions is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setStoreActionOptions: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::resolveTexture` as an owned object.
+        pub fn resolve_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(resolveTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::resolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, resolveTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setResolveTexture` from a type-checked wrapper.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setResolveTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setResolveTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setResolveTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::RenderPassStencilAttachmentDescriptor::texture` as an owned object.
+        pub fn texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(texture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::texture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, texture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL::RenderPassStencilAttachmentDescriptor::setTexture` from a type-checked wrapper.
+        pub fn set_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPassStencilAttachmentDescriptor::setTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () =
+                    msg_send![&*self._inner, setTexture: value.map(crate::Texture::as_any_object)];
             }
             Ok(())
         }
@@ -15172,6 +18828,21 @@ pub mod metal {
     }
     owned_object!(RenderPipelineState, "MTL::RenderPipelineState");
     impl RenderPipelineState {
+        /// Returns the inherited `MTL::Allocation` view with retained ownership.
+        pub fn as_allocation(&self) -> Allocation {
+            Allocation::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::RenderPipelineState::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::RenderPipelineState::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL::RenderPipelineState::imageblockSampleLength` when the runtime selector is available.
         pub fn imageblock_sample_length(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(imageblockSampleLength)) {
@@ -15462,6 +19133,10 @@ pub mod metal {
     }
     owned_object!(Resource, "MTL::Resource");
     impl Resource {
+        /// Returns the inherited `MTL::Allocation` view with retained ownership.
+        pub fn as_allocation(&self) -> Allocation {
+            Allocation::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::Resource::allocatedSize` when the runtime selector is available.
         pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(allocatedSize)) {
@@ -15597,6 +19272,50 @@ pub mod metal {
         ResourceStateCommandEncoder,
         "MTL::ResourceStateCommandEncoder"
     );
+    impl ResourceStateCommandEncoder {
+        /// Returns the inherited `MTL::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::ResourceStateCommandEncoder::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ResourceStateCommandEncoder::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::ResourceStateCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ResourceStateCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::ResourceStateCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ResourceStateCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(
         ResourceStatePassDescriptor,
         "MTL::ResourceStatePassDescriptor"
@@ -16430,6 +20149,10 @@ pub mod metal {
     }
     owned_object!(SharedEvent, "MTL::SharedEvent");
     impl SharedEvent {
+        /// Returns the inherited `MTL::Event` view with retained ownership.
+        pub fn as_event(&self) -> Event {
+            Event::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::SharedEvent::signaledValue` when the runtime selector is available.
         pub fn signaled_value(&self) -> Result<u64, FrameworkError> {
             if !self.responds_to(sel!(signaledValue)) {
@@ -16453,6 +20176,44 @@ pub mod metal {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setSignaledValue: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL::SharedEvent::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::SharedEvent::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::SharedEvent::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::SharedEvent::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::SharedEvent::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::SharedEvent::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
             }
             Ok(())
         }
@@ -17083,6 +20844,10 @@ pub mod metal {
     }
     owned_object!(StructType, "MTL::StructType");
     impl StructType {
+        /// Returns the inherited `MTL::Type` view with retained ownership.
+        pub fn as_type(&self) -> Type {
+            Type::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::StructType` when `MTLStructType` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLStructType").ok_or_else(|| {
@@ -17092,6 +20857,20 @@ pub mod metal {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL::StructType::dataType` when the runtime selector is available.
+        pub fn data_type(
+            &self,
+        ) -> Result<super::super::generated_value_types::DataType, FrameworkError> {
+            if !self.responds_to(sel!(dataType)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::StructType::dataType is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, dataType] };
+            Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
         }
         /// Reads `MTL::StructType::members` as an owned object.
         pub fn members(
@@ -17111,6 +20890,21 @@ pub mod metal {
     }
     owned_object!(Tensor, "MTL::Tensor");
     impl Tensor {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::Tensor::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL::Tensor::bufferOffset` when the runtime selector is available.
         pub fn buffer_offset(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(bufferOffset)) {
@@ -17121,6 +20915,31 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, bufferOffset] })
+        }
+        /// Reads `MTL::Tensor::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
+        /// Reads `MTL::Tensor::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
         }
         /// Reads `MTL::Tensor::dataType` when the runtime selector is available.
         pub fn data_type(
@@ -17135,6 +20954,47 @@ pub mod metal {
             // property getter with the `isize` enum representation.
             let raw: isize = unsafe { msg_send![&*self._inner, dataType] };
             Ok(super::super::generated_value_types::TensorDataType::from_system_raw(raw))
+        }
+        /// Reads `MTL::Tensor::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::Tensor::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
+        }
+        /// Reads `MTL::Tensor::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported("MTL::Tensor::storageMode returned an unknown value")
+            })
         }
         /// Reads `MTL::Tensor::usage` when the runtime selector is available.
         pub fn usage(
@@ -17178,6 +21038,18 @@ pub mod metal {
             let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, buffer] };
             value.map(crate::Buffer::from_any_object).transpose()
         }
+        /// Reads `MTL::Tensor::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
         /// Reads `MTL::Tensor::dimensions` as an owned object.
         pub fn dimensions(
             &self,
@@ -17195,6 +21067,47 @@ pub mod metal {
             let value: Option<Retained<AnyObject>> =
                 unsafe { msg_send![&*self._inner, dimensions] };
             Ok(value.map(super::super::generated_object_types::metal::TensorExtents::from_inner))
+        }
+        /// Reads `MTL::Tensor::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::Tensor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::Tensor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Tensor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
         /// Reads `MTL::Tensor::strides` as an owned object.
         pub fn strides(
@@ -17460,6 +21373,57 @@ pub mod metal {
     }
     owned_object!(TensorBinding, "MTL::TensorBinding");
     impl TensorBinding {
+        /// Returns the inherited `MTL::Binding` view with retained ownership.
+        pub fn as_binding(&self) -> Binding {
+            Binding::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::TensorBinding::index` when the runtime selector is available.
+        pub fn index(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(index)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::index is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, index] })
+        }
+        /// Reads `MTL::TensorBinding::isArgument` when the runtime selector is available.
+        pub fn is_argument(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isArgument)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::isArgument is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isArgument] })
+        }
+        /// Reads `MTL::TensorBinding::isUsed` when the runtime selector is available.
+        pub fn is_used(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUsed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::isUsed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUsed] })
+        }
+        /// Reads `MTL::TensorBinding::access` when the runtime selector is available.
+        pub fn access(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingAccess, FrameworkError> {
+            if !self.responds_to(sel!(access)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::access is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, access] };
+            Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
         /// Reads `MTL::TensorBinding::indexType` when the runtime selector is available.
         pub fn index_type(
             &self,
@@ -17487,6 +21451,20 @@ pub mod metal {
             // property getter with the `isize` enum representation.
             let raw: isize = unsafe { msg_send![&*self._inner, tensorDataType] };
             Ok(super::super::generated_value_types::TensorDataType::from_system_raw(raw))
+        }
+        /// Reads `MTL::TensorBinding::type` when the runtime selector is available.
+        pub fn r#type(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingType, FrameworkError> {
+            if !self.responds_to(sel!(type)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::type is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `isize` enum representation.
+            let raw: isize = unsafe { msg_send![&*self._inner, type] };
+            Ok(super::super::generated_value_types::BindingType::from_system_raw(raw))
         }
         /// Reads `MTL::TensorBinding::auxiliaryPlanes` as an owned object.
         pub fn auxiliary_planes(
@@ -17521,6 +21499,17 @@ pub mod metal {
             let value: Option<Retained<AnyObject>> =
                 unsafe { msg_send![&*self._inner, dimensions] };
             Ok(value.map(super::super::generated_object_types::metal::TensorExtents::from_inner))
+        }
+        /// Reads `MTL::TensorBinding::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorBinding::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
         }
     }
     owned_object!(TensorBufferAttachments, "MTL::TensorBufferAttachments");
@@ -17912,6 +21901,10 @@ pub mod metal {
     }
     owned_object!(TensorReferenceType, "MTL::TensorReferenceType");
     impl TensorReferenceType {
+        /// Returns the inherited `MTL::Type` view with retained ownership.
+        pub fn as_type(&self) -> Type {
+            Type::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::TensorReferenceType` when `MTLTensorReferenceType` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLTensorReferenceType").ok_or_else(|| {
@@ -17935,6 +21928,20 @@ pub mod metal {
             // property getter with the `usize` enum representation.
             let raw: usize = unsafe { msg_send![&*self._inner, access] };
             Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
+        /// Reads `MTL::TensorReferenceType::dataType` when the runtime selector is available.
+        pub fn data_type(
+            &self,
+        ) -> Result<super::super::generated_value_types::DataType, FrameworkError> {
+            if !self.responds_to(sel!(dataType)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TensorReferenceType::dataType is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, dataType] };
+            Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
         }
         /// Reads `MTL::TensorReferenceType::indexType` when the runtime selector is available.
         pub fn index_type(
@@ -18001,6 +22008,21 @@ pub mod metal {
     }
     owned_object!(Texture, "MTL::Texture");
     impl Texture {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::Texture::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL::Texture::allowGPUOptimizedContents` when the runtime selector is available.
         pub fn allow_gpu_optimized_contents(&self) -> Result<bool, FrameworkError> {
             if !self.responds_to(sel!(allowGPUOptimizedContents)) {
@@ -18066,6 +22088,17 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, firstMipmapInTail] })
+        }
+        /// Reads `MTL::Texture::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
         }
         /// Reads `MTL::Texture::height` when the runtime selector is available.
         pub fn height(&self) -> Result<usize, FrameworkError> {
@@ -18203,6 +22236,35 @@ pub mod metal {
             let raw: isize = unsafe { msg_send![&*self._inner, compressionType] };
             Ok(super::super::generated_value_types::TextureCompressionType::from_system_raw(raw))
         }
+        /// Reads `MTL::Texture::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::Texture::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
         /// Reads `MTL::Texture::pixelFormat` when the runtime selector is available.
         pub fn pixel_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
             if !self.responds_to(sel!(pixelFormat)) {
@@ -18214,6 +22276,18 @@ pub mod metal {
             // property getter with the `usize` enum representation.
             let raw: usize = unsafe { msg_send![&*self._inner, pixelFormat] };
             Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL::Texture::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
         }
         /// Reads `MTL::Texture::sparseTextureTier` when the runtime selector is available.
         pub fn sparse_texture_tier(
@@ -18229,6 +22303,20 @@ pub mod metal {
             // property getter with the `isize` enum representation.
             let raw: isize = unsafe { msg_send![&*self._inner, sparseTextureTier] };
             Ok(super::super::generated_value_types::TextureSparseTier::from_system_raw(raw))
+        }
+        /// Reads `MTL::Texture::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported("MTL::Texture::storageMode returned an unknown value")
+            })
         }
         /// Reads `MTL::Texture::textureType` when the runtime selector is available.
         pub fn texture_type(&self) -> Result<crate::TextureType, FrameworkError> {
@@ -18267,6 +22355,59 @@ pub mod metal {
             // is kept inside the generated owned wrapper.
             let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, buffer] };
             value.map(crate::Buffer::from_any_object).transpose()
+        }
+        /// Reads `MTL::Texture::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::Texture::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::Texture::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::Texture::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::Texture::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
         /// Reads `MTL::Texture::parentTexture` as an owned object.
         pub fn parent_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
@@ -18313,6 +22454,10 @@ pub mod metal {
     }
     owned_object!(TextureBinding, "MTL::TextureBinding");
     impl TextureBinding {
+        /// Returns the inherited `MTL::Binding` view with retained ownership.
+        pub fn as_binding(&self) -> Binding {
+            Binding::from_inner(self._inner.clone())
+        }
         /// Reads `MTL::TextureBinding::arrayLength` when the runtime selector is available.
         pub fn array_length(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(arrayLength)) {
@@ -18324,6 +22469,28 @@ pub mod metal {
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, arrayLength] })
         }
+        /// Reads `MTL::TextureBinding::index` when the runtime selector is available.
+        pub fn index(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(index)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::index is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, index] })
+        }
+        /// Reads `MTL::TextureBinding::isArgument` when the runtime selector is available.
+        pub fn is_argument(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isArgument)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::isArgument is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isArgument] })
+        }
         /// Reads `MTL::TextureBinding::isDepthTexture` when the runtime selector is available.
         pub fn is_depth_texture(&self) -> Result<bool, FrameworkError> {
             if !self.responds_to(sel!(isDepthTexture)) {
@@ -18334,6 +22501,31 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, isDepthTexture] })
+        }
+        /// Reads `MTL::TextureBinding::isUsed` when the runtime selector is available.
+        pub fn is_used(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUsed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::isUsed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUsed] })
+        }
+        /// Reads `MTL::TextureBinding::access` when the runtime selector is available.
+        pub fn access(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingAccess, FrameworkError> {
+            if !self.responds_to(sel!(access)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::access is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, access] };
+            Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
         }
         /// Reads `MTL::TextureBinding::textureDataType` when the runtime selector is available.
         pub fn texture_data_type(
@@ -18364,6 +22556,31 @@ pub mod metal {
                     "MTL::TextureBinding::textureType returned an unknown value",
                 )
             })
+        }
+        /// Reads `MTL::TextureBinding::type` when the runtime selector is available.
+        pub fn r#type(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingType, FrameworkError> {
+            if !self.responds_to(sel!(type)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::type is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `isize` enum representation.
+            let raw: isize = unsafe { msg_send![&*self._inner, type] };
+            Ok(super::super::generated_value_types::BindingType::from_system_raw(raw))
+        }
+        /// Reads `MTL::TextureBinding::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureBinding::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
         }
     }
     owned_object!(TextureDescriptor, "MTL::TextureDescriptor");
@@ -18892,6 +23109,10 @@ pub mod metal {
     }
     owned_object!(TextureReferenceType, "MTL::TextureReferenceType");
     impl TextureReferenceType {
+        /// Returns the inherited `MTL::Type` view with retained ownership.
+        pub fn as_type(&self) -> Type {
+            Type::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL::TextureReferenceType` when `MTLTextureReferenceType` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTLTextureReferenceType").ok_or_else(|| {
@@ -18926,6 +23147,20 @@ pub mod metal {
             // property getter with the `usize` enum representation.
             let raw: usize = unsafe { msg_send![&*self._inner, access] };
             Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
+        /// Reads `MTL::TextureReferenceType::dataType` when the runtime selector is available.
+        pub fn data_type(
+            &self,
+        ) -> Result<super::super::generated_value_types::DataType, FrameworkError> {
+            if !self.responds_to(sel!(dataType)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureReferenceType::dataType is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, dataType] };
+            Ok(super::super::generated_value_types::DataType::from_system_raw(raw))
         }
         /// Reads `MTL::TextureReferenceType::textureDataType` when the runtime selector is available.
         pub fn texture_data_type(
@@ -19044,8 +23279,85 @@ pub mod metal {
         }
     }
     owned_object!(TextureViewPool, "MTL::TextureViewPool");
+    impl TextureViewPool {
+        /// Returns the inherited `MTL::ResourceViewPool` view with retained ownership.
+        pub fn as_resource_view_pool(&self) -> ResourceViewPool {
+            ResourceViewPool::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::TextureViewPool::resourceViewCount` when the runtime selector is available.
+        pub fn resource_view_count(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(resourceViewCount)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureViewPool::resourceViewCount is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, resourceViewCount] })
+        }
+        /// Reads `MTL::TextureViewPool::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureViewPool::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::TextureViewPool::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::TextureViewPool::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+    }
     owned_object!(ThreadgroupBinding, "MTL::ThreadgroupBinding");
     impl ThreadgroupBinding {
+        /// Returns the inherited `MTL::Binding` view with retained ownership.
+        pub fn as_binding(&self) -> Binding {
+            Binding::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::ThreadgroupBinding::index` when the runtime selector is available.
+        pub fn index(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(index)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::index is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, index] })
+        }
+        /// Reads `MTL::ThreadgroupBinding::isArgument` when the runtime selector is available.
+        pub fn is_argument(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isArgument)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::isArgument is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isArgument] })
+        }
+        /// Reads `MTL::ThreadgroupBinding::isUsed` when the runtime selector is available.
+        pub fn is_used(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUsed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::isUsed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUsed] })
+        }
         /// Reads `MTL::ThreadgroupBinding::threadgroupMemoryAlignment` when the runtime selector is available.
         pub fn threadgroup_memory_alignment(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(threadgroupMemoryAlignment)) {
@@ -19067,6 +23379,45 @@ pub mod metal {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, threadgroupMemoryDataSize] })
+        }
+        /// Reads `MTL::ThreadgroupBinding::access` when the runtime selector is available.
+        pub fn access(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingAccess, FrameworkError> {
+            if !self.responds_to(sel!(access)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::access is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, access] };
+            Ok(super::super::generated_value_types::BindingAccess::from_system_raw(raw))
+        }
+        /// Reads `MTL::ThreadgroupBinding::type` when the runtime selector is available.
+        pub fn r#type(
+            &self,
+        ) -> Result<super::super::generated_value_types::BindingType, FrameworkError> {
+            if !self.responds_to(sel!(type)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::type is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `isize` enum representation.
+            let raw: isize = unsafe { msg_send![&*self._inner, type] };
+            Ok(super::super::generated_value_types::BindingType::from_system_raw(raw))
+        }
+        /// Reads `MTL::ThreadgroupBinding::name` as an owned string.
+        pub fn name(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(name)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::ThreadgroupBinding::name is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, name] };
+            Ok(value.map(|value| value.to_string()))
         }
     }
     owned_object!(
@@ -19928,6 +24279,144 @@ pub mod metal {
         }
     }
     owned_object!(VisibleFunctionTable, "MTL::VisibleFunctionTable");
+    impl VisibleFunctionTable {
+        /// Returns the inherited `MTL::Resource` view with retained ownership.
+        pub fn as_resource(&self) -> Resource {
+            Resource::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL::VisibleFunctionTable::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
+        /// Reads `MTL::VisibleFunctionTable::heapOffset` when the runtime selector is available.
+        pub fn heap_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(heapOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::heapOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, heapOffset] })
+        }
+        /// Reads `MTL::VisibleFunctionTable::cpuCacheMode` when the runtime selector is available.
+        pub fn cpu_cache_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::CPUCacheMode, FrameworkError> {
+            if !self.responds_to(sel!(cpuCacheMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::cpuCacheMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, cpuCacheMode] };
+            Ok(super::super::generated_value_types::CPUCacheMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::VisibleFunctionTable::hazardTrackingMode` when the runtime selector is available.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<super::super::generated_value_types::HazardTrackingMode, FrameworkError>
+        {
+            if !self.responds_to(sel!(hazardTrackingMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::hazardTrackingMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, hazardTrackingMode] };
+            Ok(super::super::generated_value_types::HazardTrackingMode::from_system_raw(raw))
+        }
+        /// Reads `MTL::VisibleFunctionTable::resourceOptions` when the runtime selector is available.
+        pub fn resource_options(&self) -> Result<crate::ResourceOptions, FrameworkError> {
+            if !self.responds_to(sel!(resourceOptions)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::resourceOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, resourceOptions] };
+            Ok(crate::ResourceOptions::from_system_raw(raw))
+        }
+        /// Reads `MTL::VisibleFunctionTable::storageMode` when the runtime selector is available.
+        pub fn storage_mode(&self) -> Result<crate::StorageMode, FrameworkError> {
+            if !self.responds_to(sel!(storageMode)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::storageMode is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, storageMode] };
+            crate::StorageMode::try_from_system_raw(raw).ok_or_else(|| {
+                FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::storageMode returned an unknown value",
+                )
+            })
+        }
+        /// Reads `MTL::VisibleFunctionTable::device` as an owned object.
+        pub fn device(&self) -> Result<Option<crate::Device>, FrameworkError> {
+            if !self.responds_to(sel!(device)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::device is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, device] };
+            value.map(crate::Device::from_any_object).transpose()
+        }
+        /// Reads `MTL::VisibleFunctionTable::heap` as an owned object.
+        pub fn heap(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Heap>, FrameworkError>
+        {
+            if !self.responds_to(sel!(heap)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::heap is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, heap] };
+            Ok(value.map(super::super::generated_object_types::metal::Heap::from_inner))
+        }
+        /// Reads `MTL::VisibleFunctionTable::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL::VisibleFunctionTable::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL::VisibleFunctionTable::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(
         VisibleFunctionTableDescriptor,
         "MTL::VisibleFunctionTableDescriptor"
@@ -19983,6 +24472,12 @@ pub mod metal4 {
         "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor"
     );
     impl AccelerationStructureBoundingBoxGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor` when `MTL4AccelerationStructureBoundingBoxGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureBoundingBoxGeometryDescriptor").ok_or_else(||
@@ -19992,6 +24487,19 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::boundingBoxCount` when the runtime selector is available.
         pub fn bounding_box_count(&self) -> Result<usize, FrameworkError> {
@@ -20045,12 +24553,167 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureBoundingBoxGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureCurveGeometryDescriptor,
         "MTL4::AccelerationStructureCurveGeometryDescriptor"
     );
     impl AccelerationStructureCurveGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureCurveGeometryDescriptor` when `MTL4AccelerationStructureCurveGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureCurveGeometryDescriptor").ok_or_else(||
@@ -20060,6 +24723,19 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::controlPointCount` when the runtime selector is available.
         pub fn control_point_count(&self) -> Result<usize, FrameworkError> {
@@ -20110,6 +24786,98 @@ pub mod metal4 {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setControlPointStride: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -20419,12 +25187,75 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::AccelerationStructureCurveGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureCurveGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureCurveGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureDescriptor,
         "MTL4::AccelerationStructureDescriptor"
     );
     impl AccelerationStructureDescriptor {
+        /// Returns the inherited `MTL::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(
+            &self,
+        ) -> super::metal::AccelerationStructureDescriptor {
+            super::metal::AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureDescriptor` when `MTL4AccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureDescriptor").ok_or_else(|| {
@@ -20436,6 +25267,49 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL4::AccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4::AccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
         }
     }
     owned_object!(
@@ -20624,6 +25498,12 @@ pub mod metal4 {
         "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor"
     );
     impl AccelerationStructureMotionBoundingBoxGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor` when `MTL4AccelerationStructureMotionBoundingBoxGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureMotionBoundingBoxGeometryDescriptor").ok_or_else(||
@@ -20633,6 +25513,19 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::boundingBoxCount` when the runtime selector is available.
         pub fn bounding_box_count(&self) -> Result<usize, FrameworkError> {
@@ -20686,12 +25579,167 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionBoundingBoxGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureMotionCurveGeometryDescriptor,
         "MTL4::AccelerationStructureMotionCurveGeometryDescriptor"
     );
     impl AccelerationStructureMotionCurveGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureMotionCurveGeometryDescriptor` when `MTL4AccelerationStructureMotionCurveGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureMotionCurveGeometryDescriptor").ok_or_else(||
@@ -20701,6 +25749,19 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
         }
         /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::controlPointCount` when the runtime selector is available.
         pub fn control_point_count(&self) -> Result<usize, FrameworkError> {
@@ -20751,6 +25812,98 @@ pub mod metal4 {
             // primitive representation declared by the inventory.
             unsafe {
                 let _: () = msg_send![&*self._inner, setControlPointStride: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
             }
             Ok(())
         }
@@ -21060,12 +26213,75 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionCurveGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureMotionTriangleGeometryDescriptor,
         "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor"
     );
     impl AccelerationStructureMotionTriangleGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor` when `MTL4AccelerationStructureMotionTriangleGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureMotionTriangleGeometryDescriptor").ok_or_else(||
@@ -21075,6 +26291,111 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
+        }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
         }
         /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::triangleCount` when the runtime selector is available.
         pub fn triangle_count(&self) -> Result<usize, FrameworkError> {
@@ -21242,12 +26563,75 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureMotionTriangleGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         AccelerationStructureTriangleGeometryDescriptor,
         "MTL4::AccelerationStructureTriangleGeometryDescriptor"
     );
     impl AccelerationStructureTriangleGeometryDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureGeometryDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_geometry_descriptor(
+            &self,
+        ) -> AccelerationStructureGeometryDescriptor {
+            AccelerationStructureGeometryDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::AccelerationStructureTriangleGeometryDescriptor` when `MTL4AccelerationStructureTriangleGeometryDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4AccelerationStructureTriangleGeometryDescriptor").ok_or_else(||
@@ -21257,6 +26641,111 @@ pub mod metal4 {
             // the inventory declares both alloc and zero-argument init.
             let inner = unsafe { msg_send![class, new] };
             Ok(Self::from_inner(inner))
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(allowDuplicateIntersectionFunctionInvocation)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::allowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allowDuplicateIntersectionFunctionInvocation] })
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::intersectionFunctionTableOffset` when the runtime selector is available.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(intersectionFunctionTableOffset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::intersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, intersectionFunctionTableOffset] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setIntersectionFunctionTableOffset` after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIntersectionFunctionTableOffset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setIntersectionFunctionTableOffset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIntersectionFunctionTableOffset: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::opaque` when the runtime selector is available.
+        pub fn opaque(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(opaque)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::opaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, opaque] })
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::primitiveDataElementSize` when the runtime selector is available.
+        pub fn primitive_data_element_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataElementSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::primitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataElementSize] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataElementSize` after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataElementSize:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataElementSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataElementSize: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::primitiveDataStride` when the runtime selector is available.
+        pub fn primitive_data_stride(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(primitiveDataStride)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::primitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, primitiveDataStride] })
+        }
+
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataStride` after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrimitiveDataStride:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setPrimitiveDataStride is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrimitiveDataStride: value];
+            }
+            Ok(())
         }
         /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::triangleCount` when the runtime selector is available.
         pub fn triangle_count(&self) -> Result<usize, FrameworkError> {
@@ -21421,6 +26910,63 @@ pub mod metal4 {
             // been checked against its declared values or option bits.
             unsafe {
                 let _: () = msg_send![&*self._inner, setVertexFormat: raw];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::AccelerationStructureTriangleGeometryDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation` when the runtime selector is available.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setAllowDuplicateIntersectionFunctionInvocation:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setAllowDuplicateIntersectionFunctionInvocation is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAllowDuplicateIntersectionFunctionInvocation: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4::AccelerationStructureTriangleGeometryDescriptor::setOpaque` when the runtime selector is available.
+        pub fn set_opaque(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOpaque:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::AccelerationStructureTriangleGeometryDescriptor::setOpaque is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOpaque: value];
             }
             Ok(())
         }
@@ -22324,8 +27870,62 @@ pub mod metal4 {
         }
     }
     owned_object!(ComputeCommandEncoder, "MTL4::ComputeCommandEncoder");
+    impl ComputeCommandEncoder {
+        /// Returns the inherited `MTL4::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4::ComputeCommandEncoder::commandBuffer` as an owned object.
+        pub fn command_buffer(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::CommandBuffer>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(commandBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputeCommandEncoder::commandBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, commandBuffer] };
+            Ok(value.map(super::super::generated_object_types::metal4::CommandBuffer::from_inner))
+        }
+        /// Reads `MTL4::ComputeCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputeCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::ComputeCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputeCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(ComputePipelineDescriptor, "MTL4::ComputePipelineDescriptor");
     impl ComputePipelineDescriptor {
+        /// Returns the inherited `MTL4::PipelineDescriptor` view with retained ownership.
+        pub fn as_pipeline_descriptor(&self) -> PipelineDescriptor {
+            PipelineDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::ComputePipelineDescriptor` when `MTL4ComputePipelineDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4ComputePipelineDescriptor").ok_or_else(|| {
@@ -22471,6 +28071,70 @@ pub mod metal4 {
             // Objective-C class identity declared for this property.
             unsafe {
                 let _: () = msg_send![&*self._inner, setComputeFunctionDescriptor: value.map(super::super::generated_object_types::metal4::FunctionDescriptor::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::ComputePipelineDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputePipelineDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::ComputePipelineDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputePipelineDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::ComputePipelineDescriptor::options` as an owned object.
+        pub fn options(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::PipelineOptions>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputePipelineDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, options] };
+            Ok(
+                value
+                    .map(super::super::generated_object_types::metal4::PipelineOptions::from_inner),
+            )
+        }
+
+        /// Writes `MTL4::ComputePipelineDescriptor::setOptions` from a type-checked wrapper.
+        pub fn set_options(
+            &self,
+            value: Option<&super::super::generated_object_types::metal4::PipelineOptions>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::ComputePipelineDescriptor::setOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: value.map(super::super::generated_object_types::metal4::PipelineOptions::as_inner)];
             }
             Ok(())
         }
@@ -22695,6 +28359,10 @@ pub mod metal4 {
         "MTL4::IndirectInstanceAccelerationStructureDescriptor"
     );
     impl IndirectInstanceAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::IndirectInstanceAccelerationStructureDescriptor` when `MTL4IndirectInstanceAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4IndirectInstanceAccelerationStructureDescriptor").ok_or_else(||
@@ -22927,12 +28595,59 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::IndirectInstanceAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::IndirectInstanceAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL4::IndirectInstanceAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4::IndirectInstanceAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::IndirectInstanceAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         InstanceAccelerationStructureDescriptor,
         "MTL4::InstanceAccelerationStructureDescriptor"
     );
     impl InstanceAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::InstanceAccelerationStructureDescriptor` when `MTL4InstanceAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -23168,6 +28883,49 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::InstanceAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::InstanceAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL4::InstanceAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4::InstanceAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::InstanceAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
+        }
     }
     owned_object!(LibraryDescriptor, "MTL4::LibraryDescriptor");
     impl LibraryDescriptor {
@@ -23268,6 +29026,10 @@ pub mod metal4 {
     }
     owned_object!(LibraryFunctionDescriptor, "MTL4::LibraryFunctionDescriptor");
     impl LibraryFunctionDescriptor {
+        /// Returns the inherited `MTL4::FunctionDescriptor` view with retained ownership.
+        pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+            FunctionDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::LibraryFunctionDescriptor` when `MTL4LibraryFunctionDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4LibraryFunctionDescriptor").ok_or_else(|| {
@@ -23339,11 +29101,65 @@ pub mod metal4 {
         MachineLearningCommandEncoder,
         "MTL4::MachineLearningCommandEncoder"
     );
+    impl MachineLearningCommandEncoder {
+        /// Returns the inherited `MTL4::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4::MachineLearningCommandEncoder::commandBuffer` as an owned object.
+        pub fn command_buffer(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::CommandBuffer>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(commandBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningCommandEncoder::commandBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, commandBuffer] };
+            Ok(value.map(super::super::generated_object_types::metal4::CommandBuffer::from_inner))
+        }
+        /// Reads `MTL4::MachineLearningCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::MachineLearningCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+    }
     owned_object!(
         MachineLearningPipelineDescriptor,
         "MTL4::MachineLearningPipelineDescriptor"
     );
     impl MachineLearningPipelineDescriptor {
+        /// Returns the inherited `MTL4::PipelineDescriptor` view with retained ownership.
+        pub fn as_pipeline_descriptor(&self) -> PipelineDescriptor {
+            PipelineDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::MachineLearningPipelineDescriptor` when `MTL4MachineLearningPipelineDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class =
@@ -23420,6 +29236,44 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::MachineLearningPipelineDescriptor::options` as an owned object.
+        pub fn options(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::PipelineOptions>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningPipelineDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, options] };
+            Ok(
+                value
+                    .map(super::super::generated_object_types::metal4::PipelineOptions::from_inner),
+            )
+        }
+
+        /// Writes `MTL4::MachineLearningPipelineDescriptor::setOptions` from a type-checked wrapper.
+        pub fn set_options(
+            &self,
+            value: Option<&super::super::generated_object_types::metal4::PipelineOptions>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningPipelineDescriptor::setOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: value.map(super::super::generated_object_types::metal4::PipelineOptions::as_inner)];
+            }
+            Ok(())
+        }
     }
     owned_object!(
         MachineLearningPipelineReflection,
@@ -23460,6 +29314,21 @@ pub mod metal4 {
         "MTL4::MachineLearningPipelineState"
     );
     impl MachineLearningPipelineState {
+        /// Returns the inherited `MTL::Allocation` view with retained ownership.
+        pub fn as_allocation(&self) -> super::metal::Allocation {
+            super::metal::Allocation::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4::MachineLearningPipelineState::allocatedSize` when the runtime selector is available.
+        pub fn allocated_size(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(allocatedSize)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MachineLearningPipelineState::allocatedSize is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, allocatedSize] })
+        }
         /// Reads `MTL4::MachineLearningPipelineState::intermediatesHeapSize` when the runtime selector is available.
         pub fn intermediates_heap_size(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(intermediatesHeapSize)) {
@@ -23518,6 +29387,10 @@ pub mod metal4 {
         "MTL4::MeshRenderPipelineDescriptor"
     );
     impl MeshRenderPipelineDescriptor {
+        /// Returns the inherited `MTL4::PipelineDescriptor` view with retained ownership.
+        pub fn as_pipeline_descriptor(&self) -> PipelineDescriptor {
+            PipelineDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::MeshRenderPipelineDescriptor` when `MTL4MeshRenderPipelineDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4MeshRenderPipelineDescriptor").ok_or_else(|| {
@@ -24025,6 +29898,32 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::MeshRenderPipelineDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MeshRenderPipelineDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::MeshRenderPipelineDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MeshRenderPipelineDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
         /// Reads `MTL4::MeshRenderPipelineDescriptor::meshFunctionDescriptor` as an owned object.
         pub fn mesh_function_descriptor(
             &self,
@@ -24172,6 +30071,44 @@ pub mod metal4 {
             // Objective-C class identity declared for this property.
             unsafe {
                 let _: () = msg_send![&*self._inner, setObjectStaticLinkingDescriptor: value.map(super::super::generated_object_types::metal4::StaticLinkingDescriptor::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::MeshRenderPipelineDescriptor::options` as an owned object.
+        pub fn options(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::PipelineOptions>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MeshRenderPipelineDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, options] };
+            Ok(
+                value
+                    .map(super::super::generated_object_types::metal4::PipelineOptions::from_inner),
+            )
+        }
+
+        /// Writes `MTL4::MeshRenderPipelineDescriptor::setOptions` from a type-checked wrapper.
+        pub fn set_options(
+            &self,
+            value: Option<&super::super::generated_object_types::metal4::PipelineOptions>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::MeshRenderPipelineDescriptor::setOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: value.map(super::super::generated_object_types::metal4::PipelineOptions::as_inner)];
             }
             Ok(())
         }
@@ -24614,6 +30551,10 @@ pub mod metal4 {
         "MTL4::PrimitiveAccelerationStructureDescriptor"
     );
     impl PrimitiveAccelerationStructureDescriptor {
+        /// Returns the inherited `MTL4::AccelerationStructureDescriptor` view with retained ownership.
+        pub fn as_acceleration_structure_descriptor(&self) -> AccelerationStructureDescriptor {
+            AccelerationStructureDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::PrimitiveAccelerationStructureDescriptor` when `MTL4PrimitiveAccelerationStructureDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4PrimitiveAccelerationStructureDescriptor").ok_or_else(||
@@ -24788,6 +30729,49 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::PrimitiveAccelerationStructureDescriptor::usage` when the runtime selector is available.
+        pub fn usage(
+            &self,
+        ) -> Result<super::super::generated_value_types::AccelerationStructureUsage, FrameworkError>
+        {
+            if !self.responds_to(sel!(usage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::PrimitiveAccelerationStructureDescriptor::usage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, usage] };
+            Ok(
+                super::super::generated_value_types::AccelerationStructureUsage::from_system_raw(
+                    raw,
+                ),
+            )
+        }
+
+        /// Writes `MTL4::PrimitiveAccelerationStructureDescriptor::setUsage` after value and selector checks.
+        pub fn set_usage(
+            &self,
+            value: super::super::generated_value_types::AccelerationStructureUsage,
+        ) -> Result<(), FrameworkError> {
+            if !value.is_valid() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4::PrimitiveAccelerationStructureDescriptor::setUsage received an undeclared value",
+                ));
+            }
+            if !self.responds_to(sel!(setUsage:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::PrimitiveAccelerationStructureDescriptor::setUsage is unavailable",
+                ));
+            }
+            let raw: usize = value.as_raw();
+            // SAFETY: The selector is present and the generated value has
+            // been checked against its declared values or option bits.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUsage: raw];
+            }
+            Ok(())
+        }
         /// Reads `MTL4::PrimitiveAccelerationStructureDescriptor::geometryDescriptors` as an owned object.
         pub fn geometry_descriptors(
             &self,
@@ -24825,6 +30809,10 @@ pub mod metal4 {
     }
     owned_object!(RenderCommandEncoder, "MTL4::RenderCommandEncoder");
     impl RenderCommandEncoder {
+        /// Returns the inherited `MTL4::CommandEncoder` view with retained ownership.
+        pub fn as_command_encoder(&self) -> CommandEncoder {
+            CommandEncoder::from_inner(self._inner.clone())
+        }
         /// Reads `MTL4::RenderCommandEncoder::tileHeight` when the runtime selector is available.
         pub fn tile_height(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(tileHeight)) {
@@ -24846,6 +30834,50 @@ pub mod metal4 {
             // SAFETY: The selector is present and the inventory declares this
             // property getter with the exact primitive return type below.
             Ok(unsafe { msg_send![&*self._inner, tileWidth] })
+        }
+        /// Reads `MTL4::RenderCommandEncoder::commandBuffer` as an owned object.
+        pub fn command_buffer(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::CommandBuffer>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(commandBuffer)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderCommandEncoder::commandBuffer is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, commandBuffer] };
+            Ok(value.map(super::super::generated_object_types::metal4::CommandBuffer::from_inner))
+        }
+        /// Reads `MTL4::RenderCommandEncoder::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderCommandEncoder::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::RenderCommandEncoder::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderCommandEncoder::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
         }
     }
     owned_object!(RenderPassDescriptor, "MTL4::RenderPassDescriptor");
@@ -25862,6 +31894,10 @@ pub mod metal4 {
     }
     owned_object!(RenderPipelineDescriptor, "MTL4::RenderPipelineDescriptor");
     impl RenderPipelineDescriptor {
+        /// Returns the inherited `MTL4::PipelineDescriptor` view with retained ownership.
+        pub fn as_pipeline_descriptor(&self) -> PipelineDescriptor {
+            PipelineDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::RenderPipelineDescriptor` when `MTL4RenderPipelineDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4RenderPipelineDescriptor").ok_or_else(|| {
@@ -26248,6 +32284,70 @@ pub mod metal4 {
             }
             Ok(())
         }
+        /// Reads `MTL4::RenderPipelineDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderPipelineDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::RenderPipelineDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderPipelineDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::RenderPipelineDescriptor::options` as an owned object.
+        pub fn options(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::PipelineOptions>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderPipelineDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, options] };
+            Ok(
+                value
+                    .map(super::super::generated_object_types::metal4::PipelineOptions::from_inner),
+            )
+        }
+
+        /// Writes `MTL4::RenderPipelineDescriptor::setOptions` from a type-checked wrapper.
+        pub fn set_options(
+            &self,
+            value: Option<&super::super::generated_object_types::metal4::PipelineOptions>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::RenderPipelineDescriptor::setOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: value.map(super::super::generated_object_types::metal4::PipelineOptions::as_inner)];
+            }
+            Ok(())
+        }
         /// Reads `MTL4::RenderPipelineDescriptor::vertexDescriptor` as an owned object.
         pub fn vertex_descriptor(
             &self,
@@ -26532,6 +32632,10 @@ pub mod metal4 {
         "MTL4::SpecializedFunctionDescriptor"
     );
     impl SpecializedFunctionDescriptor {
+        /// Returns the inherited `MTL4::FunctionDescriptor` view with retained ownership.
+        pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+            FunctionDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::SpecializedFunctionDescriptor` when `MTL4SpecializedFunctionDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4SpecializedFunctionDescriptor").ok_or_else(|| {
@@ -26770,6 +32874,10 @@ pub mod metal4 {
         "MTL4::StitchedFunctionDescriptor"
     );
     impl StitchedFunctionDescriptor {
+        /// Returns the inherited `MTL4::FunctionDescriptor` view with retained ownership.
+        pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+            FunctionDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::StitchedFunctionDescriptor` when `MTL4StitchedFunctionDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4StitchedFunctionDescriptor").ok_or_else(|| {
@@ -26860,6 +32968,10 @@ pub mod metal4 {
         "MTL4::TileRenderPipelineDescriptor"
     );
     impl TileRenderPipelineDescriptor {
+        /// Returns the inherited `MTL4::PipelineDescriptor` view with retained ownership.
+        pub fn as_pipeline_descriptor(&self) -> PipelineDescriptor {
+            PipelineDescriptor::from_inner(self._inner.clone())
+        }
         /// Creates a default `MTL4::TileRenderPipelineDescriptor` when `MTL4TileRenderPipelineDescriptor` is available.
         pub fn new() -> Result<Self, FrameworkError> {
             let class = AnyClass::get(c"MTL4TileRenderPipelineDescriptor").ok_or_else(|| {
@@ -26961,6 +33073,70 @@ pub mod metal4 {
             let value: Option<Retained<AnyObject>> =
                 unsafe { msg_send![&*self._inner, colorAttachments] };
             Ok(value.map(super::super::generated_object_types::metal::TileRenderPipelineColorAttachmentDescriptorArray::from_inner))
+        }
+        /// Reads `MTL4::TileRenderPipelineDescriptor::label` as an owned string.
+        pub fn label(&self) -> Result<Option<std::string::String>, FrameworkError> {
+            if !self.responds_to(sel!(label)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::TileRenderPipelineDescriptor::label is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and is declared to return NSString.
+            let value: Option<Retained<NSString>> = unsafe { msg_send![&*self._inner, label] };
+            Ok(value.map(|value| value.to_string()))
+        }
+
+        /// Writes `MTL4::TileRenderPipelineDescriptor::setLabel` from a borrowed Rust string.
+        pub fn set_label(&self, value: &str) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setLabel:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::TileRenderPipelineDescriptor::setLabel is unavailable",
+                ));
+            }
+            let value = NSString::from_str(value);
+            // SAFETY: The selector is present and receives a live NSString.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setLabel: &*value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4::TileRenderPipelineDescriptor::options` as an owned object.
+        pub fn options(
+            &self,
+        ) -> Result<
+            Option<super::super::generated_object_types::metal4::PipelineOptions>,
+            FrameworkError,
+        > {
+            if !self.responds_to(sel!(options)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::TileRenderPipelineDescriptor::options is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, options] };
+            Ok(
+                value
+                    .map(super::super::generated_object_types::metal4::PipelineOptions::from_inner),
+            )
+        }
+
+        /// Writes `MTL4::TileRenderPipelineDescriptor::setOptions` from a type-checked wrapper.
+        pub fn set_options(
+            &self,
+            value: Option<&super::super::generated_object_types::metal4::PipelineOptions>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOptions:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4::TileRenderPipelineDescriptor::setOptions is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOptions: value.map(super::super::generated_object_types::metal4::PipelineOptions::as_inner)];
+            }
+            Ok(())
         }
         /// Reads `MTL4::TileRenderPipelineDescriptor::staticLinkingDescriptor` as an owned object.
         pub fn static_linking_descriptor(
@@ -27077,6 +33253,1086 @@ pub mod metal4_fx {
 
     owned_object!(FrameInterpolator, "MTL4FX::FrameInterpolator");
     impl FrameInterpolator {
+        /// Returns the inherited `MTLFX::FrameInterpolatorBase` view with retained ownership.
+        pub fn as_frame_interpolator_base(&self) -> super::metal_fx::FrameInterpolatorBase {
+            super::metal_fx::FrameInterpolatorBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::aspectRatio` when the runtime selector is available.
+        pub fn aspect_ratio(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(aspectRatio)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::aspectRatio is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, aspectRatio] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setAspectRatio` after validation.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setAspectRatio requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setAspectRatio:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setAspectRatio is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAspectRatio: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::contentHeight` when the runtime selector is available.
+        pub fn content_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(contentHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::contentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, contentHeight] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setContentHeight` after validation.
+        pub fn set_content_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setContentHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setContentHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::contentWidth` when the runtime selector is available.
+        pub fn content_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(contentWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::contentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, contentWidth] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setContentWidth` after validation.
+        pub fn set_content_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setContentWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setContentWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::deltaTime` when the runtime selector is available.
+        pub fn delta_time(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(deltaTime)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::deltaTime is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, deltaTime] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDeltaTime` after validation.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setDeltaTime requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setDeltaTime:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDeltaTime is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDeltaTime: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::depthContentOffsetX` when the runtime selector is available.
+        pub fn depth_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::depthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDepthContentOffsetX` after validation.
+        pub fn set_depth_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDepthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::depthContentOffsetY` when the runtime selector is available.
+        pub fn depth_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::depthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDepthContentOffsetY` after validation.
+        pub fn set_depth_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDepthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::distortionHeight` when the runtime selector is available.
+        pub fn distortion_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::distortionHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionHeight] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDistortionHeight` after validation.
+        pub fn set_distortion_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDistortionHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::distortionOffsetX` when the runtime selector is available.
+        pub fn distortion_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::distortionOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionOffsetX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDistortionOffsetX` after validation.
+        pub fn set_distortion_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDistortionOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::distortionOffsetY` when the runtime selector is available.
+        pub fn distortion_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::distortionOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionOffsetY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDistortionOffsetY` after validation.
+        pub fn set_distortion_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDistortionOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::distortionWidth` when the runtime selector is available.
+        pub fn distortion_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::distortionWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionWidth] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDistortionWidth` after validation.
+        pub fn set_distortion_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDistortionWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::farPlane` when the runtime selector is available.
+        pub fn far_plane(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(farPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::farPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, farPlane] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setFarPlane` after validation.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setFarPlane requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setFarPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setFarPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFarPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::fieldOfView` when the runtime selector is available.
+        pub fn field_of_view(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(fieldOfView)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::fieldOfView is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, fieldOfView] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setFieldOfView` after validation.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setFieldOfView requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setFieldOfView:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setFieldOfView is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFieldOfView: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::isDepthReversed` when the runtime selector is available.
+        pub fn is_depth_reversed(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isDepthReversed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::isDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isDepthReversed] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::isUITextureComposited` when the runtime selector is available.
+        pub fn is_ui_texture_composited(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUITextureComposited)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::isUITextureComposited is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUITextureComposited] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::jitterOffsetX` when the runtime selector is available.
+        pub fn jitter_offset_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::jitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setJitterOffsetX` after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setJitterOffsetX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setJitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::jitterOffsetY` when the runtime selector is available.
+        pub fn jitter_offset_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::jitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setJitterOffsetY` after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setJitterOffsetY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setJitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionContentOffsetX` when the runtime selector is available.
+        pub fn motion_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setMotionContentOffsetX` after validation.
+        pub fn set_motion_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setMotionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionContentOffsetY` when the runtime selector is available.
+        pub fn motion_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setMotionContentOffsetY` after validation.
+        pub fn set_motion_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setMotionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionVectorScaleX` when the runtime selector is available.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setMotionVectorScaleX` after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setMotionVectorScaleX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setMotionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionVectorScaleY` when the runtime selector is available.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setMotionVectorScaleY` after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setMotionVectorScaleY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setMotionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::nearPlane` when the runtime selector is available.
+        pub fn near_plane(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(nearPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::nearPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, nearPlane] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setNearPlane` after validation.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::FrameInterpolator::setNearPlane requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setNearPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setNearPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setNearPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputOffsetX` when the runtime selector is available.
+        pub fn output_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetX] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setOutputOffsetX` after validation.
+        pub fn set_output_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setOutputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputOffsetY` when the runtime selector is available.
+        pub fn output_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetY] })
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setOutputOffsetY` after validation.
+        pub fn set_output_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setOutputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::shouldResetHistory` when the runtime selector is available.
+        pub fn should_reset_history(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(shouldResetHistory)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::shouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, shouldResetHistory] })
+        }
+        /// Reads `MTL4FX::FrameInterpolator::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::depthTextureFormat` when the runtime selector is available.
+        pub fn depth_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::depthTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::depthTextureUsage` when the runtime selector is available.
+        pub fn depth_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::depthTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionTextureFormat` when the runtime selector is available.
+        pub fn motion_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionTextureUsage` when the runtime selector is available.
+        pub fn motion_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::uiTextureFormat` when the runtime selector is available.
+        pub fn ui_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(uiTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::uiTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, uiTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::uiTextureUsage` when the runtime selector is available.
+        pub fn ui_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(uiTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::uiTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, uiTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::FrameInterpolator::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::depthTexture` as an owned object.
+        pub fn depth_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(depthTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::depthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, depthTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDepthTexture` from a type-checked wrapper.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDepthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::distortionTexture` as an owned object.
+        pub fn distortion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(distortionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::distortionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, distortionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setDistortionTexture` from a type-checked wrapper.
+        pub fn set_distortion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDistortionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::motionTexture` as an owned object.
+        pub fn motion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(motionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::motionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, motionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setMotionTexture` from a type-checked wrapper.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setMotionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::prevColorTexture` as an owned object.
+        pub fn prev_color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(prevColorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::prevColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, prevColorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setPrevColorTexture` from a type-checked wrapper.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrevColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setPrevColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrevColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::FrameInterpolator::uiTexture` as an owned object.
+        pub fn ui_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(uiTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::uiTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, uiTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::FrameInterpolator::setUITexture` from a type-checked wrapper.
+        pub fn set_ui_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setUITexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setUITexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUITexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4FX::FrameInterpolator::setDepthReversed` when the runtime selector is available.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthReversed:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthReversed: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4FX::FrameInterpolator::setIsUITextureComposited` when the runtime selector is available.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIsUITextureComposited:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setIsUITextureComposited is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIsUITextureComposited: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4FX::FrameInterpolator::setShouldResetHistory` when the runtime selector is available.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setShouldResetHistory:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::FrameInterpolator::setShouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setShouldResetHistory: value];
+            }
+            Ok(())
+        }
         /// Mechanically encodes work into an active Metal 4 recording scope.
         pub(crate) fn encode_to_metal4_command_buffer(
             &self,
@@ -27097,6 +34353,249 @@ pub mod metal4_fx {
     }
     owned_object!(SpatialScaler, "MTL4FX::SpatialScaler");
     impl SpatialScaler {
+        /// Returns the inherited `MTLFX::SpatialScalerBase` view with retained ownership.
+        pub fn as_spatial_scaler_base(&self) -> super::metal_fx::SpatialScalerBase {
+            super::metal_fx::SpatialScalerBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4FX::SpatialScaler::inputContentHeight` when the runtime selector is available.
+        pub fn input_content_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::inputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentHeight] })
+        }
+
+        /// Writes `MTL4FX::SpatialScaler::setInputContentHeight` after validation.
+        pub fn set_input_content_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::setInputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::SpatialScaler::inputContentWidth` when the runtime selector is available.
+        pub fn input_content_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::inputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentWidth] })
+        }
+
+        /// Writes `MTL4FX::SpatialScaler::setInputContentWidth` after validation.
+        pub fn set_input_content_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::setInputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::SpatialScaler::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTL4FX::SpatialScaler::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTL4FX::SpatialScaler::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTL4FX::SpatialScaler::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTL4FX::SpatialScaler::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::SpatialScaler::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::SpatialScaler::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::SpatialScaler::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::SpatialScaler::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::SpatialScaler::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::SpatialScaler::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTL4FX::SpatialScaler::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::SpatialScaler::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::SpatialScaler::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::SpatialScaler::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
         /// Mechanically encodes work into an active Metal 4 recording scope.
         pub(crate) fn encode_to_metal4_command_buffer(
             &self,
@@ -27117,6 +34616,1025 @@ pub mod metal4_fx {
     }
     owned_object!(TemporalDenoisedScaler, "MTL4FX::TemporalDenoisedScaler");
     impl TemporalDenoisedScaler {
+        /// Returns the inherited `MTLFX::TemporalDenoisedScalerBase` view with retained ownership.
+        pub fn as_temporal_denoised_scaler_base(
+            &self,
+        ) -> super::metal_fx::TemporalDenoisedScalerBase {
+            super::metal_fx::TemporalDenoisedScalerBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::inputContentMaxScale` when the runtime selector is available.
+        pub fn input_content_max_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMaxScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::inputContentMaxScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMaxScale] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::inputContentMinScale` when the runtime selector is available.
+        pub fn input_content_min_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMinScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::inputContentMinScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMinScale] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::isDepthReversed` when the runtime selector is available.
+        pub fn is_depth_reversed(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isDepthReversed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::isDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isDepthReversed] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::jitterOffsetX` when the runtime selector is available.
+        pub fn jitter_offset_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::jitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetX] })
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setJitterOffsetX` after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::TemporalDenoisedScaler::setJitterOffsetX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setJitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::jitterOffsetY` when the runtime selector is available.
+        pub fn jitter_offset_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::jitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetY] })
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setJitterOffsetY` after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::TemporalDenoisedScaler::setJitterOffsetY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setJitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::motionVectorScaleX` when the runtime selector is available.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::motionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleX] })
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleX` after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::motionVectorScaleY` when the runtime selector is available.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::motionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleY] })
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleY` after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setMotionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::preExposure` when the runtime selector is available.
+        pub fn pre_exposure(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(preExposure)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::preExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, preExposure] })
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setPreExposure` after validation.
+        pub fn set_pre_exposure(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTL4FX::TemporalDenoisedScaler::setPreExposure requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setPreExposure:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setPreExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPreExposure: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::shouldResetHistory` when the runtime selector is available.
+        pub fn should_reset_history(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(shouldResetHistory)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::shouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, shouldResetHistory] })
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTextureFormat` when the runtime selector is available.
+        pub fn denoise_strength_mask_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, denoiseStrengthMaskTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTextureUsage` when the runtime selector is available.
+        pub fn denoise_strength_mask_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, denoiseStrengthMaskTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::depthTextureFormat` when the runtime selector is available.
+        pub fn depth_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::depthTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::depthTextureUsage` when the runtime selector is available.
+        pub fn depth_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::depthTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTextureFormat` when the runtime selector is available.
+        pub fn diffuse_albedo_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, diffuseAlbedoTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTextureUsage` when the runtime selector is available.
+        pub fn diffuse_albedo_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, diffuseAlbedoTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::motionTextureFormat` when the runtime selector is available.
+        pub fn motion_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::motionTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::motionTextureUsage` when the runtime selector is available.
+        pub fn motion_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::motionTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::normalTextureFormat` when the runtime selector is available.
+        pub fn normal_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(normalTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::normalTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, normalTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::normalTextureUsage` when the runtime selector is available.
+        pub fn normal_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(normalTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::normalTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, normalTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::reactiveMaskTextureFormat` when the runtime selector is available.
+        pub fn reactive_mask_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::reactiveMaskTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, reactiveMaskTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::reactiveMaskTextureUsage` when the runtime selector is available.
+        pub fn reactive_mask_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::reactiveMaskTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, reactiveMaskTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::roughnessTextureFormat` when the runtime selector is available.
+        pub fn roughness_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::roughnessTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, roughnessTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::roughnessTextureUsage` when the runtime selector is available.
+        pub fn roughness_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::roughnessTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, roughnessTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularAlbedoTextureFormat` when the runtime selector is available.
+        pub fn specular_albedo_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularAlbedoTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularAlbedoTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularAlbedoTextureUsage` when the runtime selector is available.
+        pub fn specular_albedo_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularAlbedoTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularAlbedoTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularHitDistanceTextureFormat` when the runtime selector is available.
+        pub fn specular_hit_distance_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularHitDistanceTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularHitDistanceTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularHitDistanceTextureUsage` when the runtime selector is available.
+        pub fn specular_hit_distance_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularHitDistanceTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularHitDistanceTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::transparencyOverlayTextureFormat` when the runtime selector is available.
+        pub fn transparency_overlay_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::transparencyOverlayTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, transparencyOverlayTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::transparencyOverlayTextureUsage` when the runtime selector is available.
+        pub fn transparency_overlay_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::transparencyOverlayTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, transparencyOverlayTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTexture` as an owned object.
+        pub fn denoise_strength_mask_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::denoiseStrengthMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, denoiseStrengthMaskTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setDenoiseStrengthMaskTexture` from a type-checked wrapper.
+        pub fn set_denoise_strength_mask_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDenoiseStrengthMaskTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setDenoiseStrengthMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDenoiseStrengthMaskTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::depthTexture` as an owned object.
+        pub fn depth_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(depthTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::depthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, depthTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setDepthTexture` from a type-checked wrapper.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setDepthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTexture` as an owned object.
+        pub fn diffuse_albedo_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::diffuseAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, diffuseAlbedoTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setDiffuseAlbedoTexture` from a type-checked wrapper.
+        pub fn set_diffuse_albedo_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDiffuseAlbedoTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setDiffuseAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDiffuseAlbedoTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::exposureTexture` as an owned object.
+        pub fn exposure_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(exposureTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::exposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, exposureTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setExposureTexture` from a type-checked wrapper.
+        pub fn set_exposure_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setExposureTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setExposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setExposureTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::motionTexture` as an owned object.
+        pub fn motion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(motionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::motionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, motionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setMotionTexture` from a type-checked wrapper.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setMotionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::normalTexture` as an owned object.
+        pub fn normal_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(normalTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::normalTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, normalTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setNormalTexture` from a type-checked wrapper.
+        pub fn set_normal_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setNormalTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setNormalTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setNormalTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::reactiveMaskTexture` as an owned object.
+        pub fn reactive_mask_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::reactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, reactiveMaskTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setReactiveMaskTexture` from a type-checked wrapper.
+        pub fn set_reactive_mask_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReactiveMaskTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setReactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReactiveMaskTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::roughnessTexture` as an owned object.
+        pub fn roughness_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::roughnessTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, roughnessTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setRoughnessTexture` from a type-checked wrapper.
+        pub fn set_roughness_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setRoughnessTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setRoughnessTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setRoughnessTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularAlbedoTexture` as an owned object.
+        pub fn specular_albedo_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, specularAlbedoTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setSpecularAlbedoTexture` from a type-checked wrapper.
+        pub fn set_specular_albedo_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSpecularAlbedoTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setSpecularAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSpecularAlbedoTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::specularHitDistanceTexture` as an owned object.
+        pub fn specular_hit_distance_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::specularHitDistanceTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, specularHitDistanceTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setSpecularHitDistanceTexture` from a type-checked wrapper.
+        pub fn set_specular_hit_distance_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSpecularHitDistanceTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setSpecularHitDistanceTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSpecularHitDistanceTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTL4FX::TemporalDenoisedScaler::transparencyOverlayTexture` as an owned object.
+        pub fn transparency_overlay_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::transparencyOverlayTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, transparencyOverlayTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setTransparencyOverlayTexture` from a type-checked wrapper.
+        pub fn set_transparency_overlay_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTransparencyOverlayTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setTransparencyOverlayTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setTransparencyOverlayTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setDepthReversed` when the runtime selector is available.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthReversed:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthReversed: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTL4FX::TemporalDenoisedScaler::setShouldResetHistory` when the runtime selector is available.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setShouldResetHistory:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTL4FX::TemporalDenoisedScaler::setShouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setShouldResetHistory: value];
+            }
+            Ok(())
+        }
         /// Mechanically encodes work into an active Metal 4 recording scope.
         pub(crate) fn encode_to_metal4_command_buffer(
             &self,
@@ -27137,6 +35655,10 @@ pub mod metal4_fx {
     }
     owned_object!(TemporalScaler, "MTL4FX::TemporalScaler");
     impl TemporalScaler {
+        /// Returns the inherited `MTLFX::TemporalScalerBase` view with retained ownership.
+        pub fn as_temporal_scaler_base(&self) -> super::metal_fx::TemporalScalerBase {
+            super::metal_fx::TemporalScalerBase::from_inner(self._inner.clone())
+        }
         /// Mechanically encodes work into an active Metal 4 recording scope.
         pub(crate) fn encode_to_metal4_command_buffer(
             &self,
@@ -27167,6 +35689,1086 @@ pub mod metal_fx {
     );
     owned_object!(FrameInterpolator, "MTLFX::FrameInterpolator");
     impl FrameInterpolator {
+        /// Returns the inherited `MTLFX::FrameInterpolatorBase` view with retained ownership.
+        pub fn as_frame_interpolator_base(&self) -> FrameInterpolatorBase {
+            FrameInterpolatorBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTLFX::FrameInterpolator::aspectRatio` when the runtime selector is available.
+        pub fn aspect_ratio(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(aspectRatio)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::aspectRatio is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, aspectRatio] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setAspectRatio` after validation.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setAspectRatio requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setAspectRatio:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setAspectRatio is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setAspectRatio: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::contentHeight` when the runtime selector is available.
+        pub fn content_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(contentHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::contentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, contentHeight] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setContentHeight` after validation.
+        pub fn set_content_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setContentHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setContentHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::contentWidth` when the runtime selector is available.
+        pub fn content_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(contentWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::contentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, contentWidth] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setContentWidth` after validation.
+        pub fn set_content_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setContentWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setContentWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::deltaTime` when the runtime selector is available.
+        pub fn delta_time(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(deltaTime)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::deltaTime is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, deltaTime] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDeltaTime` after validation.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setDeltaTime requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setDeltaTime:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDeltaTime is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDeltaTime: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::depthContentOffsetX` when the runtime selector is available.
+        pub fn depth_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::depthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDepthContentOffsetX` after validation.
+        pub fn set_depth_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDepthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::depthContentOffsetY` when the runtime selector is available.
+        pub fn depth_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::depthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDepthContentOffsetY` after validation.
+        pub fn set_depth_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDepthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::distortionHeight` when the runtime selector is available.
+        pub fn distortion_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::distortionHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionHeight] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDistortionHeight` after validation.
+        pub fn set_distortion_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDistortionHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::distortionOffsetX` when the runtime selector is available.
+        pub fn distortion_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::distortionOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionOffsetX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDistortionOffsetX` after validation.
+        pub fn set_distortion_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDistortionOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::distortionOffsetY` when the runtime selector is available.
+        pub fn distortion_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::distortionOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionOffsetY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDistortionOffsetY` after validation.
+        pub fn set_distortion_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDistortionOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::distortionWidth` when the runtime selector is available.
+        pub fn distortion_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(distortionWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::distortionWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, distortionWidth] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDistortionWidth` after validation.
+        pub fn set_distortion_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDistortionWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::farPlane` when the runtime selector is available.
+        pub fn far_plane(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(farPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::farPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, farPlane] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setFarPlane` after validation.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setFarPlane requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setFarPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setFarPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFarPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::fieldOfView` when the runtime selector is available.
+        pub fn field_of_view(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(fieldOfView)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::fieldOfView is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, fieldOfView] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setFieldOfView` after validation.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setFieldOfView requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setFieldOfView:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setFieldOfView is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFieldOfView: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::isDepthReversed` when the runtime selector is available.
+        pub fn is_depth_reversed(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isDepthReversed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::isDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isDepthReversed] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::isUITextureComposited` when the runtime selector is available.
+        pub fn is_ui_texture_composited(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isUITextureComposited)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::isUITextureComposited is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isUITextureComposited] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::jitterOffsetX` when the runtime selector is available.
+        pub fn jitter_offset_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::jitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setJitterOffsetX` after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setJitterOffsetX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setJitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::jitterOffsetY` when the runtime selector is available.
+        pub fn jitter_offset_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::jitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setJitterOffsetY` after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setJitterOffsetY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setJitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionContentOffsetX` when the runtime selector is available.
+        pub fn motion_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setMotionContentOffsetX` after validation.
+        pub fn set_motion_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setMotionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionContentOffsetY` when the runtime selector is available.
+        pub fn motion_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setMotionContentOffsetY` after validation.
+        pub fn set_motion_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setMotionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionVectorScaleX` when the runtime selector is available.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setMotionVectorScaleX` after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setMotionVectorScaleX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setMotionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionVectorScaleY` when the runtime selector is available.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setMotionVectorScaleY` after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setMotionVectorScaleY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setMotionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::nearPlane` when the runtime selector is available.
+        pub fn near_plane(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(nearPlane)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::nearPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, nearPlane] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setNearPlane` after validation.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::FrameInterpolator::setNearPlane requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setNearPlane:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setNearPlane is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setNearPlane: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputOffsetX` when the runtime selector is available.
+        pub fn output_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetX] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setOutputOffsetX` after validation.
+        pub fn set_output_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setOutputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputOffsetY` when the runtime selector is available.
+        pub fn output_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetY] })
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setOutputOffsetY` after validation.
+        pub fn set_output_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setOutputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::shouldResetHistory` when the runtime selector is available.
+        pub fn should_reset_history(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(shouldResetHistory)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::shouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, shouldResetHistory] })
+        }
+        /// Reads `MTLFX::FrameInterpolator::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::depthTextureFormat` when the runtime selector is available.
+        pub fn depth_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::depthTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::depthTextureUsage` when the runtime selector is available.
+        pub fn depth_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::depthTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionTextureFormat` when the runtime selector is available.
+        pub fn motion_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionTextureUsage` when the runtime selector is available.
+        pub fn motion_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::uiTextureFormat` when the runtime selector is available.
+        pub fn ui_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(uiTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::uiTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, uiTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::uiTextureUsage` when the runtime selector is available.
+        pub fn ui_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(uiTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::uiTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, uiTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::FrameInterpolator::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::depthTexture` as an owned object.
+        pub fn depth_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(depthTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::depthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, depthTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDepthTexture` from a type-checked wrapper.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDepthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::distortionTexture` as an owned object.
+        pub fn distortion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(distortionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::distortionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, distortionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setDistortionTexture` from a type-checked wrapper.
+        pub fn set_distortion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDistortionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDistortionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDistortionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::motionTexture` as an owned object.
+        pub fn motion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(motionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::motionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, motionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setMotionTexture` from a type-checked wrapper.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setMotionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::prevColorTexture` as an owned object.
+        pub fn prev_color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(prevColorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::prevColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, prevColorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setPrevColorTexture` from a type-checked wrapper.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setPrevColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setPrevColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPrevColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::FrameInterpolator::uiTexture` as an owned object.
+        pub fn ui_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(uiTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::uiTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, uiTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::FrameInterpolator::setUITexture` from a type-checked wrapper.
+        pub fn set_ui_texture(&self, value: Option<&crate::Texture>) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setUITexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setUITexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setUITexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::FrameInterpolator::setDepthReversed` when the runtime selector is available.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthReversed:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthReversed: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::FrameInterpolator::setIsUITextureComposited` when the runtime selector is available.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setIsUITextureComposited:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setIsUITextureComposited is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setIsUITextureComposited: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::FrameInterpolator::setShouldResetHistory` when the runtime selector is available.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setShouldResetHistory:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::FrameInterpolator::setShouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setShouldResetHistory: value];
+            }
+            Ok(())
+        }
         /// Encodes work into a mutably borrowed command buffer after an availability check.
         pub fn encode_to_command_buffer(
             &self,
@@ -28692,6 +38294,249 @@ pub mod metal_fx {
     }
     owned_object!(SpatialScaler, "MTLFX::SpatialScaler");
     impl SpatialScaler {
+        /// Returns the inherited `MTLFX::SpatialScalerBase` view with retained ownership.
+        pub fn as_spatial_scaler_base(&self) -> SpatialScalerBase {
+            SpatialScalerBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTLFX::SpatialScaler::inputContentHeight` when the runtime selector is available.
+        pub fn input_content_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::inputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentHeight] })
+        }
+
+        /// Writes `MTLFX::SpatialScaler::setInputContentHeight` after validation.
+        pub fn set_input_content_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::setInputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::SpatialScaler::inputContentWidth` when the runtime selector is available.
+        pub fn input_content_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::inputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentWidth] })
+        }
+
+        /// Writes `MTLFX::SpatialScaler::setInputContentWidth` after validation.
+        pub fn set_input_content_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::setInputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::SpatialScaler::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTLFX::SpatialScaler::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTLFX::SpatialScaler::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTLFX::SpatialScaler::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTLFX::SpatialScaler::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::SpatialScaler::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::SpatialScaler::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::SpatialScaler::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::SpatialScaler::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::SpatialScaler::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::SpatialScaler::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTLFX::SpatialScaler::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::SpatialScaler::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::SpatialScaler::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::SpatialScaler::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
         /// Encodes work into a mutably borrowed command buffer after an availability check.
         pub fn encode_to_command_buffer(
             &self,
@@ -29191,6 +39036,1023 @@ pub mod metal_fx {
     }
     owned_object!(TemporalDenoisedScaler, "MTLFX::TemporalDenoisedScaler");
     impl TemporalDenoisedScaler {
+        /// Returns the inherited `MTLFX::TemporalDenoisedScalerBase` view with retained ownership.
+        pub fn as_temporal_denoised_scaler_base(&self) -> TemporalDenoisedScalerBase {
+            TemporalDenoisedScalerBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::inputContentMaxScale` when the runtime selector is available.
+        pub fn input_content_max_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMaxScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::inputContentMaxScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMaxScale] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::inputContentMinScale` when the runtime selector is available.
+        pub fn input_content_min_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMinScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::inputContentMinScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMinScale] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::isDepthReversed` when the runtime selector is available.
+        pub fn is_depth_reversed(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isDepthReversed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::isDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isDepthReversed] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::jitterOffsetX` when the runtime selector is available.
+        pub fn jitter_offset_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::jitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setJitterOffsetX` after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalDenoisedScaler::setJitterOffsetX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setJitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::jitterOffsetY` when the runtime selector is available.
+        pub fn jitter_offset_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::jitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setJitterOffsetY` after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalDenoisedScaler::setJitterOffsetY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setJitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::motionVectorScaleX` when the runtime selector is available.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::motionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleX] })
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setMotionVectorScaleX` after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalDenoisedScaler::setMotionVectorScaleX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setMotionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::motionVectorScaleY` when the runtime selector is available.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::motionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleY] })
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setMotionVectorScaleY` after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalDenoisedScaler::setMotionVectorScaleY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setMotionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::preExposure` when the runtime selector is available.
+        pub fn pre_exposure(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(preExposure)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::preExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, preExposure] })
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setPreExposure` after validation.
+        pub fn set_pre_exposure(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalDenoisedScaler::setPreExposure requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setPreExposure:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setPreExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPreExposure: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::shouldResetHistory` when the runtime selector is available.
+        pub fn should_reset_history(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(shouldResetHistory)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::shouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, shouldResetHistory] })
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTextureFormat` when the runtime selector is available.
+        pub fn denoise_strength_mask_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, denoiseStrengthMaskTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTextureUsage` when the runtime selector is available.
+        pub fn denoise_strength_mask_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, denoiseStrengthMaskTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::depthTextureFormat` when the runtime selector is available.
+        pub fn depth_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::depthTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::depthTextureUsage` when the runtime selector is available.
+        pub fn depth_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::depthTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::diffuseAlbedoTextureFormat` when the runtime selector is available.
+        pub fn diffuse_albedo_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::diffuseAlbedoTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, diffuseAlbedoTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::diffuseAlbedoTextureUsage` when the runtime selector is available.
+        pub fn diffuse_albedo_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::diffuseAlbedoTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, diffuseAlbedoTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::motionTextureFormat` when the runtime selector is available.
+        pub fn motion_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::motionTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::motionTextureUsage` when the runtime selector is available.
+        pub fn motion_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::motionTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::normalTextureFormat` when the runtime selector is available.
+        pub fn normal_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(normalTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::normalTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, normalTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::normalTextureUsage` when the runtime selector is available.
+        pub fn normal_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(normalTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::normalTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, normalTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::reactiveMaskTextureFormat` when the runtime selector is available.
+        pub fn reactive_mask_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::reactiveMaskTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, reactiveMaskTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::reactiveMaskTextureUsage` when the runtime selector is available.
+        pub fn reactive_mask_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::reactiveMaskTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, reactiveMaskTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::roughnessTextureFormat` when the runtime selector is available.
+        pub fn roughness_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::roughnessTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, roughnessTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::roughnessTextureUsage` when the runtime selector is available.
+        pub fn roughness_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::roughnessTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, roughnessTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularAlbedoTextureFormat` when the runtime selector is available.
+        pub fn specular_albedo_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularAlbedoTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularAlbedoTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularAlbedoTextureUsage` when the runtime selector is available.
+        pub fn specular_albedo_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularAlbedoTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularAlbedoTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularHitDistanceTextureFormat` when the runtime selector is available.
+        pub fn specular_hit_distance_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularHitDistanceTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularHitDistanceTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularHitDistanceTextureUsage` when the runtime selector is available.
+        pub fn specular_hit_distance_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularHitDistanceTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, specularHitDistanceTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::transparencyOverlayTextureFormat` when the runtime selector is available.
+        pub fn transparency_overlay_texture_format(
+            &self,
+        ) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::transparencyOverlayTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, transparencyOverlayTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::transparencyOverlayTextureUsage` when the runtime selector is available.
+        pub fn transparency_overlay_texture_usage(
+            &self,
+        ) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::transparencyOverlayTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, transparencyOverlayTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTexture` as an owned object.
+        pub fn denoise_strength_mask_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(denoiseStrengthMaskTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::denoiseStrengthMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, denoiseStrengthMaskTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setDenoiseStrengthMaskTexture` from a type-checked wrapper.
+        pub fn set_denoise_strength_mask_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDenoiseStrengthMaskTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setDenoiseStrengthMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDenoiseStrengthMaskTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::depthTexture` as an owned object.
+        pub fn depth_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(depthTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::depthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, depthTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setDepthTexture` from a type-checked wrapper.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setDepthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::diffuseAlbedoTexture` as an owned object.
+        pub fn diffuse_albedo_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(diffuseAlbedoTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::diffuseAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, diffuseAlbedoTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setDiffuseAlbedoTexture` from a type-checked wrapper.
+        pub fn set_diffuse_albedo_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDiffuseAlbedoTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setDiffuseAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDiffuseAlbedoTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::exposureTexture` as an owned object.
+        pub fn exposure_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(exposureTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::exposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, exposureTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setExposureTexture` from a type-checked wrapper.
+        pub fn set_exposure_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setExposureTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setExposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setExposureTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::motionTexture` as an owned object.
+        pub fn motion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(motionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::motionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, motionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setMotionTexture` from a type-checked wrapper.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setMotionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::normalTexture` as an owned object.
+        pub fn normal_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(normalTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::normalTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, normalTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setNormalTexture` from a type-checked wrapper.
+        pub fn set_normal_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setNormalTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setNormalTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setNormalTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::reactiveMaskTexture` as an owned object.
+        pub fn reactive_mask_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::reactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, reactiveMaskTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setReactiveMaskTexture` from a type-checked wrapper.
+        pub fn set_reactive_mask_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReactiveMaskTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setReactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReactiveMaskTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::roughnessTexture` as an owned object.
+        pub fn roughness_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(roughnessTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::roughnessTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, roughnessTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setRoughnessTexture` from a type-checked wrapper.
+        pub fn set_roughness_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setRoughnessTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setRoughnessTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setRoughnessTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularAlbedoTexture` as an owned object.
+        pub fn specular_albedo_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(specularAlbedoTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, specularAlbedoTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setSpecularAlbedoTexture` from a type-checked wrapper.
+        pub fn set_specular_albedo_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSpecularAlbedoTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setSpecularAlbedoTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSpecularAlbedoTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::specularHitDistanceTexture` as an owned object.
+        pub fn specular_hit_distance_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(specularHitDistanceTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::specularHitDistanceTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, specularHitDistanceTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setSpecularHitDistanceTexture` from a type-checked wrapper.
+        pub fn set_specular_hit_distance_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setSpecularHitDistanceTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setSpecularHitDistanceTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setSpecularHitDistanceTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalDenoisedScaler::transparencyOverlayTexture` as an owned object.
+        pub fn transparency_overlay_texture(
+            &self,
+        ) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(transparencyOverlayTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::transparencyOverlayTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, transparencyOverlayTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalDenoisedScaler::setTransparencyOverlayTexture` from a type-checked wrapper.
+        pub fn set_transparency_overlay_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setTransparencyOverlayTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setTransparencyOverlayTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setTransparencyOverlayTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::TemporalDenoisedScaler::setDepthReversed` when the runtime selector is available.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthReversed:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthReversed: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::TemporalDenoisedScaler::setShouldResetHistory` when the runtime selector is available.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setShouldResetHistory:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalDenoisedScaler::setShouldResetHistory is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setShouldResetHistory: value];
+            }
+            Ok(())
+        }
         /// Encodes work into a mutably borrowed command buffer after an availability check.
         pub fn encode_to_command_buffer(
             &self,
@@ -29214,6 +40076,10 @@ pub mod metal_fx {
         "MTLFX::TemporalDenoisedScalerBase"
     );
     impl TemporalDenoisedScalerBase {
+        /// Returns the inherited `MTLFX::FrameInterpolatableScaler` view with retained ownership.
+        pub fn as_frame_interpolatable_scaler(&self) -> FrameInterpolatableScaler {
+            FrameInterpolatableScaler::from_inner(self._inner.clone())
+        }
         /// Reads `MTLFX::TemporalDenoisedScalerBase::inputContentMaxScale` when the runtime selector is available.
         pub fn input_content_max_scale(&self) -> Result<f32, FrameworkError> {
             if !self.responds_to(sel!(inputContentMaxScale)) {
@@ -31216,6 +42082,926 @@ pub mod metal_fx {
     }
     owned_object!(TemporalScaler, "MTLFX::TemporalScaler");
     impl TemporalScaler {
+        /// Returns the inherited `MTLFX::TemporalScalerBase` view with retained ownership.
+        pub fn as_temporal_scaler_base(&self) -> TemporalScalerBase {
+            TemporalScalerBase::from_inner(self._inner.clone())
+        }
+        /// Reads `MTLFX::TemporalScaler::colorContentOffsetX` when the runtime selector is available.
+        pub fn color_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(colorContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::colorContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, colorContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setColorContentOffsetX` after validation.
+        pub fn set_color_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setColorContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::colorContentOffsetY` when the runtime selector is available.
+        pub fn color_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(colorContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::colorContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, colorContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setColorContentOffsetY` after validation.
+        pub fn set_color_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setColorContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::depthContentOffsetX` when the runtime selector is available.
+        pub fn depth_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::depthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setDepthContentOffsetX` after validation.
+        pub fn set_depth_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setDepthContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::depthContentOffsetY` when the runtime selector is available.
+        pub fn depth_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(depthContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::depthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, depthContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setDepthContentOffsetY` after validation.
+        pub fn set_depth_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setDepthContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::inputContentHeight` when the runtime selector is available.
+        pub fn input_content_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentHeight] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setInputContentHeight` after validation.
+        pub fn set_input_content_height(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentHeight:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setInputContentHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentHeight: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::inputContentMaxScale` when the runtime selector is available.
+        pub fn input_content_max_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMaxScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputContentMaxScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMaxScale] })
+        }
+        /// Reads `MTLFX::TemporalScaler::inputContentMinScale` when the runtime selector is available.
+        pub fn input_content_min_scale(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(inputContentMinScale)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputContentMinScale is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentMinScale] })
+        }
+        /// Reads `MTLFX::TemporalScaler::inputContentWidth` when the runtime selector is available.
+        pub fn input_content_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputContentWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputContentWidth] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setInputContentWidth` after validation.
+        pub fn set_input_content_width(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setInputContentWidth:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setInputContentWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setInputContentWidth: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::inputHeight` when the runtime selector is available.
+        pub fn input_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputHeight] })
+        }
+        /// Reads `MTLFX::TemporalScaler::inputWidth` when the runtime selector is available.
+        pub fn input_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(inputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::inputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, inputWidth] })
+        }
+        /// Reads `MTLFX::TemporalScaler::isDepthReversed` when the runtime selector is available.
+        pub fn is_depth_reversed(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(isDepthReversed)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::isDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, isDepthReversed] })
+        }
+        /// Reads `MTLFX::TemporalScaler::jitterOffsetX` when the runtime selector is available.
+        pub fn jitter_offset_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::jitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setJitterOffsetX` after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalScaler::setJitterOffsetX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setJitterOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::jitterOffsetY` when the runtime selector is available.
+        pub fn jitter_offset_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(jitterOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::jitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, jitterOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setJitterOffsetY` after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalScaler::setJitterOffsetY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setJitterOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setJitterOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setJitterOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::motionContentOffsetX` when the runtime selector is available.
+        pub fn motion_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setMotionContentOffsetX` after validation.
+        pub fn set_motion_content_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setMotionContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::motionContentOffsetY` when the runtime selector is available.
+        pub fn motion_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(motionContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setMotionContentOffsetY` after validation.
+        pub fn set_motion_content_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setMotionContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::motionVectorScaleX` when the runtime selector is available.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setMotionVectorScaleX` after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalScaler::setMotionVectorScaleX requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setMotionVectorScaleX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::motionVectorScaleY` when the runtime selector is available.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(motionVectorScaleY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, motionVectorScaleY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setMotionVectorScaleY` after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalScaler::setMotionVectorScaleY requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setMotionVectorScaleY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setMotionVectorScaleY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionVectorScaleY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::outputHeight` when the runtime selector is available.
+        pub fn output_height(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputHeight)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputHeight is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputHeight] })
+        }
+        /// Reads `MTLFX::TemporalScaler::outputOffsetX` when the runtime selector is available.
+        pub fn output_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setOutputOffsetX` after validation.
+        pub fn set_output_offset_x(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setOutputOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::outputOffsetY` when the runtime selector is available.
+        pub fn output_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setOutputOffsetY` after validation.
+        pub fn set_output_offset_y(&self, value: usize) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setOutputOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::outputWidth` when the runtime selector is available.
+        pub fn output_width(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(outputWidth)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputWidth is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, outputWidth] })
+        }
+        /// Reads `MTLFX::TemporalScaler::preExposure` when the runtime selector is available.
+        pub fn pre_exposure(&self) -> Result<f32, FrameworkError> {
+            if !self.responds_to(sel!(preExposure)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::preExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, preExposure] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setPreExposure` after validation.
+        pub fn set_pre_exposure(&self, value: f32) -> Result<(), FrameworkError> {
+            if !value.is_finite() {
+                return Err(FrameworkError::invalid_argument(
+                    "MTLFX::TemporalScaler::setPreExposure requires a finite value",
+                ));
+            }
+            if !self.responds_to(sel!(setPreExposure:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setPreExposure is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setPreExposure: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::reactiveMaskContentOffsetX` when the runtime selector is available.
+        pub fn reactive_mask_content_offset_x(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskContentOffsetX)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::reactiveMaskContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, reactiveMaskContentOffsetX] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setReactiveMaskContentOffsetX` after validation.
+        pub fn set_reactive_mask_content_offset_x(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReactiveMaskContentOffsetX:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setReactiveMaskContentOffsetX is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReactiveMaskContentOffsetX: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::reactiveMaskContentOffsetY` when the runtime selector is available.
+        pub fn reactive_mask_content_offset_y(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskContentOffsetY)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::reactiveMaskContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, reactiveMaskContentOffsetY] })
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setReactiveMaskContentOffsetY` after validation.
+        pub fn set_reactive_mask_content_offset_y(
+            &self,
+            value: usize,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReactiveMaskContentOffsetY:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setReactiveMaskContentOffsetY is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the input has the exact
+            // primitive representation declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReactiveMaskContentOffsetY: value];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::reset` when the runtime selector is available.
+        pub fn reset(&self) -> Result<bool, FrameworkError> {
+            if !self.responds_to(sel!(reset)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::reset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, reset] })
+        }
+        /// Reads `MTLFX::TemporalScaler::colorTextureFormat` when the runtime selector is available.
+        pub fn color_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::colorTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::colorTextureUsage` when the runtime selector is available.
+        pub fn color_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(colorTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::colorTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, colorTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::depthTextureFormat` when the runtime selector is available.
+        pub fn depth_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::depthTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::depthTextureUsage` when the runtime selector is available.
+        pub fn depth_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(depthTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::depthTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, depthTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::motionTextureFormat` when the runtime selector is available.
+        pub fn motion_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::motionTextureUsage` when the runtime selector is available.
+        pub fn motion_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(motionTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, motionTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::outputTextureFormat` when the runtime selector is available.
+        pub fn output_texture_format(&self) -> Result<crate::PixelFormat, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureFormat)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputTextureFormat is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureFormat] };
+            Ok(crate::PixelFormat::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::outputTextureUsage` when the runtime selector is available.
+        pub fn output_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(outputTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, outputTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::reactiveMaskTextureUsage` when the runtime selector is available.
+        pub fn reactive_mask_texture_usage(&self) -> Result<crate::TextureUsage, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTextureUsage)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::reactiveMaskTextureUsage is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the `usize` enum representation.
+            let raw: usize = unsafe { msg_send![&*self._inner, reactiveMaskTextureUsage] };
+            Ok(crate::TextureUsage::from_system_raw(raw))
+        }
+        /// Reads `MTLFX::TemporalScaler::colorTexture` as an owned object.
+        pub fn color_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(colorTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::colorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, colorTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setColorTexture` from a type-checked wrapper.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setColorTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setColorTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setColorTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::depthTexture` as an owned object.
+        pub fn depth_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(depthTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::depthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, depthTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setDepthTexture` from a type-checked wrapper.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setDepthTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::exposureTexture` as an owned object.
+        pub fn exposure_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(exposureTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::exposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, exposureTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setExposureTexture` from a type-checked wrapper.
+        pub fn set_exposure_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setExposureTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setExposureTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setExposureTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::fence` as an owned object.
+        pub fn fence(
+            &self,
+        ) -> Result<Option<super::super::generated_object_types::metal::Fence>, FrameworkError>
+        {
+            if !self.responds_to(sel!(fence)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::fence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> = unsafe { msg_send![&*self._inner, fence] };
+            Ok(value.map(super::super::generated_object_types::metal::Fence::from_inner))
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setFence` from a type-checked wrapper.
+        pub fn set_fence(
+            &self,
+            value: Option<&super::super::generated_object_types::metal::Fence>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setFence:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setFence is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setFence: value.map(super::super::generated_object_types::metal::Fence::as_inner)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::motionTexture` as an owned object.
+        pub fn motion_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(motionTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::motionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, motionTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setMotionTexture` from a type-checked wrapper.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setMotionTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setMotionTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setMotionTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::outputTexture` as an owned object.
+        pub fn output_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(outputTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::outputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, outputTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setOutputTexture` from a type-checked wrapper.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setOutputTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setOutputTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setOutputTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Reads `MTLFX::TemporalScaler::reactiveMaskTexture` as an owned object.
+        pub fn reactive_mask_texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
+            if !self.responds_to(sel!(reactiveMaskTexture)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::reactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and its retained object result
+            // is kept inside the generated owned wrapper.
+            let value: Option<Retained<AnyObject>> =
+                unsafe { msg_send![&*self._inner, reactiveMaskTexture] };
+            value.map(crate::Texture::from_any_object).transpose()
+        }
+
+        /// Writes `MTLFX::TemporalScaler::setReactiveMaskTexture` from a type-checked wrapper.
+        pub fn set_reactive_mask_texture(
+            &self,
+            value: Option<&crate::Texture>,
+        ) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReactiveMaskTexture:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setReactiveMaskTexture is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the wrapper preserves the
+            // Objective-C class identity declared for this property.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReactiveMaskTexture: value.map(crate::Texture::as_any_object)];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::TemporalScaler::setDepthReversed` when the runtime selector is available.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setDepthReversed:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setDepthReversed is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setDepthReversed: value];
+            }
+            Ok(())
+        }
+        /// Writes `MTLFX::TemporalScaler::setReset` when the runtime selector is available.
+        pub fn set_reset(&self, value: bool) -> Result<(), FrameworkError> {
+            if !self.responds_to(sel!(setReset:)) {
+                return Err(FrameworkError::unsupported(
+                    "MTLFX::TemporalScaler::setReset is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and bool covers the property's
+            // complete valid input domain declared by the inventory.
+            unsafe {
+                let _: () = msg_send![&*self._inner, setReset: value];
+            }
+            Ok(())
+        }
         /// Encodes work into a mutably borrowed command buffer after an availability check.
         pub fn encode_to_command_buffer(
             &self,
@@ -31236,6 +43022,10 @@ pub mod metal_fx {
     }
     owned_object!(TemporalScalerBase, "MTLFX::TemporalScalerBase");
     impl TemporalScalerBase {
+        /// Returns the inherited `MTLFX::FrameInterpolatableScaler` view with retained ownership.
+        pub fn as_frame_interpolatable_scaler(&self) -> FrameInterpolatableScaler {
+            FrameInterpolatableScaler::from_inner(self._inner.clone())
+        }
         /// Reads `MTLFX::TemporalScalerBase::colorContentOffsetX` when the runtime selector is available.
         pub fn color_content_offset_x(&self) -> Result<usize, FrameworkError> {
             if !self.responds_to(sel!(colorContentOffsetX)) {
@@ -32755,6 +44545,32 @@ pub mod quartz_core {
 
     owned_object!(MetalDrawable, "CA::MetalDrawable");
     impl MetalDrawable {
+        /// Returns the inherited `MTL::Drawable` view with retained ownership.
+        pub fn as_drawable(&self) -> super::metal::Drawable {
+            super::metal::Drawable::from_inner(self._inner.clone())
+        }
+        /// Reads `CA::MetalDrawable::drawableID` when the runtime selector is available.
+        pub fn drawable_id(&self) -> Result<usize, FrameworkError> {
+            if !self.responds_to(sel!(drawableID)) {
+                return Err(FrameworkError::unsupported(
+                    "CA::MetalDrawable::drawableID is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, drawableID] })
+        }
+        /// Reads `CA::MetalDrawable::presentedTime` when the runtime selector is available.
+        pub fn presented_time(&self) -> Result<f64, FrameworkError> {
+            if !self.responds_to(sel!(presentedTime)) {
+                return Err(FrameworkError::unsupported(
+                    "CA::MetalDrawable::presentedTime is unavailable",
+                ));
+            }
+            // SAFETY: The selector is present and the inventory declares this
+            // property getter with the exact primitive return type below.
+            Ok(unsafe { msg_send![&*self._inner, presentedTime] })
+        }
         /// Reads `CA::MetalDrawable::texture` as an owned object.
         pub fn texture(&self) -> Result<Option<crate::Texture>, FrameworkError> {
             if !self.responds_to(sel!(texture)) {

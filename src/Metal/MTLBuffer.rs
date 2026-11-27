@@ -105,4 +105,12 @@ impl Buffer {
     pub fn write(&self, offset: usize, bytes: &[u8]) -> Result<(), Error> {
         self.inner.write(offset, bytes).map_err(Error::from_ffi)
     }
+
+    /// Copies CPU-visible bytes into owned memory.
+    ///
+    /// The caller must wait for all GPU accesses to the requested range to
+    /// complete before reading.
+    pub fn read(&self, offset: usize, length: usize) -> Result<Vec<u8>, Error> {
+        self.inner.read(offset, length).map_err(Error::from_ffi)
+    }
 }

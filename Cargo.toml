@@ -45,6 +45,7 @@ publish = ["crates-io"]
 
 [dependencies]
 metal-rust-ffi = { version = "=1.0.0", path = "crates/metal-rust-ffi" }
+raw-window-handle = "0.6.2"
 
 [dev-dependencies]
 static_assertions = "1.1.0"

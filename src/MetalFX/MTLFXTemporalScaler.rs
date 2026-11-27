@@ -198,6 +198,102 @@ impl TemporalScalerDescriptor {
             .map(|inner| TemporalScaler { inner })
             .map_err(Error::from_ffi)
     }
+
+    /// Creates an MTL4FX temporal scaler using a Metal 4 compiler.
+    pub fn new_mtl4_scaler(
+        &self,
+        device: &Device,
+        compiler: &crate::metal4::Compiler,
+    ) -> Result<crate::metal4_fx::TemporalScaler, Error> {
+        self.inner
+            .new_mtl4_scaler(&device.inner, &compiler.inner)
+            .map(crate::metal4_fx::TemporalScaler::from_ffi)
+            .map_err(Error::from_ffi)
+    }
+}
+
+impl crate::metal4_fx::TemporalScaler {
+    /// Assigns the input color texture.
+    pub fn set_color_texture(&self, value: Option<&crate::metal::Texture>) -> Result<(), Error> {
+        self.inner
+            .set_color_texture(value.map(|value| &value.inner))
+            .map_err(Error::from_ffi)
+    }
+
+    /// Assigns the input depth texture.
+    pub fn set_depth_texture(&self, value: Option<&crate::metal::Texture>) -> Result<(), Error> {
+        self.inner
+            .set_depth_texture(value.map(|value| &value.inner))
+            .map_err(Error::from_ffi)
+    }
+
+    /// Assigns the input motion-vector texture.
+    pub fn set_motion_texture(&self, value: Option<&crate::metal::Texture>) -> Result<(), Error> {
+        self.inner
+            .set_motion_texture(value.map(|value| &value.inner))
+            .map_err(Error::from_ffi)
+    }
+
+    /// Assigns the output texture.
+    pub fn set_output_texture(&self, value: Option<&crate::metal::Texture>) -> Result<(), Error> {
+        self.inner
+            .set_output_texture(value.map(|value| &value.inner))
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the horizontal subpixel jitter offset.
+    pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), Error> {
+        self.inner
+            .set_jitter_offset_x(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the vertical subpixel jitter offset.
+    pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), Error> {
+        self.inner
+            .set_jitter_offset_y(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the horizontal motion-vector NDC-to-pixel scale.
+    pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), Error> {
+        self.inner
+            .set_motion_vector_scale_x(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the vertical motion-vector NDC-to-pixel scale.
+    pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), Error> {
+        self.inner
+            .set_motion_vector_scale_y(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the active input-content width.
+    pub fn set_input_content_width(&self, value: usize) -> Result<(), Error> {
+        self.inner
+            .set_input_content_width(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Writes the active input-content height.
+    pub fn set_input_content_height(&self, value: usize) -> Result<(), Error> {
+        self.inner
+            .set_input_content_height(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Selects the reversed-depth convention.
+    pub fn set_depth_reversed(&self, value: bool) -> Result<(), Error> {
+        self.inner
+            .set_depth_reversed(value)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Resets temporal history before the next encode.
+    pub fn set_reset(&self, value: bool) -> Result<(), Error> {
+        self.inner.set_reset(value).map_err(Error::from_ffi)
+    }
 }
 
 /// An owned MetalFX temporal scaler.

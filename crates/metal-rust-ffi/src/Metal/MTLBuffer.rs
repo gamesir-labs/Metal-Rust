@@ -200,25 +200,36 @@ impl Buffer {
         Ok(())
     }
 
-    pub(crate) fn completed_bytes(&self, length: usize) -> Result<Vec<u8>, Error> {
-        if length > self.length() {
-            return Err(Error::invalid_argument("readback length is out of bounds"));
-        }
+    /// Copies CPU-visible bytes after the caller has synchronized GPU access.
+    pub fn read(&self, offset: usize, length: usize) -> Result<Vec<u8>, Error> {
         if matches!(self.storage, StorageMode::Private | StorageMode::Memoryless) {
-            return Err(Error::unsupported("staging buffer is not CPU visible"));
+            return Err(Error::unsupported(
+                "private and memoryless buffers are not CPU readable",
+            ));
+        }
+        let end = offset
+            .checked_add(length)
+            .ok_or_else(|| Error::invalid_argument("buffer read range overflow"))?;
+        if end > self.length() {
+            return Err(Error::invalid_argument(
+                "buffer read range is out of bounds",
+            ));
         }
         if length == 0 {
             return Ok(Vec::new());
         }
         let source = self.inner.contents().as_ptr().cast::<u8>();
         let mut bytes = vec![0_u8; length];
-        // SAFETY: this method is reachable only through a completed, identity-
-        // matched readback. The staging buffer is CPU-visible and both ranges
-        // contain exactly `length` initialized bytes.
+        // SAFETY: the caller guarantees GPU synchronization; the checked
+        // range is inside the CPU-visible Metal allocation.
         unsafe {
-            std::ptr::copy_nonoverlapping(source, bytes.as_mut_ptr(), length);
+            std::ptr::copy_nonoverlapping(source.add(offset), bytes.as_mut_ptr(), length);
         }
         Ok(bytes)
+    }
+
+    pub(crate) fn completed_bytes(&self, length: usize) -> Result<Vec<u8>, Error> {
+        self.read(0, length)
     }
 }
 

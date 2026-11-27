@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -534,6 +535,16 @@ def reference_digest(root: Path, headers: list[dict[str, Any]]) -> str:
     return digest.hexdigest()
 
 
+def git_revision(root: Path) -> str | None:
+    result = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip() if result.returncode == 0 else None
+
+
 def generate(root: Path) -> dict[str, Any]:
     headers: list[dict[str, Any]] = []
     declarations: list[dict[str, Any]] = []
@@ -550,8 +561,9 @@ def generate(root: Path) -> dict[str, Any]:
         "generator": "scripts/generate_api_inventory.py",
         "reference": {
             "name": "Apple metal-cpp",
-            "relative_root": "../D3D_Documentation/metal-cpp",
+            "relative_root": "third_party/metal-cpp",
             "license": "Apache-2.0",
+            "git_revision": git_revision(root),
             "header_count": len(headers),
             "content_sha256": reference_digest(root, headers),
         },
@@ -566,7 +578,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=Path("api/metal-cpp-inventory.json"))
     parser.add_argument("--check", action="store_true", help="fail if the checked-in inventory would change")
     args = parser.parse_args()
-    root = (args.reference or Path(__file__).resolve().parents[1].parent / "D3D_Documentation" / "metal-cpp").resolve()
+    repository = Path(__file__).resolve().parents[1]
+    root = (args.reference or repository / "third_party" / "metal-cpp").resolve()
     if not root.is_dir():
         parser.error(f"reference root does not exist: {root}")
     inventory = generate(root)

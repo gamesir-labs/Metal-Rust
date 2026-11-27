@@ -17,16 +17,9 @@
 //! let _implementation_object = device.inner;
 //! ```
 //!
-//! GPU resource readback is also intentionally absent until synchronization
-//! can be associated with the specific resource being read:
-//!
-//! ```compile_fail
-//! let device = metal_rust::Device::system_default().unwrap();
-//! let buffer = device
-//!     .new_buffer(16, metal_rust::ResourceOptions::SHARED)
-//!     .unwrap();
-//! let _bytes = buffer.read(0, 16);
-//! ```
+//! Buffer readback is available for CPU-visible shared buffers and remains
+//! range-checked. Callers are responsible for synchronizing the relevant
+//! producer work before reading resource contents.
 //!
 //! ```compile_fail
 //! let device = metal_rust::Device::system_default().unwrap();

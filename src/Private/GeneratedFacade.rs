@@ -327,9 +327,61 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `heap_offset` property with availability checks.
+        pub fn heap_offset(&self) -> Result<usize, crate::Error> {
+            self.inner.heap_offset().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `size` property with availability checks.
         pub fn size(&self) -> Result<usize, crate::Error> {
             self.inner.size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `cpu_cache_mode` property with availability checks.
+        pub fn cpu_cache_mode(&self) -> Result<crate::metal::CPUCacheMode, crate::Error> {
+            self.inner.cpu_cache_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `hazard_tracking_mode` property with availability checks.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<crate::metal::HazardTrackingMode, crate::Error> {
+            self.inner
+                .hazard_tracking_mode()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resource_options` property with availability checks.
+        pub fn resource_options(&self) -> Result<crate::metal::ResourceOptions, crate::Error> {
+            self.inner
+                .resource_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `storage_mode` property with availability checks.
+        pub fn storage_mode(&self) -> Result<crate::metal::StorageMode, crate::Error> {
+            self.inner.storage_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `heap` object property.
+        pub fn heap(&self) -> Result<Option<crate::metal::Heap>, crate::Error> {
+            self.inner
+                .heap()
+                .map(|value| value.map(crate::metal::Heap::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -349,6 +401,14 @@ pub(crate) mod metal {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal::AccelerationStructureBoundingBoxGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `bounding_box_buffer_offset` property with availability checks.
@@ -387,6 +447,61 @@ pub(crate) mod metal {
                 .set_bounding_box_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `bounding_box_buffer` object property.
         pub fn bounding_box_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
             self.inner
@@ -403,6 +518,43 @@ pub(crate) mod metal {
                 .set_bounding_box_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::AccelerationStructureCommandEncoder`.
@@ -417,6 +569,21 @@ pub(crate) mod metal {
             inner: metal_rust_ffi::__private::objects::metal::AccelerationStructureCommandEncoder,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -437,6 +604,14 @@ pub(crate) mod metal {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal::AccelerationStructureCurveGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `control_point_buffer_offset` property with availability checks.
@@ -485,6 +660,61 @@ pub(crate) mod metal {
         pub fn set_index_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_index_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `radius_buffer_offset` property with availability checks.
@@ -634,6 +864,30 @@ pub(crate) mod metal {
                 .set_index_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `radius_buffer` object property.
         pub fn radius_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
             self.inner
@@ -649,6 +903,19 @@ pub(crate) mod metal {
             self.inner
                 .set_radius_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -824,6 +1091,14 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `bounding_box_count` property with availability checks.
         pub fn bounding_box_count(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -848,6 +1123,98 @@ pub(crate) mod metal {
                 .set_bounding_box_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::AccelerationStructureMotionCurveGeometryDescriptor`.
@@ -866,6 +1233,14 @@ pub(crate) mod metal {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal::AccelerationStructureMotionCurveGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `control_point_count` property with availability checks.
@@ -902,6 +1277,61 @@ pub(crate) mod metal {
         pub fn set_index_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_index_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `radius_stride` property with availability checks.
@@ -1023,6 +1453,43 @@ pub(crate) mod metal {
                 .set_index_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::AccelerationStructureMotionTriangleGeometryDescriptor`.
@@ -1043,6 +1510,14 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `index_buffer_offset` property with availability checks.
         pub fn index_buffer_offset(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -1053,6 +1528,61 @@ pub(crate) mod metal {
         pub fn set_index_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_index_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `transformation_matrix_buffer_offset` property with availability checks.
@@ -1146,6 +1676,30 @@ pub(crate) mod metal {
                 .set_index_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `transformation_matrix_buffer` object property.
         pub fn transformation_matrix_buffer(
             &self,
@@ -1163,6 +1717,19 @@ pub(crate) mod metal {
             self.inner
                 .set_transformation_matrix_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -1298,6 +1865,14 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `index_buffer_offset` property with availability checks.
         pub fn index_buffer_offset(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -1308,6 +1883,61 @@ pub(crate) mod metal {
         pub fn set_index_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_index_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_buffer_offset` property with availability checks.
+        pub fn primitive_data_buffer_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_buffer_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer_offset` property after validation.
+        pub fn set_primitive_data_buffer_offset(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `transformation_matrix_buffer_offset` property with availability checks.
@@ -1413,6 +2043,30 @@ pub(crate) mod metal {
                 .set_index_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `primitive_data_buffer` object property.
+        pub fn primitive_data_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
+            self.inner
+                .primitive_data_buffer()
+                .map(|value| value.map(crate::metal::Buffer::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_buffer` object property.
+        pub fn set_primitive_data_buffer(
+            &self,
+            value: Option<&crate::metal::Buffer>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_buffer(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `transformation_matrix_buffer` object property.
         pub fn transformation_matrix_buffer(
             &self,
@@ -1446,6 +2100,19 @@ pub(crate) mod metal {
             self.inner
                 .set_vertex_buffer(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -1746,6 +2413,10 @@ pub(crate) mod metal {
         /// Reads the `stride` property with availability checks.
         pub fn stride(&self) -> Result<usize, crate::Error> {
             self.inner.stride().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `data_type` property with availability checks.
+        pub fn data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
+            self.inner.data_type().map_err(crate::Error::from_ffi)
         }
         /// Reads the `element_type` property with availability checks.
         pub fn element_type(&self) -> Result<crate::metal::DataType, crate::Error> {
@@ -2091,11 +2762,31 @@ pub(crate) mod metal {
                 .buffer_data_size()
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `index` property with availability checks.
+        pub fn index(&self) -> Result<usize, crate::Error> {
+            self.inner.index().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_argument` property with availability checks.
+        pub fn is_argument(&self) -> Result<bool, crate::Error> {
+            self.inner.is_argument().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_used` property with availability checks.
+        pub fn is_used(&self) -> Result<bool, crate::Error> {
+            self.inner.is_used().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `access` property with availability checks.
+        pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
+            self.inner.access().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `buffer_data_type` property with availability checks.
         pub fn buffer_data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
             self.inner
                 .buffer_data_type()
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `r#type` property with availability checks.
+        pub fn r#type(&self) -> Result<crate::metal::BindingType, crate::Error> {
+            self.inner.r#type().map_err(crate::Error::from_ffi)
         }
         /// Reads the optional `buffer_pointer_type` object property.
         pub fn buffer_pointer_type(
@@ -2112,6 +2803,10 @@ pub(crate) mod metal {
                 .buffer_struct_type()
                 .map(|value| value.map(crate::metal::StructType::from_ffi))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
         }
     }
 
@@ -3455,6 +4150,10 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `current_allocated_size` property with availability checks.
         pub fn current_allocated_size(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -3838,9 +4537,61 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `heap_offset` property with availability checks.
+        pub fn heap_offset(&self) -> Result<usize, crate::Error> {
+            self.inner.heap_offset().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `size` property with availability checks.
         pub fn size(&self) -> Result<usize, crate::Error> {
             self.inner.size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `cpu_cache_mode` property with availability checks.
+        pub fn cpu_cache_mode(&self) -> Result<crate::metal::CPUCacheMode, crate::Error> {
+            self.inner.cpu_cache_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `hazard_tracking_mode` property with availability checks.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<crate::metal::HazardTrackingMode, crate::Error> {
+            self.inner
+                .hazard_tracking_mode()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resource_options` property with availability checks.
+        pub fn resource_options(&self) -> Result<crate::metal::ResourceOptions, crate::Error> {
+            self.inner
+                .resource_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `storage_mode` property with availability checks.
+        pub fn storage_mode(&self) -> Result<crate::metal::StorageMode, crate::Error> {
+            self.inner.storage_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `heap` object property.
+        pub fn heap(&self) -> Result<Option<crate::metal::Heap>, crate::Error> {
+            self.inner
+                .heap()
+                .map(|value| value.map(crate::metal::Heap::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -4288,6 +5039,17 @@ pub(crate) mod metal {
                 .set_motion_transform_type(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `instance_count_buffer` object property.
         pub fn instance_count_buffer(&self) -> Result<Option<crate::metal::Buffer>, crate::Error> {
             self.inner
@@ -4517,6 +5279,17 @@ pub(crate) mod metal {
                 .set_motion_transform_type(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `instance_descriptor_buffer` object property.
         pub fn instance_descriptor_buffer(
             &self,
@@ -4573,6 +5346,57 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `options` property with availability checks.
+        pub fn options(&self) -> Result<crate::metal::FunctionOptions, crate::Error> {
+            self.inner.options().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` property after validation.
+        pub fn set_options(
+            &self,
+            value: crate::metal::FunctionOptions,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `constant_values` object property.
+        pub fn constant_values(
+            &self,
+        ) -> Result<Option<crate::metal::FunctionConstantValues>, crate::Error> {
+            self.inner
+                .constant_values()
+                .map(|value| value.map(crate::metal::FunctionConstantValues::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `constant_values` object property.
+        pub fn set_constant_values(
+            &self,
+            value: Option<&crate::metal::FunctionConstantValues>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_constant_values(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `name` string property.
+        pub fn set_name(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_name(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `specialized_name` string property.
+        pub fn specialized_name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner
+                .specialized_name()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `specialized_name` string property.
+        pub fn set_specialized_name(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner
+                .set_specialized_name(value)
+                .map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::IntersectionFunctionTable`.
@@ -4586,6 +5410,58 @@ pub(crate) mod metal {
             inner: metal_rust_ffi::__private::objects::metal::IntersectionFunctionTable,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `heap_offset` property with availability checks.
+        pub fn heap_offset(&self) -> Result<usize, crate::Error> {
+            self.inner.heap_offset().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `cpu_cache_mode` property with availability checks.
+        pub fn cpu_cache_mode(&self) -> Result<crate::metal::CPUCacheMode, crate::Error> {
+            self.inner.cpu_cache_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `hazard_tracking_mode` property with availability checks.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<crate::metal::HazardTrackingMode, crate::Error> {
+            self.inner
+                .hazard_tracking_mode()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resource_options` property with availability checks.
+        pub fn resource_options(&self) -> Result<crate::metal::ResourceOptions, crate::Error> {
+            self.inner
+                .resource_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `storage_mode` property with availability checks.
+        pub fn storage_mode(&self) -> Result<crate::metal::StorageMode, crate::Error> {
+            self.inner.storage_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `heap` object property.
+        pub fn heap(&self) -> Result<Option<crate::metal::Heap>, crate::Error> {
+            self.inner
+                .heap()
+                .map(|value| value.map(crate::metal::Heap::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -5164,6 +6040,18 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `index` property with availability checks.
+        pub fn index(&self) -> Result<usize, crate::Error> {
+            self.inner.index().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_argument` property with availability checks.
+        pub fn is_argument(&self) -> Result<bool, crate::Error> {
+            self.inner.is_argument().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_used` property with availability checks.
+        pub fn is_used(&self) -> Result<bool, crate::Error> {
+            self.inner.is_used().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `object_payload_alignment` property with availability checks.
         pub fn object_payload_alignment(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -5175,6 +6063,18 @@ pub(crate) mod metal {
             self.inner
                 .object_payload_data_size()
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `access` property with availability checks.
+        pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
+            self.inner.access().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `r#type` property with availability checks.
+        pub fn r#type(&self) -> Result<crate::metal::BindingType, crate::Error> {
+            self.inner.r#type().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
         }
     }
 
@@ -5189,6 +6089,21 @@ pub(crate) mod metal {
             inner: metal_rust_ffi::__private::objects::metal::ParallelRenderCommandEncoder,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -5277,6 +6192,10 @@ pub(crate) mod metal {
         /// Reads the `access` property with availability checks.
         pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
             self.inner.access().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `data_type` property with availability checks.
+        pub fn data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
+            self.inner.data_type().map_err(crate::Error::from_ffi)
         }
         /// Reads the `element_type` property with availability checks.
         pub fn element_type(&self) -> Result<crate::metal::DataType, crate::Error> {
@@ -5370,6 +6289,17 @@ pub(crate) mod metal {
             self.inner
                 .set_motion_start_border_mode(value)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -5691,6 +6621,136 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `depth_plane` property with availability checks.
+        pub fn depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner.depth_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_plane` property after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `level` property with availability checks.
+        pub fn level(&self) -> Result<usize, crate::Error> {
+            self.inner.level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `level` property after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_level(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_depth_plane` property with availability checks.
+        pub fn resolve_depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .resolve_depth_plane()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_depth_plane` property after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_level` property with availability checks.
+        pub fn resolve_level(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_level` property after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_level(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_slice` property with availability checks.
+        pub fn resolve_slice(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_slice` property after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_slice(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `slice` property with availability checks.
+        pub fn slice(&self) -> Result<usize, crate::Error> {
+            self.inner.slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `slice` property after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_slice(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `load_action` property with availability checks.
+        pub fn load_action(&self) -> Result<crate::metal::LoadAction, crate::Error> {
+            self.inner.load_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `load_action` property after validation.
+        pub fn set_load_action(&self, value: crate::metal::LoadAction) -> Result<(), crate::Error> {
+            self.inner
+                .set_load_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action` property with availability checks.
+        pub fn store_action(&self) -> Result<crate::metal::StoreAction, crate::Error> {
+            self.inner.store_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action` property after validation.
+        pub fn set_store_action(
+            &self,
+            value: crate::metal::StoreAction,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action_options` property with availability checks.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<crate::metal::StoreActionOptions, crate::Error> {
+            self.inner
+                .store_action_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action_options` property after validation.
+        pub fn set_store_action_options(
+            &self,
+            value: crate::metal::StoreActionOptions,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action_options(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `resolve_texture` object property.
+        pub fn resolve_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .resolve_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_texture` object property.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `texture` object property.
+        pub fn texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `texture` object property.
+        pub fn set_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::RenderPassColorAttachmentDescriptorArray`.
@@ -5743,6 +6803,64 @@ pub(crate) mod metal {
                 .set_clear_depth(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `depth_plane` property with availability checks.
+        pub fn depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner.depth_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_plane` property after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `level` property with availability checks.
+        pub fn level(&self) -> Result<usize, crate::Error> {
+            self.inner.level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `level` property after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_level(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_depth_plane` property with availability checks.
+        pub fn resolve_depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .resolve_depth_plane()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_depth_plane` property after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_level` property with availability checks.
+        pub fn resolve_level(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_level` property after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_level(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_slice` property with availability checks.
+        pub fn resolve_slice(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_slice` property after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_slice(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `slice` property with availability checks.
+        pub fn slice(&self) -> Result<usize, crate::Error> {
+            self.inner.slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `slice` property after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_slice(value).map_err(crate::Error::from_ffi)
+        }
         /// Reads the `depth_resolve_filter` property with availability checks.
         pub fn depth_resolve_filter(
             &self,
@@ -5758,6 +6876,78 @@ pub(crate) mod metal {
         ) -> Result<(), crate::Error> {
             self.inner
                 .set_depth_resolve_filter(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `load_action` property with availability checks.
+        pub fn load_action(&self) -> Result<crate::metal::LoadAction, crate::Error> {
+            self.inner.load_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `load_action` property after validation.
+        pub fn set_load_action(&self, value: crate::metal::LoadAction) -> Result<(), crate::Error> {
+            self.inner
+                .set_load_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action` property with availability checks.
+        pub fn store_action(&self) -> Result<crate::metal::StoreAction, crate::Error> {
+            self.inner.store_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action` property after validation.
+        pub fn set_store_action(
+            &self,
+            value: crate::metal::StoreAction,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action_options` property with availability checks.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<crate::metal::StoreActionOptions, crate::Error> {
+            self.inner
+                .store_action_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action_options` property after validation.
+        pub fn set_store_action_options(
+            &self,
+            value: crate::metal::StoreActionOptions,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action_options(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `resolve_texture` object property.
+        pub fn resolve_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .resolve_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_texture` object property.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `texture` object property.
+        pub fn texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `texture` object property.
+        pub fn set_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_texture(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
     }
@@ -5898,6 +7088,74 @@ pub(crate) mod metal {
                 .set_clear_stencil(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `depth_plane` property with availability checks.
+        pub fn depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner.depth_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_plane` property after validation.
+        pub fn set_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `level` property with availability checks.
+        pub fn level(&self) -> Result<usize, crate::Error> {
+            self.inner.level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `level` property after validation.
+        pub fn set_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_level(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_depth_plane` property with availability checks.
+        pub fn resolve_depth_plane(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .resolve_depth_plane()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_depth_plane` property after validation.
+        pub fn set_resolve_depth_plane(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_depth_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_level` property with availability checks.
+        pub fn resolve_level(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_level().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_level` property after validation.
+        pub fn set_resolve_level(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_level(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resolve_slice` property with availability checks.
+        pub fn resolve_slice(&self) -> Result<usize, crate::Error> {
+            self.inner.resolve_slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_slice` property after validation.
+        pub fn set_resolve_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_slice(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `slice` property with availability checks.
+        pub fn slice(&self) -> Result<usize, crate::Error> {
+            self.inner.slice().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `slice` property after validation.
+        pub fn set_slice(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner.set_slice(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `load_action` property with availability checks.
+        pub fn load_action(&self) -> Result<crate::metal::LoadAction, crate::Error> {
+            self.inner.load_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `load_action` property after validation.
+        pub fn set_load_action(&self, value: crate::metal::LoadAction) -> Result<(), crate::Error> {
+            self.inner
+                .set_load_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `stencil_resolve_filter` property with availability checks.
         pub fn stencil_resolve_filter(
             &self,
@@ -5913,6 +7171,68 @@ pub(crate) mod metal {
         ) -> Result<(), crate::Error> {
             self.inner
                 .set_stencil_resolve_filter(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action` property with availability checks.
+        pub fn store_action(&self) -> Result<crate::metal::StoreAction, crate::Error> {
+            self.inner.store_action().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action` property after validation.
+        pub fn set_store_action(
+            &self,
+            value: crate::metal::StoreAction,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `store_action_options` property with availability checks.
+        pub fn store_action_options(
+            &self,
+        ) -> Result<crate::metal::StoreActionOptions, crate::Error> {
+            self.inner
+                .store_action_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `store_action_options` property after validation.
+        pub fn set_store_action_options(
+            &self,
+            value: crate::metal::StoreActionOptions,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_store_action_options(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `resolve_texture` object property.
+        pub fn resolve_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .resolve_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `resolve_texture` object property.
+        pub fn set_resolve_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_resolve_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `texture` object property.
+        pub fn texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `texture` object property.
+        pub fn set_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_texture(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
     }
@@ -6285,6 +7605,21 @@ pub(crate) mod metal {
             inner: metal_rust_ffi::__private::objects::metal::ResourceStateCommandEncoder,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -6727,6 +8062,21 @@ pub(crate) mod metal {
                 .set_signaled_value(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::SharedEventHandle`.
@@ -7059,6 +8409,10 @@ pub(crate) mod metal {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `data_type` property with availability checks.
+        pub fn data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
+            self.inner.data_type().map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::Tensor`.
@@ -7073,13 +8427,43 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `buffer_offset` property with availability checks.
         pub fn buffer_offset(&self) -> Result<usize, crate::Error> {
             self.inner.buffer_offset().map_err(crate::Error::from_ffi)
         }
+        /// Reads the `heap_offset` property with availability checks.
+        pub fn heap_offset(&self) -> Result<usize, crate::Error> {
+            self.inner.heap_offset().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `cpu_cache_mode` property with availability checks.
+        pub fn cpu_cache_mode(&self) -> Result<crate::metal::CPUCacheMode, crate::Error> {
+            self.inner.cpu_cache_mode().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `data_type` property with availability checks.
         pub fn data_type(&self) -> Result<crate::metal::TensorDataType, crate::Error> {
             self.inner.data_type().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `hazard_tracking_mode` property with availability checks.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<crate::metal::HazardTrackingMode, crate::Error> {
+            self.inner
+                .hazard_tracking_mode()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resource_options` property with availability checks.
+        pub fn resource_options(&self) -> Result<crate::metal::ResourceOptions, crate::Error> {
+            self.inner
+                .resource_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `storage_mode` property with availability checks.
+        pub fn storage_mode(&self) -> Result<crate::metal::StorageMode, crate::Error> {
+            self.inner.storage_mode().map_err(crate::Error::from_ffi)
         }
         /// Reads the `usage` property with availability checks.
         pub fn usage(&self) -> Result<crate::metal::TensorUsage, crate::Error> {
@@ -7092,12 +8476,34 @@ pub(crate) mod metal {
                 .map(|value| value.map(crate::metal::Buffer::from_ffi))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `dimensions` object property.
         pub fn dimensions(&self) -> Result<Option<crate::metal::TensorExtents>, crate::Error> {
             self.inner
                 .dimensions()
                 .map(|value| value.map(crate::metal::TensorExtents::from_ffi))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `heap` object property.
+        pub fn heap(&self) -> Result<Option<crate::metal::Heap>, crate::Error> {
+            self.inner
+                .heap()
+                .map(|value| value.map(crate::metal::Heap::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
         }
         /// Reads the optional `strides` object property.
         pub fn strides(&self) -> Result<Option<crate::metal::TensorExtents>, crate::Error> {
@@ -7265,6 +8671,22 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `index` property with availability checks.
+        pub fn index(&self) -> Result<usize, crate::Error> {
+            self.inner.index().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_argument` property with availability checks.
+        pub fn is_argument(&self) -> Result<bool, crate::Error> {
+            self.inner.is_argument().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_used` property with availability checks.
+        pub fn is_used(&self) -> Result<bool, crate::Error> {
+            self.inner.is_used().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `access` property with availability checks.
+        pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
+            self.inner.access().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `index_type` property with availability checks.
         pub fn index_type(&self) -> Result<crate::metal::DataType, crate::Error> {
             self.inner.index_type().map_err(crate::Error::from_ffi)
@@ -7275,12 +8697,20 @@ pub(crate) mod metal {
                 .tensor_data_type()
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `r#type` property with availability checks.
+        pub fn r#type(&self) -> Result<crate::metal::BindingType, crate::Error> {
+            self.inner.r#type().map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `dimensions` object property.
         pub fn dimensions(&self) -> Result<Option<crate::metal::TensorExtents>, crate::Error> {
             self.inner
                 .dimensions()
                 .map(|value| value.map(crate::metal::TensorExtents::from_ffi))
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
         }
     }
 
@@ -7499,6 +8929,10 @@ pub(crate) mod metal {
         pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
             self.inner.access().map_err(crate::Error::from_ffi)
         }
+        /// Reads the `data_type` property with availability checks.
+        pub fn data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
+            self.inner.data_type().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `index_type` property with availability checks.
         pub fn index_type(&self) -> Result<crate::metal::DataType, crate::Error> {
             self.inner.index_type().map_err(crate::Error::from_ffi)
@@ -7534,11 +8968,27 @@ pub(crate) mod metal {
         pub fn array_length(&self) -> Result<usize, crate::Error> {
             self.inner.array_length().map_err(crate::Error::from_ffi)
         }
+        /// Reads the `index` property with availability checks.
+        pub fn index(&self) -> Result<usize, crate::Error> {
+            self.inner.index().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_argument` property with availability checks.
+        pub fn is_argument(&self) -> Result<bool, crate::Error> {
+            self.inner.is_argument().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `is_depth_texture` property with availability checks.
         pub fn is_depth_texture(&self) -> Result<bool, crate::Error> {
             self.inner
                 .is_depth_texture()
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_used` property with availability checks.
+        pub fn is_used(&self) -> Result<bool, crate::Error> {
+            self.inner.is_used().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `access` property with availability checks.
+        pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
+            self.inner.access().map_err(crate::Error::from_ffi)
         }
         /// Reads the `texture_data_type` property with availability checks.
         pub fn texture_data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
@@ -7549,6 +8999,14 @@ pub(crate) mod metal {
         /// Reads the `texture_type` property with availability checks.
         pub fn texture_type(&self) -> Result<crate::metal::TextureType, crate::Error> {
             self.inner.texture_type().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `r#type` property with availability checks.
+        pub fn r#type(&self) -> Result<crate::metal::BindingType, crate::Error> {
+            self.inner.r#type().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
         }
     }
 
@@ -7579,6 +9037,10 @@ pub(crate) mod metal {
         /// Reads the `access` property with availability checks.
         pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
             self.inner.access().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `data_type` property with availability checks.
+        pub fn data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
+            self.inner.data_type().map_err(crate::Error::from_ffi)
         }
         /// Reads the `texture_data_type` property with availability checks.
         pub fn texture_data_type(&self) -> Result<crate::metal::DataType, crate::Error> {
@@ -7650,6 +9112,23 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `resource_view_count` property with availability checks.
+        pub fn resource_view_count(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .resource_view_count()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::ThreadgroupBinding`.
@@ -7664,6 +9143,18 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `index` property with availability checks.
+        pub fn index(&self) -> Result<usize, crate::Error> {
+            self.inner.index().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_argument` property with availability checks.
+        pub fn is_argument(&self) -> Result<bool, crate::Error> {
+            self.inner.is_argument().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_used` property with availability checks.
+        pub fn is_used(&self) -> Result<bool, crate::Error> {
+            self.inner.is_used().map_err(crate::Error::from_ffi)
+        }
         /// Reads the `threadgroup_memory_alignment` property with availability checks.
         pub fn threadgroup_memory_alignment(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -7675,6 +9166,18 @@ pub(crate) mod metal {
             self.inner
                 .threadgroup_memory_data_size()
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `access` property with availability checks.
+        pub fn access(&self) -> Result<crate::metal::BindingAccess, crate::Error> {
+            self.inner.access().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `r#type` property with availability checks.
+        pub fn r#type(&self) -> Result<crate::metal::BindingType, crate::Error> {
+            self.inner.r#type().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `name` string property.
+        pub fn name(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.name().map_err(crate::Error::from_ffi)
         }
     }
 
@@ -8158,6 +9661,58 @@ pub(crate) mod metal {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `heap_offset` property with availability checks.
+        pub fn heap_offset(&self) -> Result<usize, crate::Error> {
+            self.inner.heap_offset().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `cpu_cache_mode` property with availability checks.
+        pub fn cpu_cache_mode(&self) -> Result<crate::metal::CPUCacheMode, crate::Error> {
+            self.inner.cpu_cache_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `hazard_tracking_mode` property with availability checks.
+        pub fn hazard_tracking_mode(
+            &self,
+        ) -> Result<crate::metal::HazardTrackingMode, crate::Error> {
+            self.inner
+                .hazard_tracking_mode()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `resource_options` property with availability checks.
+        pub fn resource_options(&self) -> Result<crate::metal::ResourceOptions, crate::Error> {
+            self.inner
+                .resource_options()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `storage_mode` property with availability checks.
+        pub fn storage_mode(&self) -> Result<crate::metal::StorageMode, crate::Error> {
+            self.inner.storage_mode().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `device` object property.
+        pub fn device(&self) -> Result<Option<crate::metal::Device>, crate::Error> {
+            self.inner
+                .device()
+                .map(|value| value.map(crate::metal::Device::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `heap` object property.
+        pub fn heap(&self) -> Result<Option<crate::metal::Heap>, crate::Error> {
+            self.inner
+                .heap()
+                .map(|value| value.map(crate::metal::Heap::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL::VisibleFunctionTableDescriptor`.
@@ -8251,6 +9806,14 @@ pub(crate) mod metal4 {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `bounding_box_count` property with availability checks.
         pub fn bounding_box_count(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -8275,6 +9838,70 @@ pub(crate) mod metal4 {
                 .set_bounding_box_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::AccelerationStructureCurveGeometryDescriptor`.
@@ -8293,6 +9920,14 @@ pub(crate) mod metal4 {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal4::AccelerationStructureCurveGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `control_point_count` property with availability checks.
@@ -8317,6 +9952,49 @@ pub(crate) mod metal4 {
         pub fn set_control_point_stride(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_control_point_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `radius_stride` property with availability checks.
@@ -8422,6 +10100,27 @@ pub(crate) mod metal4 {
                 .set_radius_format(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::AccelerationStructureDescriptor`.
@@ -8442,6 +10141,17 @@ pub(crate) mod metal4 {
             metal_rust_ffi::__private::objects::metal4::AccelerationStructureDescriptor::new()
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -8556,6 +10266,14 @@ pub(crate) mod metal4 {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `bounding_box_count` property with availability checks.
         pub fn bounding_box_count(&self) -> Result<usize, crate::Error> {
             self.inner
@@ -8580,6 +10298,70 @@ pub(crate) mod metal4 {
                 .set_bounding_box_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::AccelerationStructureMotionCurveGeometryDescriptor`.
@@ -8598,6 +10380,14 @@ pub(crate) mod metal4 {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal4::AccelerationStructureMotionCurveGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `control_point_count` property with availability checks.
@@ -8622,6 +10412,49 @@ pub(crate) mod metal4 {
         pub fn set_control_point_stride(&self, value: usize) -> Result<(), crate::Error> {
             self.inner
                 .set_control_point_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `radius_stride` property with availability checks.
@@ -8727,6 +10560,27 @@ pub(crate) mod metal4 {
                 .set_radius_format(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::AccelerationStructureMotionTriangleGeometryDescriptor`.
@@ -8745,6 +10599,57 @@ pub(crate) mod metal4 {
         pub fn new() -> Result<Self, crate::Error> {
             metal_rust_ffi::__private::objects::metal4::AccelerationStructureMotionTriangleGeometryDescriptor::new()
                 .map(Self::from_ffi)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
                 .map_err(crate::Error::from_ffi)
         }
         /// Reads the `triangle_count` property with availability checks.
@@ -8806,6 +10711,27 @@ pub(crate) mod metal4 {
             self.inner
                 .set_vertex_format(value)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -8827,6 +10753,57 @@ pub(crate) mod metal4 {
                 .map(Self::from_ffi)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `allow_duplicate_intersection_function_invocation` property with availability checks.
+        pub fn allow_duplicate_intersection_function_invocation(
+            &self,
+        ) -> Result<bool, crate::Error> {
+            self.inner
+                .allow_duplicate_intersection_function_invocation()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `intersection_function_table_offset` property with availability checks.
+        pub fn intersection_function_table_offset(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .intersection_function_table_offset()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `intersection_function_table_offset` property after validation.
+        pub fn set_intersection_function_table_offset(
+            &self,
+            value: usize,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_intersection_function_table_offset(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `opaque` property with availability checks.
+        pub fn opaque(&self) -> Result<bool, crate::Error> {
+            self.inner.opaque().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_element_size` property with availability checks.
+        pub fn primitive_data_element_size(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_element_size()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_element_size` property after validation.
+        pub fn set_primitive_data_element_size(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_element_size(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `primitive_data_stride` property with availability checks.
+        pub fn primitive_data_stride(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .primitive_data_stride()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `primitive_data_stride` property after validation.
+        pub fn set_primitive_data_stride(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_primitive_data_stride(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the `triangle_count` property with availability checks.
         pub fn triangle_count(&self) -> Result<usize, crate::Error> {
             self.inner.triangle_count().map_err(crate::Error::from_ffi)
@@ -8886,6 +10863,27 @@ pub(crate) mod metal4 {
             self.inner
                 .set_vertex_format(value)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_allow_duplicate_intersection_function_invocation(
+            &self,
+            value: bool,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_allow_duplicate_intersection_function_invocation(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_opaque(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner.set_opaque(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -9496,6 +11494,30 @@ pub(crate) mod metal4 {
                 .set_compute_function_descriptor(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `options` object property.
+        pub fn options(&self) -> Result<Option<crate::metal4::PipelineOptions>, crate::Error> {
+            self.inner
+                .options()
+                .map(|value| value.map(crate::metal4::PipelineOptions::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` object property.
+        pub fn set_options(
+            &self,
+            value: Option<&crate::metal4::PipelineOptions>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `static_linking_descriptor` object property.
         pub fn static_linking_descriptor(
             &self,
@@ -9703,6 +11725,17 @@ pub(crate) mod metal4 {
                 .set_motion_transform_type(value)
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::InstanceAccelerationStructureDescriptor`.
@@ -9819,6 +11852,17 @@ pub(crate) mod metal4 {
             self.inner
                 .set_motion_transform_type(value)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -9963,6 +12007,22 @@ pub(crate) mod metal4 {
                 .set_machine_learning_function_descriptor(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `options` object property.
+        pub fn options(&self) -> Result<Option<crate::metal4::PipelineOptions>, crate::Error> {
+            self.inner
+                .options()
+                .map(|value| value.map(crate::metal4::PipelineOptions::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` object property.
+        pub fn set_options(
+            &self,
+            value: Option<&crate::metal4::PipelineOptions>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
     }
 
     /// Safe owned facade for `MTL4::MachineLearningPipelineReflection`.
@@ -9997,6 +12057,10 @@ pub(crate) mod metal4 {
             inner: metal_rust_ffi::__private::objects::metal4::MachineLearningPipelineState,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the `allocated_size` property with availability checks.
+        pub fn allocated_size(&self) -> Result<usize, crate::Error> {
+            self.inner.allocated_size().map_err(crate::Error::from_ffi)
         }
         /// Reads the `intermediates_heap_size` property with availability checks.
         pub fn intermediates_heap_size(&self) -> Result<usize, crate::Error> {
@@ -10281,6 +12345,14 @@ pub(crate) mod metal4 {
                 .set_fragment_static_linking_descriptor(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `mesh_function_descriptor` object property.
         pub fn mesh_function_descriptor(
             &self,
@@ -10351,6 +12423,22 @@ pub(crate) mod metal4 {
         ) -> Result<(), crate::Error> {
             self.inner
                 .set_object_static_linking_descriptor(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `options` object property.
+        pub fn options(&self) -> Result<Option<crate::metal4::PipelineOptions>, crate::Error> {
+            self.inner
+                .options()
+                .map(|value| value.map(crate::metal4::PipelineOptions::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` object property.
+        pub fn set_options(
+            &self,
+            value: Option<&crate::metal4::PipelineOptions>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
         /// Writes the Boolean property after availability checks.
@@ -10660,6 +12748,17 @@ pub(crate) mod metal4 {
             self.inner
                 .set_motion_start_border_mode(value)
                 .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `usage` property with availability checks.
+        pub fn usage(&self) -> Result<crate::metal::AccelerationStructureUsage, crate::Error> {
+            self.inner.usage().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `usage` property after validation.
+        pub fn set_usage(
+            &self,
+            value: crate::metal::AccelerationStructureUsage,
+        ) -> Result<(), crate::Error> {
+            self.inner.set_usage(value).map_err(crate::Error::from_ffi)
         }
     }
 
@@ -11282,6 +13381,30 @@ pub(crate) mod metal4 {
                 .set_fragment_static_linking_descriptor(value.map(|value| &value.inner))
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `options` object property.
+        pub fn options(&self) -> Result<Option<crate::metal4::PipelineOptions>, crate::Error> {
+            self.inner
+                .options()
+                .map(|value| value.map(crate::metal4::PipelineOptions::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` object property.
+        pub fn set_options(
+            &self,
+            value: Option<&crate::metal4::PipelineOptions>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `vertex_descriptor` object property.
         pub fn vertex_descriptor(
             &self,
@@ -11637,6 +13760,30 @@ pub(crate) mod metal4 {
                 })
                 .map_err(crate::Error::from_ffi)
         }
+        /// Reads the optional `label` string property.
+        pub fn label(&self) -> Result<Option<String>, crate::Error> {
+            self.inner.label().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `label` string property.
+        pub fn set_label(&self, value: &str) -> Result<(), crate::Error> {
+            self.inner.set_label(value).map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `options` object property.
+        pub fn options(&self) -> Result<Option<crate::metal4::PipelineOptions>, crate::Error> {
+            self.inner
+                .options()
+                .map(|value| value.map(crate::metal4::PipelineOptions::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `options` object property.
+        pub fn set_options(
+            &self,
+            value: Option<&crate::metal4::PipelineOptions>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_options(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Reads the optional `static_linking_descriptor` object property.
         pub fn static_linking_descriptor(
             &self,
@@ -11705,6 +13852,473 @@ pub(crate) mod metal4_fx {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `aspect_ratio` property with availability checks.
+        pub fn aspect_ratio(&self) -> Result<f32, crate::Error> {
+            self.inner.aspect_ratio().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `aspect_ratio` property after validation.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_aspect_ratio(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `content_height` property with availability checks.
+        pub fn content_height(&self) -> Result<usize, crate::Error> {
+            self.inner.content_height().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `content_height` property after validation.
+        pub fn set_content_height(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_content_height(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `content_width` property with availability checks.
+        pub fn content_width(&self) -> Result<usize, crate::Error> {
+            self.inner.content_width().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `content_width` property after validation.
+        pub fn set_content_width(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_content_width(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `delta_time` property with availability checks.
+        pub fn delta_time(&self) -> Result<f32, crate::Error> {
+            self.inner.delta_time().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `delta_time` property after validation.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_delta_time(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_content_offset_x` property with availability checks.
+        pub fn depth_content_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .depth_content_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_content_offset_x` property after validation.
+        pub fn set_depth_content_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_content_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_content_offset_y` property with availability checks.
+        pub fn depth_content_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .depth_content_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_content_offset_y` property after validation.
+        pub fn set_depth_content_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_content_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_height` property with availability checks.
+        pub fn distortion_height(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_height()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_height` property after validation.
+        pub fn set_distortion_height(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_height(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_offset_x` property with availability checks.
+        pub fn distortion_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_offset_x` property after validation.
+        pub fn set_distortion_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_offset_y` property with availability checks.
+        pub fn distortion_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_offset_y` property after validation.
+        pub fn set_distortion_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_width` property with availability checks.
+        pub fn distortion_width(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_width()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_width` property after validation.
+        pub fn set_distortion_width(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_width(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `far_plane` property with availability checks.
+        pub fn far_plane(&self) -> Result<f32, crate::Error> {
+            self.inner.far_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `far_plane` property after validation.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_far_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `field_of_view` property with availability checks.
+        pub fn field_of_view(&self) -> Result<f32, crate::Error> {
+            self.inner.field_of_view().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `field_of_view` property after validation.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_field_of_view(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_height` property with availability checks.
+        pub fn input_height(&self) -> Result<usize, crate::Error> {
+            self.inner.input_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_width` property with availability checks.
+        pub fn input_width(&self) -> Result<usize, crate::Error> {
+            self.inner.input_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_depth_reversed` property with availability checks.
+        pub fn is_depth_reversed(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_depth_reversed()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_ui_texture_composited` property with availability checks.
+        pub fn is_ui_texture_composited(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_ui_texture_composited()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_x` property with availability checks.
+        pub fn jitter_offset_x(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_x` property after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_y` property with availability checks.
+        pub fn jitter_offset_y(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_y` property after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_content_offset_x` property with availability checks.
+        pub fn motion_content_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .motion_content_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_content_offset_x` property after validation.
+        pub fn set_motion_content_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_content_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_content_offset_y` property with availability checks.
+        pub fn motion_content_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .motion_content_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_content_offset_y` property after validation.
+        pub fn set_motion_content_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_content_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_x` property with availability checks.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_x` property after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_y` property with availability checks.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_y` property after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `near_plane` property with availability checks.
+        pub fn near_plane(&self) -> Result<f32, crate::Error> {
+            self.inner.near_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `near_plane` property after validation.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_near_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_height` property with availability checks.
+        pub fn output_height(&self) -> Result<usize, crate::Error> {
+            self.inner.output_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_offset_x` property with availability checks.
+        pub fn output_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner.output_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_offset_x` property after validation.
+        pub fn set_output_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_offset_y` property with availability checks.
+        pub fn output_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner.output_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_offset_y` property after validation.
+        pub fn set_output_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_width` property with availability checks.
+        pub fn output_width(&self) -> Result<usize, crate::Error> {
+            self.inner.output_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `should_reset_history` property with availability checks.
+        pub fn should_reset_history(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .should_reset_history()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_format` property with availability checks.
+        pub fn color_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .color_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_usage` property with availability checks.
+        pub fn color_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .color_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_format` property with availability checks.
+        pub fn depth_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .depth_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_usage` property with availability checks.
+        pub fn depth_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .depth_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_format` property with availability checks.
+        pub fn motion_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .motion_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_usage` property with availability checks.
+        pub fn motion_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .motion_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_format` property with availability checks.
+        pub fn output_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .output_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_usage` property with availability checks.
+        pub fn output_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .output_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `ui_texture_format` property with availability checks.
+        pub fn ui_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .ui_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `ui_texture_usage` property with availability checks.
+        pub fn ui_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .ui_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `color_texture` object property.
+        pub fn color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `color_texture` object property.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `depth_texture` object property.
+        pub fn depth_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .depth_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_texture` object property.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `distortion_texture` object property.
+        pub fn distortion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .distortion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_texture` object property.
+        pub fn set_distortion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `fence` object property.
+        pub fn fence(&self) -> Result<Option<crate::metal::Fence>, crate::Error> {
+            self.inner
+                .fence()
+                .map(|value| value.map(crate::metal::Fence::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `fence` object property.
+        pub fn set_fence(&self, value: Option<&crate::metal::Fence>) -> Result<(), crate::Error> {
+            self.inner
+                .set_fence(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `motion_texture` object property.
+        pub fn motion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .motion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_texture` object property.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `output_texture` object property.
+        pub fn output_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .output_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_texture` object property.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `prev_color_texture` object property.
+        pub fn prev_color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .prev_color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `prev_color_texture` object property.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_prev_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `ui_texture` object property.
+        pub fn ui_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .ui_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `ui_texture` object property.
+        pub fn set_ui_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_ui_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_reversed(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_is_ui_texture_composited(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_should_reset_history(value)
+                .map_err(crate::Error::from_ffi)
+        }
         /// Encodes work into an active Metal 4 recording scope.
         pub fn encode_to_command_buffer(
             &self,
@@ -11729,6 +14343,115 @@ pub(crate) mod metal4_fx {
         ) -> Self {
             Self { inner }
         }
+        /// Reads the `input_content_height` property with availability checks.
+        pub fn input_content_height(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .input_content_height()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `input_content_height` property after validation.
+        pub fn set_input_content_height(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_input_content_height(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_content_width` property with availability checks.
+        pub fn input_content_width(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .input_content_width()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `input_content_width` property after validation.
+        pub fn set_input_content_width(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_input_content_width(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_height` property with availability checks.
+        pub fn input_height(&self) -> Result<usize, crate::Error> {
+            self.inner.input_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_width` property with availability checks.
+        pub fn input_width(&self) -> Result<usize, crate::Error> {
+            self.inner.input_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_height` property with availability checks.
+        pub fn output_height(&self) -> Result<usize, crate::Error> {
+            self.inner.output_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_width` property with availability checks.
+        pub fn output_width(&self) -> Result<usize, crate::Error> {
+            self.inner.output_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_format` property with availability checks.
+        pub fn color_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .color_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_usage` property with availability checks.
+        pub fn color_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .color_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_format` property with availability checks.
+        pub fn output_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .output_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_usage` property with availability checks.
+        pub fn output_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .output_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `color_texture` object property.
+        pub fn color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `color_texture` object property.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `fence` object property.
+        pub fn fence(&self) -> Result<Option<crate::metal::Fence>, crate::Error> {
+            self.inner
+                .fence()
+                .map(|value| value.map(crate::metal::Fence::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `fence` object property.
+        pub fn set_fence(&self, value: Option<&crate::metal::Fence>) -> Result<(), crate::Error> {
+            self.inner
+                .set_fence(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `output_texture` object property.
+        pub fn output_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .output_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_texture` object property.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
         /// Encodes work into an active Metal 4 recording scope.
         pub fn encode_to_command_buffer(
             &self,
@@ -11752,6 +14475,511 @@ pub(crate) mod metal4_fx {
             inner: metal_rust_ffi::__private::objects::metal4_fx::TemporalDenoisedScaler,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the `input_content_max_scale` property with availability checks.
+        pub fn input_content_max_scale(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .input_content_max_scale()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_content_min_scale` property with availability checks.
+        pub fn input_content_min_scale(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .input_content_min_scale()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_height` property with availability checks.
+        pub fn input_height(&self) -> Result<usize, crate::Error> {
+            self.inner.input_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_width` property with availability checks.
+        pub fn input_width(&self) -> Result<usize, crate::Error> {
+            self.inner.input_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_depth_reversed` property with availability checks.
+        pub fn is_depth_reversed(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_depth_reversed()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_x` property with availability checks.
+        pub fn jitter_offset_x(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_x` property after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_y` property with availability checks.
+        pub fn jitter_offset_y(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_y` property after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_x` property with availability checks.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_x` property after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_y` property with availability checks.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_y` property after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_height` property with availability checks.
+        pub fn output_height(&self) -> Result<usize, crate::Error> {
+            self.inner.output_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_width` property with availability checks.
+        pub fn output_width(&self) -> Result<usize, crate::Error> {
+            self.inner.output_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `pre_exposure` property with availability checks.
+        pub fn pre_exposure(&self) -> Result<f32, crate::Error> {
+            self.inner.pre_exposure().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `pre_exposure` property after validation.
+        pub fn set_pre_exposure(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_pre_exposure(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `should_reset_history` property with availability checks.
+        pub fn should_reset_history(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .should_reset_history()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_format` property with availability checks.
+        pub fn color_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .color_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_usage` property with availability checks.
+        pub fn color_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .color_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `denoise_strength_mask_texture_format` property with availability checks.
+        pub fn denoise_strength_mask_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `denoise_strength_mask_texture_usage` property with availability checks.
+        pub fn denoise_strength_mask_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_format` property with availability checks.
+        pub fn depth_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .depth_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_usage` property with availability checks.
+        pub fn depth_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .depth_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `diffuse_albedo_texture_format` property with availability checks.
+        pub fn diffuse_albedo_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `diffuse_albedo_texture_usage` property with availability checks.
+        pub fn diffuse_albedo_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_format` property with availability checks.
+        pub fn motion_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .motion_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_usage` property with availability checks.
+        pub fn motion_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .motion_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `normal_texture_format` property with availability checks.
+        pub fn normal_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .normal_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `normal_texture_usage` property with availability checks.
+        pub fn normal_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .normal_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_format` property with availability checks.
+        pub fn output_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .output_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_usage` property with availability checks.
+        pub fn output_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .output_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `reactive_mask_texture_format` property with availability checks.
+        pub fn reactive_mask_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .reactive_mask_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `reactive_mask_texture_usage` property with availability checks.
+        pub fn reactive_mask_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .reactive_mask_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `roughness_texture_format` property with availability checks.
+        pub fn roughness_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .roughness_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `roughness_texture_usage` property with availability checks.
+        pub fn roughness_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .roughness_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_albedo_texture_format` property with availability checks.
+        pub fn specular_albedo_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .specular_albedo_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_albedo_texture_usage` property with availability checks.
+        pub fn specular_albedo_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .specular_albedo_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_hit_distance_texture_format` property with availability checks.
+        pub fn specular_hit_distance_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_hit_distance_texture_usage` property with availability checks.
+        pub fn specular_hit_distance_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `transparency_overlay_texture_format` property with availability checks.
+        pub fn transparency_overlay_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .transparency_overlay_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `transparency_overlay_texture_usage` property with availability checks.
+        pub fn transparency_overlay_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .transparency_overlay_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `color_texture` object property.
+        pub fn color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `color_texture` object property.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `denoise_strength_mask_texture` object property.
+        pub fn denoise_strength_mask_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `denoise_strength_mask_texture` object property.
+        pub fn set_denoise_strength_mask_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_denoise_strength_mask_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `depth_texture` object property.
+        pub fn depth_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .depth_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_texture` object property.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `diffuse_albedo_texture` object property.
+        pub fn diffuse_albedo_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `diffuse_albedo_texture` object property.
+        pub fn set_diffuse_albedo_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_diffuse_albedo_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `exposure_texture` object property.
+        pub fn exposure_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .exposure_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `exposure_texture` object property.
+        pub fn set_exposure_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_exposure_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `fence` object property.
+        pub fn fence(&self) -> Result<Option<crate::metal::Fence>, crate::Error> {
+            self.inner
+                .fence()
+                .map(|value| value.map(crate::metal::Fence::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `fence` object property.
+        pub fn set_fence(&self, value: Option<&crate::metal::Fence>) -> Result<(), crate::Error> {
+            self.inner
+                .set_fence(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `motion_texture` object property.
+        pub fn motion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .motion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_texture` object property.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `normal_texture` object property.
+        pub fn normal_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .normal_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `normal_texture` object property.
+        pub fn set_normal_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_normal_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `output_texture` object property.
+        pub fn output_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .output_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_texture` object property.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `reactive_mask_texture` object property.
+        pub fn reactive_mask_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .reactive_mask_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `reactive_mask_texture` object property.
+        pub fn set_reactive_mask_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_reactive_mask_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `roughness_texture` object property.
+        pub fn roughness_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .roughness_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `roughness_texture` object property.
+        pub fn set_roughness_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_roughness_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `specular_albedo_texture` object property.
+        pub fn specular_albedo_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .specular_albedo_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `specular_albedo_texture` object property.
+        pub fn set_specular_albedo_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_specular_albedo_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `specular_hit_distance_texture` object property.
+        pub fn specular_hit_distance_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `specular_hit_distance_texture` object property.
+        pub fn set_specular_hit_distance_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_specular_hit_distance_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `transparency_overlay_texture` object property.
+        pub fn transparency_overlay_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .transparency_overlay_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `transparency_overlay_texture` object property.
+        pub fn set_transparency_overlay_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_transparency_overlay_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_reversed(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_should_reset_history(value)
+                .map_err(crate::Error::from_ffi)
         }
         /// Encodes work into an active Metal 4 recording scope.
         pub fn encode_to_command_buffer(
@@ -11817,6 +15045,473 @@ pub(crate) mod metal_fx {
             inner: metal_rust_ffi::__private::objects::metal_fx::FrameInterpolator,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the `aspect_ratio` property with availability checks.
+        pub fn aspect_ratio(&self) -> Result<f32, crate::Error> {
+            self.inner.aspect_ratio().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `aspect_ratio` property after validation.
+        pub fn set_aspect_ratio(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_aspect_ratio(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `content_height` property with availability checks.
+        pub fn content_height(&self) -> Result<usize, crate::Error> {
+            self.inner.content_height().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `content_height` property after validation.
+        pub fn set_content_height(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_content_height(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `content_width` property with availability checks.
+        pub fn content_width(&self) -> Result<usize, crate::Error> {
+            self.inner.content_width().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `content_width` property after validation.
+        pub fn set_content_width(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_content_width(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `delta_time` property with availability checks.
+        pub fn delta_time(&self) -> Result<f32, crate::Error> {
+            self.inner.delta_time().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `delta_time` property after validation.
+        pub fn set_delta_time(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_delta_time(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_content_offset_x` property with availability checks.
+        pub fn depth_content_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .depth_content_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_content_offset_x` property after validation.
+        pub fn set_depth_content_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_content_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_content_offset_y` property with availability checks.
+        pub fn depth_content_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .depth_content_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_content_offset_y` property after validation.
+        pub fn set_depth_content_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_content_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_height` property with availability checks.
+        pub fn distortion_height(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_height()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_height` property after validation.
+        pub fn set_distortion_height(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_height(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_offset_x` property with availability checks.
+        pub fn distortion_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_offset_x` property after validation.
+        pub fn set_distortion_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_offset_y` property with availability checks.
+        pub fn distortion_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_offset_y` property after validation.
+        pub fn set_distortion_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `distortion_width` property with availability checks.
+        pub fn distortion_width(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .distortion_width()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_width` property after validation.
+        pub fn set_distortion_width(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_width(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `far_plane` property with availability checks.
+        pub fn far_plane(&self) -> Result<f32, crate::Error> {
+            self.inner.far_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `far_plane` property after validation.
+        pub fn set_far_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_far_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `field_of_view` property with availability checks.
+        pub fn field_of_view(&self) -> Result<f32, crate::Error> {
+            self.inner.field_of_view().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `field_of_view` property after validation.
+        pub fn set_field_of_view(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_field_of_view(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_height` property with availability checks.
+        pub fn input_height(&self) -> Result<usize, crate::Error> {
+            self.inner.input_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_width` property with availability checks.
+        pub fn input_width(&self) -> Result<usize, crate::Error> {
+            self.inner.input_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_depth_reversed` property with availability checks.
+        pub fn is_depth_reversed(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_depth_reversed()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_ui_texture_composited` property with availability checks.
+        pub fn is_ui_texture_composited(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_ui_texture_composited()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_x` property with availability checks.
+        pub fn jitter_offset_x(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_x` property after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_y` property with availability checks.
+        pub fn jitter_offset_y(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_y` property after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_content_offset_x` property with availability checks.
+        pub fn motion_content_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .motion_content_offset_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_content_offset_x` property after validation.
+        pub fn set_motion_content_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_content_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_content_offset_y` property with availability checks.
+        pub fn motion_content_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner
+                .motion_content_offset_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_content_offset_y` property after validation.
+        pub fn set_motion_content_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_content_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_x` property with availability checks.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_x` property after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_y` property with availability checks.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_y` property after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `near_plane` property with availability checks.
+        pub fn near_plane(&self) -> Result<f32, crate::Error> {
+            self.inner.near_plane().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `near_plane` property after validation.
+        pub fn set_near_plane(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_near_plane(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_height` property with availability checks.
+        pub fn output_height(&self) -> Result<usize, crate::Error> {
+            self.inner.output_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_offset_x` property with availability checks.
+        pub fn output_offset_x(&self) -> Result<usize, crate::Error> {
+            self.inner.output_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_offset_x` property after validation.
+        pub fn set_output_offset_x(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_offset_y` property with availability checks.
+        pub fn output_offset_y(&self) -> Result<usize, crate::Error> {
+            self.inner.output_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_offset_y` property after validation.
+        pub fn set_output_offset_y(&self, value: usize) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_width` property with availability checks.
+        pub fn output_width(&self) -> Result<usize, crate::Error> {
+            self.inner.output_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `should_reset_history` property with availability checks.
+        pub fn should_reset_history(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .should_reset_history()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_format` property with availability checks.
+        pub fn color_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .color_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_usage` property with availability checks.
+        pub fn color_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .color_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_format` property with availability checks.
+        pub fn depth_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .depth_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_usage` property with availability checks.
+        pub fn depth_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .depth_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_format` property with availability checks.
+        pub fn motion_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .motion_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_usage` property with availability checks.
+        pub fn motion_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .motion_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_format` property with availability checks.
+        pub fn output_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .output_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_usage` property with availability checks.
+        pub fn output_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .output_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `ui_texture_format` property with availability checks.
+        pub fn ui_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .ui_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `ui_texture_usage` property with availability checks.
+        pub fn ui_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .ui_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `color_texture` object property.
+        pub fn color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `color_texture` object property.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `depth_texture` object property.
+        pub fn depth_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .depth_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_texture` object property.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `distortion_texture` object property.
+        pub fn distortion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .distortion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `distortion_texture` object property.
+        pub fn set_distortion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_distortion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `fence` object property.
+        pub fn fence(&self) -> Result<Option<crate::metal::Fence>, crate::Error> {
+            self.inner
+                .fence()
+                .map(|value| value.map(crate::metal::Fence::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `fence` object property.
+        pub fn set_fence(&self, value: Option<&crate::metal::Fence>) -> Result<(), crate::Error> {
+            self.inner
+                .set_fence(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `motion_texture` object property.
+        pub fn motion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .motion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_texture` object property.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `output_texture` object property.
+        pub fn output_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .output_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_texture` object property.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `prev_color_texture` object property.
+        pub fn prev_color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .prev_color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `prev_color_texture` object property.
+        pub fn set_prev_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_prev_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `ui_texture` object property.
+        pub fn ui_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .ui_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `ui_texture` object property.
+        pub fn set_ui_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_ui_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_reversed(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_is_ui_texture_composited(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_is_ui_texture_composited(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_should_reset_history(value)
+                .map_err(crate::Error::from_ffi)
         }
         /// Encodes work into a mutably borrowed Metal command buffer.
         pub fn encode_to_command_buffer(
@@ -12628,6 +16323,511 @@ pub(crate) mod metal_fx {
             inner: metal_rust_ffi::__private::objects::metal_fx::TemporalDenoisedScaler,
         ) -> Self {
             Self { inner }
+        }
+        /// Reads the `input_content_max_scale` property with availability checks.
+        pub fn input_content_max_scale(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .input_content_max_scale()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_content_min_scale` property with availability checks.
+        pub fn input_content_min_scale(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .input_content_min_scale()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_height` property with availability checks.
+        pub fn input_height(&self) -> Result<usize, crate::Error> {
+            self.inner.input_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `input_width` property with availability checks.
+        pub fn input_width(&self) -> Result<usize, crate::Error> {
+            self.inner.input_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `is_depth_reversed` property with availability checks.
+        pub fn is_depth_reversed(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .is_depth_reversed()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_x` property with availability checks.
+        pub fn jitter_offset_x(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_x().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_x` property after validation.
+        pub fn set_jitter_offset_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `jitter_offset_y` property with availability checks.
+        pub fn jitter_offset_y(&self) -> Result<f32, crate::Error> {
+            self.inner.jitter_offset_y().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `jitter_offset_y` property after validation.
+        pub fn set_jitter_offset_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_jitter_offset_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_x` property with availability checks.
+        pub fn motion_vector_scale_x(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_x()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_x` property after validation.
+        pub fn set_motion_vector_scale_x(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_x(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_vector_scale_y` property with availability checks.
+        pub fn motion_vector_scale_y(&self) -> Result<f32, crate::Error> {
+            self.inner
+                .motion_vector_scale_y()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_vector_scale_y` property after validation.
+        pub fn set_motion_vector_scale_y(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_vector_scale_y(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_height` property with availability checks.
+        pub fn output_height(&self) -> Result<usize, crate::Error> {
+            self.inner.output_height().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_width` property with availability checks.
+        pub fn output_width(&self) -> Result<usize, crate::Error> {
+            self.inner.output_width().map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `pre_exposure` property with availability checks.
+        pub fn pre_exposure(&self) -> Result<f32, crate::Error> {
+            self.inner.pre_exposure().map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `pre_exposure` property after validation.
+        pub fn set_pre_exposure(&self, value: f32) -> Result<(), crate::Error> {
+            self.inner
+                .set_pre_exposure(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `should_reset_history` property with availability checks.
+        pub fn should_reset_history(&self) -> Result<bool, crate::Error> {
+            self.inner
+                .should_reset_history()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_format` property with availability checks.
+        pub fn color_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .color_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `color_texture_usage` property with availability checks.
+        pub fn color_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .color_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `denoise_strength_mask_texture_format` property with availability checks.
+        pub fn denoise_strength_mask_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `denoise_strength_mask_texture_usage` property with availability checks.
+        pub fn denoise_strength_mask_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_format` property with availability checks.
+        pub fn depth_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .depth_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `depth_texture_usage` property with availability checks.
+        pub fn depth_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .depth_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `diffuse_albedo_texture_format` property with availability checks.
+        pub fn diffuse_albedo_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `diffuse_albedo_texture_usage` property with availability checks.
+        pub fn diffuse_albedo_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_format` property with availability checks.
+        pub fn motion_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .motion_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `motion_texture_usage` property with availability checks.
+        pub fn motion_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .motion_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `normal_texture_format` property with availability checks.
+        pub fn normal_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .normal_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `normal_texture_usage` property with availability checks.
+        pub fn normal_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .normal_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_format` property with availability checks.
+        pub fn output_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .output_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `output_texture_usage` property with availability checks.
+        pub fn output_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .output_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `reactive_mask_texture_format` property with availability checks.
+        pub fn reactive_mask_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .reactive_mask_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `reactive_mask_texture_usage` property with availability checks.
+        pub fn reactive_mask_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .reactive_mask_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `roughness_texture_format` property with availability checks.
+        pub fn roughness_texture_format(&self) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .roughness_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `roughness_texture_usage` property with availability checks.
+        pub fn roughness_texture_usage(&self) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .roughness_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_albedo_texture_format` property with availability checks.
+        pub fn specular_albedo_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .specular_albedo_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_albedo_texture_usage` property with availability checks.
+        pub fn specular_albedo_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .specular_albedo_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_hit_distance_texture_format` property with availability checks.
+        pub fn specular_hit_distance_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `specular_hit_distance_texture_usage` property with availability checks.
+        pub fn specular_hit_distance_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `transparency_overlay_texture_format` property with availability checks.
+        pub fn transparency_overlay_texture_format(
+            &self,
+        ) -> Result<crate::metal::PixelFormat, crate::Error> {
+            self.inner
+                .transparency_overlay_texture_format()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the `transparency_overlay_texture_usage` property with availability checks.
+        pub fn transparency_overlay_texture_usage(
+            &self,
+        ) -> Result<crate::metal::TextureUsage, crate::Error> {
+            self.inner
+                .transparency_overlay_texture_usage()
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `color_texture` object property.
+        pub fn color_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .color_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `color_texture` object property.
+        pub fn set_color_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_color_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `denoise_strength_mask_texture` object property.
+        pub fn denoise_strength_mask_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .denoise_strength_mask_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `denoise_strength_mask_texture` object property.
+        pub fn set_denoise_strength_mask_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_denoise_strength_mask_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `depth_texture` object property.
+        pub fn depth_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .depth_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `depth_texture` object property.
+        pub fn set_depth_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `diffuse_albedo_texture` object property.
+        pub fn diffuse_albedo_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .diffuse_albedo_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `diffuse_albedo_texture` object property.
+        pub fn set_diffuse_albedo_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_diffuse_albedo_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `exposure_texture` object property.
+        pub fn exposure_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .exposure_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `exposure_texture` object property.
+        pub fn set_exposure_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_exposure_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `fence` object property.
+        pub fn fence(&self) -> Result<Option<crate::metal::Fence>, crate::Error> {
+            self.inner
+                .fence()
+                .map(|value| value.map(crate::metal::Fence::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `fence` object property.
+        pub fn set_fence(&self, value: Option<&crate::metal::Fence>) -> Result<(), crate::Error> {
+            self.inner
+                .set_fence(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `motion_texture` object property.
+        pub fn motion_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .motion_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `motion_texture` object property.
+        pub fn set_motion_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_motion_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `normal_texture` object property.
+        pub fn normal_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .normal_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `normal_texture` object property.
+        pub fn set_normal_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_normal_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `output_texture` object property.
+        pub fn output_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .output_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `output_texture` object property.
+        pub fn set_output_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_output_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `reactive_mask_texture` object property.
+        pub fn reactive_mask_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .reactive_mask_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `reactive_mask_texture` object property.
+        pub fn set_reactive_mask_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_reactive_mask_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `roughness_texture` object property.
+        pub fn roughness_texture(&self) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .roughness_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `roughness_texture` object property.
+        pub fn set_roughness_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_roughness_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `specular_albedo_texture` object property.
+        pub fn specular_albedo_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .specular_albedo_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `specular_albedo_texture` object property.
+        pub fn set_specular_albedo_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_specular_albedo_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `specular_hit_distance_texture` object property.
+        pub fn specular_hit_distance_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .specular_hit_distance_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `specular_hit_distance_texture` object property.
+        pub fn set_specular_hit_distance_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_specular_hit_distance_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Reads the optional `transparency_overlay_texture` object property.
+        pub fn transparency_overlay_texture(
+            &self,
+        ) -> Result<Option<crate::metal::Texture>, crate::Error> {
+            self.inner
+                .transparency_overlay_texture()
+                .map(|value| value.map(crate::metal::Texture::from_ffi))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the `transparency_overlay_texture` object property.
+        pub fn set_transparency_overlay_texture(
+            &self,
+            value: Option<&crate::metal::Texture>,
+        ) -> Result<(), crate::Error> {
+            self.inner
+                .set_transparency_overlay_texture(value.map(|value| &value.inner))
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_depth_reversed(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_depth_reversed(value)
+                .map_err(crate::Error::from_ffi)
+        }
+        /// Writes the Boolean property after availability checks.
+        pub fn set_should_reset_history(&self, value: bool) -> Result<(), crate::Error> {
+            self.inner
+                .set_should_reset_history(value)
+                .map_err(crate::Error::from_ffi)
         }
         /// Encodes work into a mutably borrowed Metal command buffer.
         pub fn encode_to_command_buffer(

@@ -1,6 +1,7 @@
 //! Safe Core Animation Metal layer and drawable wrappers.
 
 use crate::{Device, Error, PixelFormat, Texture};
+use raw_window_handle::RawWindowHandle;
 
 /// An owned Core Graphics color space accepted by `CAMetalLayer`.
 pub struct ColorSpace {
@@ -34,6 +35,14 @@ impl Layer {
         metal_rust_ffi::Layer::with_device(&device.inner)
             .map(|inner| Self { inner })
             .map_err(Error::from_ffi)
+    }
+
+    /// Installs this layer as an AppKit window's backing layer.
+    ///
+    /// The handle is consumed synchronously; this API never exposes the
+    /// Objective-C view or layer pointer.
+    pub fn attach_to_window(&self, handle: RawWindowHandle) -> Result<(), Error> {
+        self.inner.attach_to_window(handle).map_err(Error::from_ffi)
     }
 
     /// Sets the layer's Metal device.

@@ -3,17 +3,17 @@
 use crate::Error;
 use crate::metal::{
     BinaryArchive, ComputePipelineState, DynamicLibrary, Library, RenderPipelineState,
-    SamplePosition, Size,
+    SamplePosition, Size, Texture,
 };
 use crate::metal4::{
     BinaryFunction, BinaryFunctionDescriptor, CommandAllocator, Compiler, CompilerTask,
     CompilerTaskOptions, ComputePipelineDescriptor, FunctionDescriptor, LibraryDescriptor,
-    MachineLearningPipelineDescriptor, MachineLearningPipelineState, MeshRenderPipelineDescriptor,
-    PipelineDataSetSerializer, PipelineStageDynamicLinkingDescriptor, RenderPassDescriptor,
-    RenderPipelineBinaryFunctionsDescriptor, RenderPipelineColorAttachmentDescriptor,
-    RenderPipelineColorAttachmentDescriptorArray, RenderPipelineDescriptor,
-    RenderPipelineDynamicLinkingDescriptor, StaticLinkingDescriptor, StitchedFunctionDescriptor,
-    TileRenderPipelineDescriptor,
+    LibraryFunctionDescriptor, MachineLearningPipelineDescriptor, MachineLearningPipelineState,
+    MeshRenderPipelineDescriptor, PipelineDataSetSerializer, PipelineStageDynamicLinkingDescriptor,
+    RenderPassDescriptor, RenderPipelineBinaryFunctionsDescriptor,
+    RenderPipelineColorAttachmentDescriptor, RenderPipelineColorAttachmentDescriptorArray,
+    RenderPipelineDescriptor, RenderPipelineDynamicLinkingDescriptor, StaticLinkingDescriptor,
+    StitchedFunctionDescriptor, TileRenderPipelineDescriptor,
 };
 use std::collections::HashMap;
 use std::path::Path;
@@ -634,6 +634,36 @@ impl StitchedFunctionDescriptor {
 }
 
 impl RenderPassDescriptor {
+    /// Sets a checked color attachment with a clear load action and stored result.
+    pub fn set_color_attachment(
+        &self,
+        index: usize,
+        texture: &Texture,
+        clear_color: crate::metal::ClearColor,
+    ) -> Result<(), Error> {
+        self.inner
+            .set_color_attachment(index, &texture.inner, clear_color)
+            .map_err(Error::from_ffi)
+    }
+
+    /// Sets a multisample color attachment and its single-sample resolve target.
+    pub fn set_color_attachment_with_resolve(
+        &self,
+        index: usize,
+        texture: &Texture,
+        resolve_texture: &Texture,
+        clear_color: crate::metal::ClearColor,
+    ) -> Result<(), Error> {
+        self.inner
+            .set_color_attachment_with_resolve(
+                index,
+                &texture.inner,
+                &resolve_texture.inner,
+                clear_color,
+            )
+            .map_err(Error::from_ffi)
+    }
+
     /// Returns up to `count` programmable sample positions.
     pub fn sample_positions_vec(&self, count: usize) -> Result<Vec<SamplePosition>, Error> {
         self.inner
@@ -646,6 +676,13 @@ impl RenderPassDescriptor {
         self.inner
             .set_sample_positions_slice(values)
             .map_err(Error::from_ffi)
+    }
+}
+
+impl LibraryFunctionDescriptor {
+    /// Exposes the retained base function descriptor required by render pipelines.
+    pub fn as_function_descriptor(&self) -> FunctionDescriptor {
+        FunctionDescriptor::from_ffi(self.inner.as_function_descriptor())
     }
 }
 
