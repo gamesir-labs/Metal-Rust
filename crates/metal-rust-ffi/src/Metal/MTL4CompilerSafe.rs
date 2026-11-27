@@ -1253,6 +1253,65 @@ impl metal4::RenderPassDescriptor {
         Ok(())
     }
 
+    /// Sets a multisample color attachment and its single-sample resolve target.
+    pub fn set_color_attachment_with_resolve(
+        &self,
+        index: usize,
+        texture: &Texture,
+        resolve_texture: &Texture,
+        clear_color: ClearColor,
+    ) -> Result<(), Error> {
+        validate_mtl4_color_attachment(index, clear_color)?;
+        if texture.pixel_format() != resolve_texture.pixel_format()
+            || texture.width() != resolve_texture.width()
+            || texture.height() != resolve_texture.height()
+        {
+            return Err(Error::invalid_argument(
+                "MSAA resolve source and target formats and dimensions must match",
+            ));
+        }
+        let descriptor = self.as_inner();
+        if !descriptor.responds_to(sel!(colorAttachments)) {
+            return Err(Error::unsupported(
+                "MTL4RenderPassDescriptor color attachments are unavailable",
+            ));
+        }
+        let attachments: Retained<AnyObject> = unsafe { msg_send![descriptor, colorAttachments] };
+        if !attachments.responds_to(sel!(objectAtIndexedSubscript:)) {
+            return Err(Error::unsupported(
+                "MTL4RenderPassDescriptor color attachment indexing is unavailable",
+            ));
+        }
+        let attachment: Retained<AnyObject> =
+            unsafe { msg_send![&*attachments, objectAtIndexedSubscript: index] };
+        for (selector, operation) in [
+            (sel!(setTexture:), "MTL4 MSAA attachment texture"),
+            (sel!(setResolveTexture:), "MTL4 MSAA resolve texture"),
+            (sel!(setLoadAction:), "MTL4 MSAA load action"),
+            (sel!(setStoreAction:), "MTL4 MSAA store action"),
+            (sel!(setClearColor:), "MTL4 MSAA clear color"),
+        ] {
+            if !attachment.responds_to(selector) {
+                return Err(Error::unsupported(format!("{operation} is unavailable")));
+            }
+        }
+        // SAFETY: all selectors are checked, the attachment index is bounded,
+        // and source/resolve textures obey Metal's documented MSAA constraints.
+        unsafe {
+            let _: () = msg_send![&*attachment, setTexture: texture.as_any_object()];
+            let _: () = msg_send![&*attachment, setResolveTexture: resolve_texture.as_any_object()];
+            let _: () = msg_send![&*attachment, setLoadAction: MTLLoadAction::Clear];
+            let _: () = msg_send![&*attachment, setStoreAction: MTLStoreAction::MultisampleResolve];
+            let _: () = msg_send![&*attachment, setClearColor: MTLClearColor {
+                red: clear_color.red,
+                green: clear_color.green,
+                blue: clear_color.blue,
+                alpha: clear_color.alpha,
+            }];
+        }
+        Ok(())
+    }
+
     /// Returns up to `count` programmable sample positions as owned values.
     pub fn sample_positions_vec(
         &self,

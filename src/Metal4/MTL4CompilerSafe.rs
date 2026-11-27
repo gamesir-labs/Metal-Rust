@@ -646,6 +646,24 @@ impl RenderPassDescriptor {
             .map_err(Error::from_ffi)
     }
 
+    /// Sets a multisample color attachment and its single-sample resolve target.
+    pub fn set_color_attachment_with_resolve(
+        &self,
+        index: usize,
+        texture: &Texture,
+        resolve_texture: &Texture,
+        clear_color: crate::metal::ClearColor,
+    ) -> Result<(), Error> {
+        self.inner
+            .set_color_attachment_with_resolve(
+                index,
+                &texture.inner,
+                &resolve_texture.inner,
+                clear_color,
+            )
+            .map_err(Error::from_ffi)
+    }
+
     /// Returns up to `count` programmable sample positions.
     pub fn sample_positions_vec(&self, count: usize) -> Result<Vec<SamplePosition>, Error> {
         self.inner
